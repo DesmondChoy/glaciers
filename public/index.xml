@@ -32,5 +32,15 @@ You can embed an R code chunk like this:
 summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
     </item>
     
+    <item>
+      <title>About Me</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>My career in the investment industry began in 2011 with a portfolio management role in a Fund of Hedge Funds and subsequently with a regional life insurer. In my current capacity, I focus on fundamental bottom-up research on corporate bonds in a regional asset management firm based in Singapore, and I’m a CFA Charterholder since 2014.
+Having discovered R in 2018, I very quickly fell in love with the language, packages and community - and have been using data science to augment and refine my investment process.</description>
+    </item>
+    
   </channel>
 </rss>
