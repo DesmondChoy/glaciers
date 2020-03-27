@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.66.0 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="Desmond Choy">
+<meta name="keywords" content="tech">
+<meta name="description" content="Continuing on from Part I of this analysis, we move on Part II.
+Part I: Data Importing and Wrangling (Tidying)Part II: Exploratory Data Analysis and interpretation of resultsIf you wish to replicate my findings, the raw Bloomberg data is available at my github.
+Disclaimer
+All data that I have used in this presentation is obtained from Bloomberg and I do not own any of it.">
+
+
+<meta property="og:description" content="Continuing on from Part I of this analysis, we move on Part II.
+Part I: Data Importing and Wrangling (Tidying)Part II: Exploratory Data Analysis and interpretation of resultsIf you wish to replicate my findings, the raw Bloomberg data is available at my github.
+Disclaimer
+All data that I have used in this presentation is obtained from Bloomberg and I do not own any of it.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oil and Gas Sector 2019 (Part II)">
+<meta name="twitter:title" content="Oil and Gas Sector 2019 (Part II)">
+<meta property="og:url" content="/2019/12/oil-and-gas-sector-2019-part-ii/">
+<meta property="twitter:url" content="/2019/12/oil-and-gas-sector-2019-part-ii/">
+<meta property="og:site_name" content="Desmond Choy&#39;s Blog">
+<meta property="og:description" content="Continuing on from Part I of this analysis, we move on Part II.
+Part I: Data Importing and Wrangling (Tidying)Part II: Exploratory Data Analysis and interpretation of resultsIf you wish to replicate my findings, the raw Bloomberg data is available at my github.
+Disclaimer
+All data that I have used in this presentation is obtained from Bloomberg and I do not own any of it.">
+<meta name="twitter:description" content="Continuing on from Part I of this analysis, we move on Part II.
+Part I: Data Importing and Wrangling (Tidying)Part II: Exploratory Data Analysis and interpretation of resultsIf you wish to replicate my findings, the raw Bloomberg data is available at my github.
+Disclaimer
+All data that I have used in this presentation is obtained from Bloomberg and I do not own any of it.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-12-31T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2019-12-31T00:00:00">
+  
+  
+  
+  
+    
+      <meta property="article:tag" content="r">
+    
+      <meta property="article:tag" content="fixed income">
+    
+      <meta property="article:tag" content="EDA">
+    
+      <meta property="article:tag" content="visualization">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Norest">
+
+
+  <meta name="twitter:creator" content="@Norest">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/7_avatar-512.png">
+  <meta property="twitter:image" content="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/7_avatar-512.png">
+
+
+    <title>Oil and Gas Sector 2019 (Part II)</title>
+
+    <link rel="icon" href="/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="/2019/12/oil-and-gas-sector-2019-part-ii/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="/">Desmond Choy&#39;s Blog</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="/about">
+          <img class="sidebar-profile-picture" src="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/7_avatar-512.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Desmond Choy</h4>
+        
+          <h5 class="sidebar-profile-bio">Investment Professional by day ; Data Scientist by night</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="/about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/choydesmond/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/DesmondChoy">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Oil and Gas Sector 2019 (Part II)
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-12-31T00:00:00Z">
+        
+  December 31, 2019
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+
+<p>Continuing on from <a href="https://desmondchoy.netlify.com/2019/12/oil-and-gas-sector-2019-part-i/">Part I</a> of this analysis, we move on Part II.</p>
+<ul>
+<li>Part I: Data Importing and Wrangling (Tidying)</li>
+<li>Part II: Exploratory Data Analysis and interpretation of results</li>
+</ul>
+<p>If you wish to replicate my findings, the raw Bloomberg data is available at my <a href="https://github.com/DesmondChoy/glaciers/tree/master/content/post">github</a>.</p>
+<blockquote>
+<p>Disclaimer</p>
+</blockquote>
+<p>All data that I have used in this presentation is obtained from Bloomberg and I do not own any of it. Nothing in this document should be construed as investment advice, recommendations, an investment strategy, or whether or not to “buy”, “sell” or “hold” an investment, nor should it be construed or relied upon as tax, regulatory or accounting advice.</p>
+<div id="data-visualization-fundamental-metrics" class="section level1">
+<h1>Data Visualization: Fundamental Metrics</h1>
+<p>I have now tidied up the raw data and will attempt to visualize a comparison of the companies across four fundamental credit metrics:</p>
+<ul>
+<li>Leverage<br />
+</li>
+<li>Gearing<br />
+</li>
+<li>RCF/Net Debt<br />
+</li>
+<li>Capex/Sales</li>
+</ul>
+<blockquote>
+<p>Leverage</p>
+</blockquote>
+<p>Defined as Debt/EBITDA, leverage is a fundamental metric commonly used to identify a company’s level of indebtedness relative to its earnings. Its advantage is that it can be used across sectors and subsectors.</p>
+<p>Here I note leverage peaked in 2016 - not a coincidence if you’ll recall that is the year when oil prices crashed. Since 2016, the sector has cleaned up its balance sheet and, buoyed by higher oil prices, leverage has improved in 2017 and 2018.</p>
+<p>Leverage for the refining sub-sector, however, has been been flat from 2015-17, and increased in 2018 - as refining companies increased capital expenditure in anticipation of IMO 2020.</p>
+<pre class="r"><code>Metrics %&gt;%
+  filter(bloomberg.composite.rating %in% Rating) %&gt;%
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;)) %&gt;%
+  ggplot(aes(x = period, y = leverage, fill = bucket)) +
+  geom_boxplot(size = 0.6) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  facet_wrap(. ~ bclass.level.4.classification.name) +
+  ggtitle(&quot;Leverage&quot;, &quot;Deleveraging has likely bottomed but unlikely to materially increase&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1)) +
+  ylab(&quot;Debt/EBITDA (x)&quot;) +
+  ylim(0, 9)</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Leverage%20(Clean)-1.png" width="1440" /></p>
+<blockquote>
+<p>Diving Deeper Into The Data</p>
+</blockquote>
+<p>Boxplots are notorious for concealing the number of data points, and R (specifically, ggplot2 package) conveniently allows the user to display both the boxplot as well as the underlying data points. The downside, however, is additional clutter and will be aethestically less pleasing.</p>
+<p>I also felt it would be helpful to label outliers and I sought to do this mathematically by using <code>quantile()</code>. In this case, <strong>highly leveraged companies that fall in the 90th percentile of the bond universe would have tickers displayed</strong>.</p>
+<p>N.B. There’s a line of code that has been hashtagged out - it aims to label data points at 10% percentile or above.</p>
+<ul>
+<li>In the case of leverage, an analyst would be concerned about issuers with higher leverage (higher risk).<br />
+</li>
+<li>However, if you had a cash flow metrics (as we’d see later on), we’d be concerned with lower cashflows (higher risk).</li>
+</ul>
+<p>Hashtagging it meant I could switch the ggplots conveniently simply by removing/adding one hashtag.</p>
+<p>With the number of data points now revealed and filtered tickers, some further insight has been revealed:</p>
+<ul>
+<li>BPLN has been the highest leveraged integrated oil major for the last 5 years. Why is that so and is it priced accordingly?</li>
+<li>STOAU has done a beautiful job deleveraging - from being a huge outlier in 2017 to being in line with peers in 1H19.</li>
+<li>With only data from three refiners, box plots in the Refining sector might not be fully reflective of the entire Refining sector.</li>
+</ul>
+<pre class="r"><code>Metrics %&gt;%
+  filter(bloomberg.composite.rating %in% Rating) %&gt;%
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;)) %&gt;%
+  ggplot(aes(x = period, y = leverage, fill = bucket)) +
+  geom_boxplot(size = 0.6, outlier.shape = NA) +
+  geom_jitter(aes(colour = factor(region)), size = 1.5, width = 0.1, pch = 2, stroke = 1.25) +
+  geom_text_repel(data = . %&gt;%
+                    group_by(bclass.level.4.classification.name, period) %&gt;%
+                    #mutate(percentile = leverage &lt;= quantile(leverage, 0.1, na.rm = TRUE)) %&gt;%
+                    mutate(percentile = leverage &gt;= quantile(leverage, 0.9, na.rm = TRUE)) %&gt;%
+                    filter(percentile == 1),
+                  aes(label = ticker), box.padding = 1, size = 4) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  facet_wrap(. ~ bclass.level.4.classification.name) +
+  ggtitle(&quot;Leverage&quot;, &quot;Deleveraging has likely bottomed but unlikely to materially increase&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1)) +
+  ylab(&quot;Debt/EBITDA (x)&quot;) +
+  ylim(0, 9)</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Leverage%20(Details)-1.png" width="1440" /></p>
+<blockquote>
+<p>CapEx/Sales</p>
+</blockquote>
+<p>The Oil &amp; Gas sector is capital intensive by nature and, historically, peak capex tends to coincide with a nasty market correction. I track CapEx/Sales as a comparative metric across all issuers regardless of size.</p>
+<p>As a fixed income analyst, I take heart that CapEx/Sales has improved since 2016 and has stablized despite significantly higher oil prices. This has largely been driven by equity investors demanding ROI instead of growth-at-all-costs. The exception, once again, is the Refining sector where we see CapEx/Sales ticking up a little ahead of IMO 2020.</p>
+<p>While lower CapEx usually translates into higher free cash flow, one also has to factor shareholder returns (share buybacks and dividends).</p>
+<pre class="r"><code>Metrics %&gt;%
+  filter(bloomberg.composite.rating %in% Rating) %&gt;%
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;)) %&gt;%
+  ggplot(aes(x = period, y = capex.to.sales, fill = bucket)) +
+  geom_boxplot(size = 0.6) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  facet_wrap(. ~ bclass.level.4.classification.name) +
+  ggtitle(&quot;CapEx/Sales&quot;, &quot;Appetite for long-cycle greenfield projects are very low&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1)) +
+  ylab(&quot;CapEx/Sales (%)&quot;) +
+  ylim(0, 80)</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Capex/Sales%20(Clean)-1.png" width="1440" /></p>
+<p>And the same chart, but this time with outlier labels:</p>
+<pre class="r"><code>Metrics %&gt;%
+  filter(bloomberg.composite.rating %in% Rating) %&gt;%
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;)) %&gt;%
+  ggplot(aes(x = period, y = capex.to.sales, fill = bucket)) +
+  geom_boxplot(size = 0.6, outlier.shape = NA) +
+  geom_jitter(aes(colour = factor(region)), size = 1.5, width = 0.1, pch = 2, stroke = 1.25) +
+  geom_text_repel(data = . %&gt;%
+                    group_by(bclass.level.4.classification.name, period) %&gt;%
+                    #mutate(percentile = capex.to.sales &lt;= quantile(capex.to.sales, 0.1, na.rm = TRUE)) %&gt;%
+                    mutate(percentile = capex.to.sales &gt;= quantile(capex.to.sales, 0.9, na.rm = TRUE)) %&gt;%
+                    filter(percentile == 1),
+                  aes(label = ticker), box.padding = 1, size = 4) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  facet_wrap(. ~ bclass.level.4.classification.name) +
+  ggtitle(&quot;CapEx/Sales&quot;, &quot;Appetite for long-cycle greenfield projects are very low&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1)) +
+  ylab(&quot;CapEx/Sales (%)&quot;) +
+  ylim(0, 80)</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Capex/Sales%20(Details)-1.png" width="1440" /></p>
+<p>Some initial thoughts and observations:</p>
+<ul>
+<li>Dispersion between median Capex/Sales of A- bucket and BBB bucket has shrunk - reflecting muted capex appetite</li>
+<li>PETMK consistently has higher Capex/Sales compared to peers. What has been its ROI for capex been?</li>
+</ul>
+<blockquote>
+<p>RCF/Net Debt</p>
+</blockquote>
+<p>Defined as (FCF - Dividends)/(Total Debt - Cash), this is an indicator of how healthy cash flows are relative to net debt levels, and is generally comparable to all companies. Midstream is the exception as these companies are structured as MLPs which have a policy to pay out excess cash after capex. As such, RCF/Net Debt is not an appropriate credit metric for this sub-sector.</p>
+<p>RCF/Net Debt once again reinforces the view that balance sheets are healthy for the O&amp;G sector.</p>
+<pre class="r"><code>Metrics %&gt;%
+  filter(bloomberg.composite.rating %in% Rating) %&gt;%
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;)) %&gt;%
+  ggplot(aes(x = period, y = rcf.net.debt*100, fill = bucket)) +
+  geom_boxplot(size = 0.6) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  facet_wrap(. ~ bclass.level.4.classification.name) +
+  ggtitle(&quot;RCF/Net Debt&quot;, &quot;Balance sheets have recovered and are stronger pre 2014-16 oil crisis&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1)) +
+  ylab(&quot;RCF/Net Debt (%)&quot;) +
+  ylim(0, 100)</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/RCF/Net%20Debt%20(Clean)-1.png" width="1440" /></p>
+<pre class="r"><code>Metrics %&gt;%
+  filter(bloomberg.composite.rating %in% Rating) %&gt;%
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;)) %&gt;%
+  ggplot(aes(x = period, y = rcf.net.debt*100, fill = bucket)) +
+  geom_boxplot(size = 0.6, outlier.shape = NA) +
+  geom_jitter(aes(colour = factor(region)), size = 1.5, width = 0.1, pch = 2, stroke = 1.25) +
+  geom_text_repel(data = . %&gt;%
+                    group_by(bclass.level.4.classification.name, period) %&gt;%
+                    #mutate(percentile = rcf.net.debt &lt;= quantile(rcf.net.debt, 0.1, na.rm = TRUE)) %&gt;%
+                    mutate(percentile = rcf.net.debt &gt;= quantile(rcf.net.debt, 0.9, na.rm = TRUE)) %&gt;%
+                    filter(percentile == 1),
+                  aes(label = ticker), box.padding = 1, size = 4) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  facet_wrap(. ~ bclass.level.4.classification.name) +
+  ggtitle(&quot;RCF/Net Debt&quot;, &quot;Balance sheets have recovered and are stronger pre 2014-16 oil crisis&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1)) +
+  ylab(&quot;RCF/Net Debt (%)&quot;) +
+  ylim(0, 100)</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/RCF/Net%20Debt%20(Details)-1.png" width="1440" /></p>
+</div>
+<div id="data-visualization-spread-movements-and-relative-value" class="section level1">
+<h1>Data Visualization: Spread Movements and Relative Value</h1>
+<p>Credit spreads can be defined as the difference in yield between a corporate bond over a comparable risk-free bond e.g. US Treasury bond.</p>
+<ul>
+<li>If credit spreads <strong>widen</strong>, one way to interpret this could be that the corporate’s credit fundamentals are deteriorating. As a consequence of this deterioration, bond investors would need additional compensation via a higher yield - hence the widening.</li>
+<li>Ergo, if credit spreads <strong>tighten</strong>, that can be viewed as an improvement in credit fundamentals.</li>
+</ul>
+<p>The way to view the following charts would be to gauge a bond’s spread relative to zero on the y-axis. If the spread is below zero, that reflects tightening, and vice versa.</p>
+<blockquote>
+<p>Credit Spreads Over a 1 Year Period (Nov 2018-19)</p>
+</blockquote>
+<ul>
+<li>For both credit rating buckets, short-mid maturity bonds (&lt; 7 years) generally saw credit spreads tightened, regardless of sub-sector. I’d attribute this to the sector’s solid credit fundamentals that have been maintained.</li>
+<li>Stand-out would be BPLN and OXY - the later which engaged in a credit-negative debt-funded M&amp;A that saw its leverage increase to over 3x from below 1x. OXY was slapped with a three notch credit rating downgrade.</li>
+</ul>
+<pre class="r"><code>Energy %&gt;%
+  filter(maturity &lt;= 20) %&gt;% 
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;),
+    label = paste(ticker, coupon, year, sep = &quot; &quot;),
+    curve =  cut(maturity, breaks = seq(0, 20, 5))) %&gt;%
+  ggplot(aes(maturity, `1y.chg`)) +
+  geom_point(
+    aes(shape = bclass.level.4.classification.name, color = bclass.level.4.classification.name),
+    size = 2) +
+  geom_text_repel(data = . %&gt;%
+                    group_by(bucket, curve) %&gt;%
+                    mutate(percentile = `1y.chg` &lt;= quantile(`1y.chg`, 0.025, na.rm = TRUE) |
+                             `1y.chg` &gt;= quantile(`1y.chg`, 0.975, na.rm = TRUE)) %&gt;%
+                    filter(percentile == 1),
+                  aes(label = label), box.padding = 0.5, size = 4) +
+  facet_wrap(. ~ bucket) +
+  xlab(&quot;Years to Maturity&quot;) +
+  ylab(&quot;Spread&quot;) +
+  ylim(-100, 100) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  ggtitle(&quot;Spread Movements (Nov 2018 - Nov 2019)&quot;, &quot;Bonds Highlighted Have Experienced The Most Widening/Tightening&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1))</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Spread%20Movements%201yr-1.png" width="1440" /></p>
+<blockquote>
+<p>Credit Spreads YTD Paints A Different Picture</p>
+</blockquote>
+<ul>
+<li>You’ll be hard pressed to find a bond that <em>didn’t</em> make money. This is mainly attributable to oil prices crashing in late 2018, and subsequently rallying in Jan 2019.</li>
+<li>Given that the longer-end of the curve (&gt; 15 years) hasn’t rallied as much in both time frames, the market could be pricing in some uncertainty with regards to how the O&amp;G sector would fare in an environment where climate change is greatly scrutinized.</li>
+<li>In my opinion, climate change scrutiny is expected to intensify, shaping capex appetite and financing conditions for the sector.</li>
+</ul>
+<pre class="r"><code>Energy %&gt;%
+  filter(maturity &lt;= 20) %&gt;% 
+  mutate(bucket = if_else(
+    bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;),
+    label = paste(ticker, coupon, year, sep = &quot; &quot;),
+    curve =  cut(maturity, breaks = seq(0, 20, 4))) %&gt;%
+  ggplot(aes(maturity, ytd.chg)) +
+  geom_point(
+    aes(shape = bclass.level.4.classification.name, color = bclass.level.4.classification.name),
+    size = 2) +
+  geom_text_repel(data = . %&gt;%
+                    group_by(bucket, curve) %&gt;%
+                    mutate(percentile = ytd.chg &lt;= quantile(ytd.chg, 0.005, na.rm = TRUE) |
+                             ytd.chg &gt;= quantile(ytd.chg, 0.995, na.rm = TRUE)) %&gt;%
+                    filter(percentile == 1),
+                  aes(label = label), box.padding = 0.5, size = 4) +
+  facet_wrap(. ~ bucket) +
+  xlab(&quot;Years to Maturity&quot;) +
+  ylab(&quot;Spread&quot;) +
+  ylim(-150, 100) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  ggtitle(&quot;Spread Movements (2019 YTD)&quot;, &quot;Bonds Highlighted Have Experienced The Most Widening/Tightening&quot;) +
+  theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1))</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Spread%20Movements%20YTD-1.png" width="1440" /></p>
+<blockquote>
+<p>Relative Value Screening</p>
+</blockquote>
+<p>My methodology here was to divide the 20-year curve into 10 parts consisting of 2 years each, and subsequently attempted to label outliers within each 2 year segment.</p>
+<ul>
+<li>BPLN once again screens cheap - rightfully so, in my opinion. Among the oil majors, BPLN’s gearing improvements and debt reduction has been the slowest; but similar to peers, it has deleveraged through non-core asset disposals.</li>
+<li>ETP screens cheap too: Current leverage is slightly higher than BBB- limit, with further leverage dependent on EBITDA growth rather than debt reduction. It faces some execution risk - some pipeline projects are encountering resistance from local communities.</li>
+</ul>
+<pre class="r"><code>Energy %&gt;%
+  filter(maturity &lt;= 20) %&gt;% 
+  mutate(bucket = if_else(
+      bloomberg.composite.rating %in% c(&quot;BBB+&quot;, &quot;BBB&quot;, &quot;BBB-&quot;), &quot;BBB+ to BBB-&quot;, &quot;A- &amp; Higher&quot;),
+    label = paste(ticker, coupon, year, sep = &quot; &quot;),
+    curve =  cut(maturity, breaks = seq(0, 20, 2))) %&gt;%
+  ggplot(aes(maturity, current)) +
+  geom_point(
+    aes(shape = bclass.level.4.classification.name, color = bclass.level.4.classification.name),
+    size = 2) +
+  geom_smooth(method = &quot;lm&quot;, formula = y ~ log(x), se = FALSE, colour = &quot;Black&quot;) +
+  geom_text_repel(data = . %&gt;%
+      group_by(bucket, curve) %&gt;%
+      #mutate(percentile = current &lt;= quantile(current, 0.01, na.rm = TRUE)) %&gt;%
+      mutate(percentile = current &gt;= quantile(current, 0.99, na.rm = TRUE)) %&gt;%
+      filter(percentile == 1),
+    aes(label = label), box.padding = 0.5, size = 4) +
+  facet_wrap(. ~ bucket) +
+  xlab(&quot;Years to Maturity&quot;) +
+  ylab(&quot;Spread&quot;) +
+  ylim(0, 350) +
+  scale_color_manual(values = c(&quot;#23576E&quot;, &quot;#099FDB&quot;, &quot;#29B00E&quot;, &quot;#208F84&quot;, &quot;#F55840&quot;, &quot;#924F3E&quot;)) +
+  #ggtitle(&quot;Relative Value (As Of 2nd Dec)&quot;, &quot;XOM, RDSA, CNQCN, ENBCN Trades Tight&quot;) +
+  ggtitle(&quot;Relative Value (As Of 2nd Dec)&quot;, &quot;BPLN, ETP Trades Wide&quot;) +
+    theme_ipsum() +
+  theme(plot.title = element_text(face = &quot;bold&quot;, size = 30), plot.subtitle = element_text(size = 20),
+        strip.background = element_blank(), strip.text = element_text(face = &quot;bold&quot;, size = 20),
+        legend.position = &quot;bottom&quot;, legend.title = element_blank(),
+        legend.box = &quot;horizontal&quot;, legend.text = element_text(size = 20)) +
+  guides(col = guide_legend(nrow = 1))</code></pre>
+<p><img src="/post/2019-12-31-oil-and-gas-sector-2019-part-ii_files/figure-html/Relative%20Value%20chart-1.png" width="1440" /></p>
+<p>The beauty of doing this in R is the transparency of the method, as well as the customization; a portfolio manager could simply slice the curve to whichever portion they deem fit.</p>
+<blockquote>
+<p>Conclusion</p>
+</blockquote>
+<p>So if you made it to the end, thank you! This was my first RMarkdown document and my first blog post, and I certainly learnt much on how to do things and how <em>not</em> to do things.</p>
+<p>I can see how data sets from Bloomberg’s proprietary terminals can be difficult to obtain, so I’ll aim to use more accessible datasets in future blog posts to improve replicability. Both Part I and Part II are available in RMD format on my <a href="https://github.com/DesmondChoy/glaciers/tree/master/content/post">github</a>.</p>
+</div>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="/tags/r/">r</a>
+
+  <a class="tag tag--primary tag--small" href="/tags/fixed-income/">fixed income</a>
+
+  <a class="tag tag--primary tag--small" href="/tags/eda/">EDA</a>
+
+  <a class="tag tag--primary tag--small" href="/tags/visualization/">visualization</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="/2019/12/oil-and-gas-sector-2019-part-i/" data-tooltip="Oil and Gas Sector 2019 (Part I)">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=/2019/12/oil-and-gas-sector-2019-part-ii/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=/2019/12/oil-and-gas-sector-2019-part-ii/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 Desmond Choy. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="/2019/12/oil-and-gas-sector-2019-part-i/" data-tooltip="Oil and Gas Sector 2019 (Part I)">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=/2019/12/oil-and-gas-sector-2019-part-ii/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=/2019/12/oil-and-gas-sector-2019-part-ii/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=%2F2019%2F12%2Foil-and-gas-sector-2019-part-ii%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=%2F2019%2F12%2Foil-and-gas-sector-2019-part-ii%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/7_avatar-512.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Desmond Choy</h4>
+    
+      <div id="about-card-bio">Investment Professional by day ; Data Scientist by night</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Investment Analyst
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Singapore
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('/img/glacier.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = '\/2019\/12\/oil-and-gas-sector-2019-part-ii\/';
+          
+            this.page.identifier = '\/2019\/12\/oil-and-gas-sector-2019-part-ii\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

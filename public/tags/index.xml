@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 31 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>EDA</title>
       <link>/tags/eda/</link>
-      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 31 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/eda/</guid>
       <description></description>
@@ -23,36 +23,27 @@
     <item>
       <title>fixed income</title>
       <link>/tags/fixed-income/</link>
-      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 31 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/fixed-income/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>import</title>
-      <link>/tags/import/</link>
-      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/import/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>r</title>
       <link>/tags/r/</link>
-      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 31 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/r/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>tidy</title>
-      <link>/tags/tidy/</link>
-      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
+      <title>visualization</title>
+      <link>/tags/visualization/</link>
+      <pubDate>Tue, 31 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/tidy/</guid>
+      <guid>/tags/visualization/</guid>
       <description></description>
     </item>
     
