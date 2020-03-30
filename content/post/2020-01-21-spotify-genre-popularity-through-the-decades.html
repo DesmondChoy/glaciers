@@ -1,0 +1,88 @@
+---
+title: Spotify Genre Popularity Through Time
+author: Desmond Choy
+date: '2020-01-21'
+slug: spotify-genre-popularity-through-the-decades
+categories: []
+tags:
+  - r
+  - EDA
+  - visualization
+  - tidytuesday
+keywords:
+  - tech
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+<p>This dataset was taken from the very popular <a href="https://github.com/rfordatascience/tidytuesday">TidyTuesday</a> github repo, and this was my attempt at having a go at visualization given my love for music and this was a Spotify dataset.</p>
+<p>Datasets from TidyTuesday are usually cleaned (or at least there’ll be instructions/hints on what one should first start with), and I begin by importing the data and wrangling it slightly by labelling the decades.</p>
+<p>In the spirit of “<a href="https://en.wikipedia.org/wiki/Perfect_is_the_enemy_of_good">Perfect is the enemy of good</a>”, this will be a short post aimed at answering just a couple of questions with EDA and visualization.</p>
+<pre class="r"><code>spotify_songs &lt;-
+  read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv&#39;)
+
+spotify &lt;- spotify_songs %&gt;%
+  distinct(track_name, track_artist, .keep_all = TRUE) %&gt;%
+  mutate(year = str_extract(track_album_release_date, &quot;^\\d...&quot;))
+
+spotify$decades &lt;- cut(
+  as.numeric(spotify$year),
+  c(1956, 1960, 1970, 1980, 1990, 2000, 2010, 2021),
+  labels = c(&quot;50s&quot;, &quot;60s&quot;, &quot;70s&quot;, &quot;80s&quot;, &quot;90s&quot;, &quot;2000s&quot;, &quot;2010s&quot;)
+)</code></pre>
+<p>Using track popularity as a gauge, how have subgenres evolved over the decades?</p>
+<pre class="r"><code>spotify %&gt;%
+  group_by(decades, playlist_subgenre) %&gt;%
+  add_count(playlist_subgenre) %&gt;% 
+  filter(n &gt; 5) %&gt;% 
+  ggplot(aes(
+    reorder_within(playlist_subgenre, track_popularity, decades),
+    track_popularity
+  )) +
+  geom_boxplot(aes(fill = playlist_genre)) +
+  coord_flip() +
+  facet_wrap(decades ~ ., nrow = 2, scales = &quot;free_y&quot;) +
+  scale_x_reordered() +
+  theme_ipsum() +
+  labs(
+    title = &quot;Popularity of Genres Through The Decades&quot;,
+    subtitle = &quot;Recent Decades Saw An Explosion of Music Genres - Led by Rock and R&amp;B&quot;,
+    caption = &quot;\n Source: TidyTuesday
+      Visualization: Desmond Choy (Twitter @Norest)&quot;,
+    fill = &quot;Music Genres&quot;,
+    x = &quot;Music Sub-Genres&quot;,
+    y = &quot;Track Popularity&quot;
+  ) +
+  theme(
+    plot.title = element_text(face = &quot;bold&quot;, size = 25),
+    plot.subtitle = element_text(size = 15),
+    strip.background = element_blank(),
+    strip.text = element_text(face = &quot;bold&quot;, size = 15),
+    legend.position = &quot;top&quot;,
+    legend.title = element_text(&quot;Music Genres&quot;),
+    legend.box = &quot;horizontal&quot;,
+    legend.text = element_text(size = 10)
+  ) +
+  guides(row = guide_legend(nrow = 1))</code></pre>
+<p><img src="/post/2020-01-21-spotify-genre-popularity-through-the-decades_files/figure-html/unnamed-chunk-2-1.png" width="1440" /></p>
+<p>Permanent wave stood out to me as a rock sub-genre that, until 2010, stood the test of time in terms of popularity.</p>
+<p>But as an avid music fan, I’ve not heard of permanent wave at all! Digging into the dataset a little more … permanent wave actually had a few of my all-time favourite artists!</p>
+<pre class="r"><code>spotify %&gt;% 
+  filter(playlist_subgenre == &quot;permanent wave&quot;) %&gt;% 
+  count(track_artist, sort = TRUE) </code></pre>
+<pre><code>## # A tibble: 471 x 2
+##    track_artist              n
+##    &lt;chr&gt;                 &lt;int&gt;
+##  1 Muse                     19
+##  2 The Smiths               19
+##  3 David Bowie              13
+##  4 Depeche Mode             12
+##  5 The Cure                 12
+##  6 Foo Fighters             11
+##  7 New Order                11
+##  8 Red Hot Chili Peppers    11
+##  9 George Harrison           9
+## 10 Oasis                     9
+## # ... with 461 more rows</code></pre>
