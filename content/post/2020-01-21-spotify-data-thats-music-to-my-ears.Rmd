@@ -2,7 +2,7 @@
 title: Spotify Data? That's Music To My Ears!
 author: Desmond Choy
 date: '2020-01-21'
-slug: spotify-genre-popularity-through-the-decades
+slug: spotify-data-thats-music-to-my-ears
 categories: []
 tags:
   - r
@@ -43,7 +43,7 @@ spotify_songs <-
 skimr::skim(spotify_songs)
 ```
 
-A lot of interesting labels are associated with the data, some of which include *danceability*, *instrumentalness* and *valence*. Full definitions can be found in the associated [data dictionary](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-21/readme.md)
+A lot of interesting labels are associated with the data, some of which include *danceability*, *instrumentalness* and *valence*. Full definitions can be found in the associated [data dictionary](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-21/readme.md).
 
 I proceed to wrangle the data by adding my own labels to indicate the decades in which the track/album appears in.
 
@@ -192,6 +192,6 @@ spotify %>%
   head(20)
 ```
 
-As always, RMarkdown document can be found in my github should you wish to replicate these results.
+As always, RMarkdown document can be found in my [github](https://github.com/DesmondChoy) should you wish to replicate these results.
 
 
