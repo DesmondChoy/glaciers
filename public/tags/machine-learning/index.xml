@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tidytuesday on Desmond Choy&#39;s Blog</title>
-    <link>/tags/tidytuesday/</link>
-    <description>Recent content in tidytuesday on Desmond Choy&#39;s Blog</description>
+    <title>machine learning on Desmond Choy&#39;s Blog</title>
+    <link>/tags/machine-learning/</link>
+    <description>Recent content in machine learning on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 11 Apr 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/tidytuesday/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,17 +19,6 @@
       <guid>/2020/04/food-consumption-and-co2-emissions/</guid>
       <description>This dataset is once again taken from TidyTuesday, and the code to scrape this info can be found here. The study analyses data from the Food and Agriculture Organization of the United Nations (FAO) to determine the quantity of produce supplied for consumption of 11 food types for all countries researched. Using CO2 emissions data, the carbon footprint per capita is then calculated for each food type.
 I heavily borrow intuition gleaned from this blog post by Julia Silge - who does an amazing job at detailing the intricacies of tidymodels metapackage.</description>
-    </item>
-    
-    <item>
-      <title>Spotify Data? That&#39;s Music To My Ears!</title>
-      <link>/2020/01/spotify-data-thats-music-to-my-ears/</link>
-      <pubDate>Tue, 21 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/2020/01/spotify-data-thats-music-to-my-ears/</guid>
-      <description>This dataset was taken from the very popular TidyTuesday github repo, and this was my attempt at having a go at visualization given my love for music and this was a Spotify dataset.
-In the spirit of “Perfect is the enemy of good”, this will be a short post aimed at answering just a couple of questions with EDA and visualization.
-Datasets from TidyTuesday are usually cleaned (or at least there’ll be instructions/hints on what one should first start with), and I begin by importing the data and exploring it via skimr.</description>
     </item>
     
   </channel>

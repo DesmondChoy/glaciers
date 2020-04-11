@@ -6,10 +6,20 @@
     <description>Recent content in visualization on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 21 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Food Consumption and CO2 Emissions</title>
+      <link>/2020/04/food-consumption-and-co2-emissions/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/04/food-consumption-and-co2-emissions/</guid>
+      <description>This dataset is once again taken from TidyTuesday, and the code to scrape this info can be found here. The study analyses data from the Food and Agriculture Organization of the United Nations (FAO) to determine the quantity of produce supplied for consumption of 11 food types for all countries researched. Using CO2 emissions data, the carbon footprint per capita is then calculated for each food type.
+I heavily borrow intuition gleaned from this blog post by Julia Silge - who does an amazing job at detailing the intricacies of tidymodels metapackage.</description>
+    </item>
     
     <item>
       <title>Spotify Data? That&#39;s Music To My Ears!</title>

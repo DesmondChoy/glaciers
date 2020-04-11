@@ -4,41 +4,51 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/eda/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2020/04/food-consumption-and-co2-emissions/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/machine-learning/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/r/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/2020/01/spotify-data-thats-music-to-my-ears/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/tidytuesday/</loc>
-    <lastmod>2020-01-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/visualization/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2020/01/spotify-data-thats-music-to-my-ears/</loc>
     <lastmod>2020-01-21T00:00:00+00:00</lastmod>
   </url>
   
