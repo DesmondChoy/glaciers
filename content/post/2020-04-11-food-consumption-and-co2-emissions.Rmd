@@ -22,19 +22,18 @@ knitr::opts_chunk$set(
   warning = FALSE)
 ```
 
-```{r Libraries, warning=FALSE, message=FALSE, echo=FALSE}
+This will be my first attempt at machine learning using the `tidymodels` package, with a dataset  taken from [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-18/readme.md). The code used to scrape this data can be found [here](https://r-tastic.co.uk/post/from-messy-to-tidy/).   
+
+The study analyses data from the Food and Agriculture Organization of the United Nations (FAO) to determine the quantity of produce supplied for consumption of 11 food types for all countries researched. Using CO2 emissions data, the carbon footprint per capita is then calculated for each food type.  
+
+I heavily borrow intuition gleaned from this [blog post](https://juliasilge.com/blog/food-hyperparameter-tune/) by Julia Silge - who does an amazing job at detailing the intricacies of `tidymodels` metapackage in her various blog posts.
+
+```{r Libraries, warning=FALSE, message=FALSE}
 library(tidyverse)
 
 theme_set(theme_minimal())
-```
 
-This dataset is once again taken from [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-18/readme.md), and the code to scrape this info can be found [here](https://r-tastic.co.uk/post/from-messy-to-tidy/). The study analyses data from the Food and Agriculture Organization of the United Nations (FAO) to determine the quantity of produce supplied for consumption of 11 food types for all countries researched. Using CO2 emissions data, the carbon footprint per capita is then calculated for each food type.  
-
-I heavily borrow intuition gleaned from this [blog post](https://juliasilge.com/blog/food-hyperparameter-tune/) by Julia Silge - who does an amazing job at detailing the intricacies of `tidymodels` metapackage. 
-
-```{r}
 food_consumption <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv")
-
 food_consumption
 ```
 
@@ -47,6 +46,7 @@ Using a preliminary `skim`, the dataset has 130 unique countries, each tagged wi
 
 ```{r}
 library(skimr)
+
 skim(food_consumption)
 
 food_consumption %>% 
@@ -226,7 +226,7 @@ Mostly for my own benefit, I list down the definitions of performance metrics th
 
 * **Accuracy** is the total number of correct predictions divided by the total number of predictions made for a dataset.   
 * **Precision** quantifies the number of positive class predictions that actually belong to the positive class.  
-* **Recall** quantifies the number of positive class predictions made out of all positive examples in the dataset.   
+* **Recall/Sensitivity** quantifies the number of positive class predictions made out of all positive examples in the dataset.   
 * **F-Measure** provides a single score that balances both the concerns of precision and recall in one number.   
 
 ```{r}
@@ -246,14 +246,14 @@ results_train <- log_fit %>%
   )
 
 results_test <- log_fit %>%
-  predict(new_data = food_test) %>%
+  predict(new_data = bake(food_rec, food_test)) %>%
   mutate(truth = food_test$americas) %>%
   conf_mat(truth, .pred_class) %>%
   summary() %>%
   mutate(model = "log") %>%
   bind_rows(
     rf_fit %>%
-      predict(new_data = food_test) %>%
+      predict(new_data = bake(food_rec, food_test)) %>%
       mutate(truth = food_test$americas) %>%
       conf_mat(truth, .pred_class) %>%
       summary() %>%
@@ -269,7 +269,7 @@ library(patchwork) #to combine ggplots
 p1 <- results_train %>%
   filter(.metric %in% c("accuracy", "precision", "recall", "f_meas")) %>%
   ggplot(aes(.metric, .estimate, fill = model)) +
-  geom_col(position = "dodge2") +
+  geom_col(position = "dodge") +
   geom_text(aes(label = round(.estimate, 2)),
             position = position_dodge(width = 0.9), vjust = -0.5) + 
   labs(
@@ -280,7 +280,7 @@ p1 <- results_train %>%
 p2 <- results_test %>%
   filter(.metric %in% c("accuracy", "precision", "recall", "f_meas")) %>%
   ggplot(aes(.metric, .estimate, fill = model)) +
-  geom_col(position = "dodge2") +
+  geom_col(position = "dodge") +
   geom_text(aes(label = round(.estimate, 2)),
             position = position_dodge(width = 0.9), vjust = -0.5) + 
   labs(
@@ -313,7 +313,7 @@ food_cv_folds
 Using our 10-fold CV data frame, we re-fit our models.  
 Subsequently, using the `collect_metrics` function, we are able to succintly summarize our specified performance metrics for both models, join them into a tibble, and use `patchwork` once again to visualize them all in a single diagram.
 
-```{r fig.width = 11, fig.height = 8}
+```{r fig.width = 12, fig.height = 10}
 log_refit <- fit_resamples(
   log_spec,
   americas ~ .,
@@ -339,7 +339,7 @@ results_train_refit <- log_refit %>%
 
 p3 <- results_train_refit %>%
   ggplot(aes(.metric, mean, fill = model)) +
-  geom_col(position = "dodge2") +
+  geom_col(position = "dodge") +
   geom_text(aes(label = round(mean, 2)),
             position = position_dodge(width = 0.9), vjust = -0.5) + 
   labs(

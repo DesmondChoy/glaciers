@@ -18,10 +18,14 @@ editor_options:
 
 
 
-<p>This dataset is once again taken from <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-18/readme.md">TidyTuesday</a>, and the code to scrape this info can be found <a href="https://r-tastic.co.uk/post/from-messy-to-tidy/">here</a>. The study analyses data from the Food and Agriculture Organization of the United Nations (FAO) to determine the quantity of produce supplied for consumption of 11 food types for all countries researched. Using CO2 emissions data, the carbon footprint per capita is then calculated for each food type.</p>
-<p>I heavily borrow intuition gleaned from this <a href="https://juliasilge.com/blog/food-hyperparameter-tune/">blog post</a> by Julia Silge - who does an amazing job at detailing the intricacies of <code>tidymodels</code> metapackage.</p>
-<pre class="r"><code>food_consumption &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv&quot;)
+<p>This will be my first attempt at machine learning using the <code>tidymodels</code> package, with a dataset taken from <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-02-18/readme.md">TidyTuesday</a>. The code used to scrape this data can be found <a href="https://r-tastic.co.uk/post/from-messy-to-tidy/">here</a>.</p>
+<p>The study analyses data from the Food and Agriculture Organization of the United Nations (FAO) to determine the quantity of produce supplied for consumption of 11 food types for all countries researched. Using CO2 emissions data, the carbon footprint per capita is then calculated for each food type.</p>
+<p>I heavily borrow intuition gleaned from this <a href="https://juliasilge.com/blog/food-hyperparameter-tune/">blog post</a> by Julia Silge - who does an amazing job at detailing the intricacies of <code>tidymodels</code> metapackage in her various blog posts.</p>
+<pre class="r"><code>library(tidyverse)
 
+theme_set(theme_minimal())
+
+food_consumption &lt;- readr::read_csv(&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv&quot;)
 food_consumption</code></pre>
 <pre><code>## # A tibble: 1,430 x 4
 ##    country   food_category            consumption co2_emmission
@@ -45,9 +49,10 @@ food_consumption</code></pre>
 </ul>
 <p>Using a preliminary <code>skim</code>, the dataset has 130 unique countries, each tagged with 11 different categories of food, and no missing values.</p>
 <pre class="r"><code>library(skimr)
+
 skim(food_consumption)</code></pre>
 <table>
-<caption><span id="tab:unnamed-chunk-2">Table 1: </span>Data summary</caption>
+<caption><span id="tab:unnamed-chunk-1">Table 1: </span>Data summary</caption>
 <tbody>
 <tr class="odd">
 <td align="left">Name</td>
@@ -197,7 +202,7 @@ skim(food_consumption)</code></pre>
     x = &quot;Food Categories&quot;,
     y = &quot;Average CO2 Emissions&quot;
   )</code></pre>
-<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>How about inspecting the median values and country outliers through a boxplot?</p>
 <pre class="r"><code>library(ggrepel) #ggplot identification of data points
 
@@ -221,7 +226,7 @@ food_consumption %&gt;%
     x = &quot;Food Categories&quot;,
     y = &quot;Average CO2 Emissions&quot;
   )</code></pre>
-<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>Filtering for <code>Beef</code> only, let’s take a closer look at the top 20 countries.</p>
 <pre class="r"><code>food_consumption %&gt;% 
   filter(food_category == &quot;Beef&quot;) %&gt;%
@@ -234,7 +239,7 @@ food_consumption %&gt;%
     x = &quot;Country&quot;,
     y = &quot;Beef Consumption&quot;
   )</code></pre>
-<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>I did not expect Argentina to be on top of that list by such a significant margin. Doing a bit of googling to fact-check, it does appear Argentinians are lovers of red meat. However, that consumption per person also seems to be <a href="https://www.batimes.com.ar/news/argentina/worlds-biggest-carnivores-are-turning-their-backs-on-beef.phtml">coming down</a>, due to a combination of rampant inflation as well as a growing health awareness of non-meat options. But I digress.</p>
 <p>Quite a number of North and South America countries America show up as heavy beef consumers. This gives me an idea - can I predict, using <code>co2_emmission</code>, if a country belongs to the Americas or not?</p>
 <p>I use the <code>countrycode</code> package to create a new column identifying which continent a country belongs to, and further create a binary classification of whether or not the country belongs to Americas.</p>
@@ -283,7 +288,7 @@ food %&gt;%
 
 food %&gt;% 
   ggscatmat(columns = 1:11, color = &quot;americas&quot;, alpha = 0.7)</code></pre>
-<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Nothing too out of the ordinary, although poultry &amp; beef tends to be contribute more CO2 in Americas versus rest of the world - very likely as a function of higher consumption.</p>
 <p>With that, let’s dive into modelling.</p>
 <blockquote>
@@ -361,7 +366,7 @@ log_fit</code></pre>
 rf_fit </code></pre>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  30ms 
+## Fit time:  51ms 
 ## Ranger result
 ## 
 ## Call:
@@ -386,7 +391,7 @@ rf_fit </code></pre>
 </li>
 <li><strong>Precision</strong> quantifies the number of positive class predictions that actually belong to the positive class.<br />
 </li>
-<li><strong>Recall</strong> quantifies the number of positive class predictions made out of all positive examples in the dataset.<br />
+<li><strong>Recall/Sensitivity</strong> quantifies the number of positive class predictions made out of all positive examples in the dataset.<br />
 </li>
 <li><strong>F-Measure</strong> provides a single score that balances both the concerns of precision and recall in one number.</li>
 </ul>
@@ -406,14 +411,14 @@ rf_fit </code></pre>
   )
 
 results_test &lt;- log_fit %&gt;%
-  predict(new_data = food_test) %&gt;%
+  predict(new_data = bake(food_rec, food_test)) %&gt;%
   mutate(truth = food_test$americas) %&gt;%
   conf_mat(truth, .pred_class) %&gt;%
   summary() %&gt;%
   mutate(model = &quot;log&quot;) %&gt;%
   bind_rows(
     rf_fit %&gt;%
-      predict(new_data = food_test) %&gt;%
+      predict(new_data = bake(food_rec, food_test)) %&gt;%
       mutate(truth = food_test$americas) %&gt;%
       conf_mat(truth, .pred_class) %&gt;%
       summary() %&gt;%
@@ -424,7 +429,7 @@ results_test &lt;- log_fit %&gt;%
 p1 &lt;- results_train %&gt;%
   filter(.metric %in% c(&quot;accuracy&quot;, &quot;precision&quot;, &quot;recall&quot;, &quot;f_meas&quot;)) %&gt;%
   ggplot(aes(.metric, .estimate, fill = model)) +
-  geom_col(position = &quot;dodge2&quot;) +
+  geom_col(position = &quot;dodge&quot;) +
   geom_text(aes(label = round(.estimate, 2)),
             position = position_dodge(width = 0.9), vjust = -0.5) + 
   labs(
@@ -435,7 +440,7 @@ p1 &lt;- results_train %&gt;%
 p2 &lt;- results_test %&gt;%
   filter(.metric %in% c(&quot;accuracy&quot;, &quot;precision&quot;, &quot;recall&quot;, &quot;f_meas&quot;)) %&gt;%
   ggplot(aes(.metric, .estimate, fill = model)) +
-  geom_col(position = &quot;dodge2&quot;) +
+  geom_col(position = &quot;dodge&quot;) +
   geom_text(aes(label = round(.estimate, 2)),
             position = position_dodge(width = 0.9), vjust = -0.5) + 
   labs(
@@ -444,7 +449,7 @@ p2 &lt;- results_test %&gt;%
   )
 
 p1 + p2 + plot_layout(guides = &quot;collect&quot;) &amp; theme(legend.position = &#39;bottom&#39;)</code></pre>
-<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>In the training results, random forest does a stellar job with close to perfect scores across these metrics.</p>
 <p>However, in our test results, our logistic regression model handily outperforms random forest. This difference in performance could imply overfitting of the random forest model. Resampling will address this issue of overfitting.</p>
 <blockquote>
@@ -498,7 +503,7 @@ results_train_refit &lt;- log_refit %&gt;%
 
 p3 &lt;- results_train_refit %&gt;%
   ggplot(aes(.metric, mean, fill = model)) +
-  geom_col(position = &quot;dodge2&quot;) +
+  geom_col(position = &quot;dodge&quot;) +
   geom_text(aes(label = round(mean, 2)),
             position = position_dodge(width = 0.9), vjust = -0.5) + 
   labs(
@@ -510,7 +515,7 @@ p3 &lt;- results_train_refit %&gt;%
   plot_annotation(title = &quot;Training vs Training (Resampled) vs Test Data&quot;,
                   subtitle = &quot;After resampling, overfitting is less apparent\nwith training performance metrics more closely resembling test data&quot;) +
   plot_layout(guides = &quot;collect&quot;) &amp; theme(legend.position = &#39;bottom&#39;)</code></pre>
-<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-16-1.png" width="1056" /></p>
+<p><img src="/post/2020-04-11-food-consumption-and-co2-emissions_files/figure-html/unnamed-chunk-15-1.png" width="1152" /></p>
 <blockquote>
 <p>Conclusion</p>
 </blockquote>
