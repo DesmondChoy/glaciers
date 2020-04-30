@@ -937,6 +937,7 @@ springer_tidy %&gt;%
 wordcloud &lt;- springer_tidy %&gt;%
   add_count(categories) %&gt;%
   mutate(english_package_name = fct_lump_n(english_package_name, 5)) %&gt;%
+  filter(n &lt; 15) %&gt;% 
   group_by(english_package_name) %&gt;%
   sample_n(40) %&gt;%
   distinct(categories, n, english_package_name)

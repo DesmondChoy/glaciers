@@ -125,6 +125,7 @@ library(ggwordcloud)
 wordcloud <- springer_tidy %>%
   add_count(categories) %>%
   mutate(english_package_name = fct_lump_n(english_package_name, 5)) %>%
+  filter(n < 15) %>% 
   group_by(english_package_name) %>%
   sample_n(40) %>%
   distinct(categories, n, english_package_name)
