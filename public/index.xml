@@ -17,8 +17,8 @@
       <pubDate>Thu, 30 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/04/being-picky-about-free-textbooks-from-springer/</guid>
-      <description>You might have heard that Springer Nature, an American German academic publishing company, is giving free access to more than 500 key textbooks across Springer Nature’s eBook subject collections, as their way to support lecturers, teachers and students and grant remote access to essential educational resources during this Covid-19 lockdown period.
-To my delight, I stumbled across the springerQuarantineBooksR package made by Renan Xavier Cortes in a blog post. After a preliminary scan of the package, I thought this would make for a good opportunity to practise some exploratory data analysis.</description>
+      <description>You might have heard that Springer Nature, an American German academic publishing company, is giving free access to more than 500 key textbooks across Springer Nature’s eBook subject collections, as their way to support lecturers, teachers and students and grant remote access to essential educational resources during this Covid-19 lockdown period. A repository of the books can be found here.
+To my delight, I stumbled across the springerQuarantineBooksR package made by Renan Xavier Cortes in a blog post.</description>
     </item>
     
     <item>

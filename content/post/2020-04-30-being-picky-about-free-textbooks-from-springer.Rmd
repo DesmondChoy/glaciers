@@ -20,9 +20,9 @@ knitr::opts_chunk$set(
   warning = FALSE)
 ```
 
-You might have heard that Springer Nature, an American German academic publishing company, is [giving free access](https://www.springernature.com/gp/librarians/news-events/all-news-articles/industry-news-initiatives/free-access-to-textbooks-for-institutions-affected-by-coronaviru/17855960) to more than 500 key textbooks across Springer Nature's eBook subject collections, as their way to support lecturers, teachers and students and grant remote access to essential educational resources during this Covid-19 lockdown period.  
+You might have heard that Springer Nature, an American German academic publishing company, is [giving free access](https://www.springernature.com/gp/librarians/news-events/all-news-articles/industry-news-initiatives/free-access-to-textbooks-for-institutions-affected-by-coronaviru/17855960) to more than 500 key textbooks across Springer Nature's eBook subject collections, as their way to support lecturers, teachers and students and grant remote access to essential educational resources during this Covid-19 lockdown period. A repository of the books can be [found here](https://link.springer.com/search/page/2?facet-content-type=%22Book%22&package=mat-covid19_textbooks&facet-language=%22En%22&sortOrder=newestFirst&showAll=true).  
 
-To my delight, I stumbled across the `springerQuarantineBooksR` package made by [Renan Xavier Cortes](https://github.com/renanxcortes/springerQuarantineBooksR ) in a [blog post](https://www.statsandr.com/blog/a-package-to-download-free-springer-books-during-covid-19-quarantine/). After a preliminary scan of the package, I thought this would make for a good opportunity to practise some exploratory data analysis.
+To my delight, I stumbled across the `springerQuarantineBooksR` package made by [Renan Xavier Cortes](https://github.com/renanxcortes/springerQuarantineBooksR ) in a [blog post](https://www.statsandr.com/blog/a-package-to-download-free-springer-books-during-covid-19-quarantine/). After a preliminary scan of the package, I thought this would make for a good opportunity to practise some exploratory data analysis to explore ways to narrow down a search across hundreds of books and their descriptions.
 
 ```{r libraries}
 #devtools::install_github("renanxcortes/springerQuarantineBooksR")
@@ -40,7 +40,7 @@ Once the package is installed, you are now able to download the entire batch of 
 
 Diving a bit deeper into the package has to offer, I noticed the dataset consists of only 407 rows and 391 unique book titles available for download - not quite the >500 aforementioned textbooks that was cited in the article linked above.   
 
-```{r}
+```{r fig.width = 12, fig.height = 10}
 library(skimr)
 
 springer_table <- download_springer_table()
@@ -48,6 +48,7 @@ skim(springer_table)
 ```
 
 I looked around at the Github repo and found this [explanation](https://github.com/renanxcortes/springerQuarantineBooksR/issues/5) by the author:  
+
 "Currently, due to the fact that the package works with the book title (in order to facilitate the creation of subgroups of books by title), **It fetches the latest edition of each book. In fact, that's why the number of books generated is lower than the number of lines of the .xlsx file catalog that springer made available.** Perhaps, it is worth to check an alternative to download all editions of the same book."  
 
 Perusing the column names together with a `head()`+`transmute()` combo, I'll filter out some columns which doesn't interest me.
@@ -80,15 +81,26 @@ So if one is looking for a book, it's better to search for sub-categories under 
 ```{r}
 springer2 <- springer %>%
   separate(subject_classification, paste("category", 1:8, sep = ""), sep = ";")
+
+springer2 %>% 
+  select(book_title, english_package_name, contains("cat"))
+```
+
+This part of the data wrangling required some trial and error to gauge how many columns I needed to completely seperate all sub-categories. From another round of `skim`, it looks like only 7 columns were needed because column `category8` has all 407 rows with missing values i.e. all sub-categories have been separated.
+
+```{r fig.width = 12, fig.height = 10}
 skim(springer2)
 ```
 
-This part of the data wrangling required some trial and error to gauge how many columns I needed to completely seperate all sub-categories. From another round of `skim`, it looks like only 7 columns were needed because column `category8` is empty. I'll proceed to remove it followed by `pivot_longer()`.  
-Some observations:
+Another way to scan for missing values would be using the `map_df()` function by the purrr package. Once again we obtain the same outcome.
 
-* Physics, Mathematics, Chemistry and Statistics are very straightforward categories - you won't be surprised
-* Categories like Mathematical & Computer Engineering and Statistics & Computing, on the other hand, are inter-disciplinary. 
+```{r}
+springer2 %>% 
+  select(contains("cat")) %>% 
+  map_df(~sum(is.na(.)))
+```
 
+I'll proceed to remove that column, followed by making our data long with `pivot_longer()` so that we can process it later.
 
 ```{r fig.width = 12, fig.height = 10}
 springer_tidy <- springer2 %>%
@@ -117,7 +129,12 @@ springer_tidy %>%
 
 ```
 
-I created word clouds for the most popular categories in the event anyone is looking for some inspiration on topics to dive into.
+Some observations:
+
+* Physics, Mathematics, Chemistry and Statistics are very straightforward categories - you won't be surprised
+* Categories like Mathematical & Computer Engineering and Statistics & Computing, on the other hand, are inter-disciplinary. 
+
+To narrow down potentially interesting sub-categories, I created word clouds to highlight the most popular ones, in the event anyone is looking for  inspiration on topics to dive into.
 
 ```{r fig.width = 12, fig.height = 10}
 library(ggwordcloud)
@@ -137,11 +154,11 @@ ggplot(wordcloud,
        )) +
   geom_text_wordcloud_area(
     rm_outside = T,
-    area_corr_power = 0.8,
+    area_corr_power = 0.7,
     eccentricity = 1,
     shape = "pentagon"
   ) +
-  scale_size_area(max_size = 10) +
+  scale_size_area(max_size = 8) +
   facet_wrap(. ~ english_package_name, nrow = 3) +
   labs(title = "Analysis paralysis setting in with hundred of books to choose from?",
        subtitle = "Word clouds are a way to visualize text data; Size of the word is an indication of its popularity in each category") +
@@ -149,7 +166,7 @@ ggplot(wordcloud,
     plot.title = element_text(face = "bold", size = 25, hjust = 0.5),
     plot.subtitle = element_text(size = 15,  hjust = 0.5),
     strip.background = element_blank(),
-    strip.text = element_text(face = "bold", size = 25)
+    strip.text = element_text(face = "bold", size = 20)
   )
 
 ```
@@ -168,30 +185,30 @@ wordcloud2 <- springer_tidy %>%
 
 ggplot(wordcloud2,
        aes(label = categories,
-           size = n,
-           colour = english_package_name
+         size = n,
+         colour = english_package_name
        )) +
   geom_text_wordcloud_area(
     rm_outside = T,
-    area_corr_power = 0.8,
+    area_corr_power = 0.7,
     eccentricity = 1,
     shape = "pentagon"
   ) +
-  scale_size_area(max_size = 10) +
+  scale_size_area(max_size = 8) +
   facet_wrap(. ~ english_package_name, nrow = 3) +
   labs(title = "What are some potentially esoteric sub-categories?",
        subtitle = "These are a sample of sub-categories that are cited three times or less.") +
-  theme(
+theme(
     plot.title = element_text(face = "bold", size = 25, hjust = 0.5),
     plot.subtitle = element_text(size = 15,  hjust = 0.5),
     strip.background = element_blank(),
-    strip.text = element_text(face = "bold", size = 25)
+    strip.text = element_text(face = "bold", size = 20)
   )
 ```
 
 Once you've decided on a category, say Sociology, the following code brings up the book title, author, and the relevant download link
 
-```{r}
+```{r fig.width = 12, fig.height = 10}
 springer_tidy %>%
   mutate(open_url = paste0('<a target="_blank" href="',
                            open_url,

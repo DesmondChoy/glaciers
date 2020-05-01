@@ -16,8 +16,8 @@ chunk_output_type: console
 
 
 
-<p>You might have heard that Springer Nature, an American German academic publishing company, is <a href="https://www.springernature.com/gp/librarians/news-events/all-news-articles/industry-news-initiatives/free-access-to-textbooks-for-institutions-affected-by-coronaviru/17855960">giving free access</a> to more than 500 key textbooks across Springer Nature’s eBook subject collections, as their way to support lecturers, teachers and students and grant remote access to essential educational resources during this Covid-19 lockdown period.</p>
-<p>To my delight, I stumbled across the <code>springerQuarantineBooksR</code> package made by <a href="https://github.com/renanxcortes/springerQuarantineBooksR">Renan Xavier Cortes</a> in a <a href="https://www.statsandr.com/blog/a-package-to-download-free-springer-books-during-covid-19-quarantine/">blog post</a>. After a preliminary scan of the package, I thought this would make for a good opportunity to practise some exploratory data analysis.</p>
+<p>You might have heard that Springer Nature, an American German academic publishing company, is <a href="https://www.springernature.com/gp/librarians/news-events/all-news-articles/industry-news-initiatives/free-access-to-textbooks-for-institutions-affected-by-coronaviru/17855960">giving free access</a> to more than 500 key textbooks across Springer Nature’s eBook subject collections, as their way to support lecturers, teachers and students and grant remote access to essential educational resources during this Covid-19 lockdown period. A repository of the books can be <a href="https://link.springer.com/search/page/2?facet-content-type=%22Book%22&amp;package=mat-covid19_textbooks&amp;facet-language=%22En%22&amp;sortOrder=newestFirst&amp;showAll=true">found here</a>.</p>
+<p>To my delight, I stumbled across the <code>springerQuarantineBooksR</code> package made by <a href="https://github.com/renanxcortes/springerQuarantineBooksR">Renan Xavier Cortes</a> in a <a href="https://www.statsandr.com/blog/a-package-to-download-free-springer-books-during-covid-19-quarantine/">blog post</a>. After a preliminary scan of the package, I thought this would make for a good opportunity to practise some exploratory data analysis to explore ways to narrow down a search across hundreds of books and their descriptions.</p>
 <pre class="r"><code>#devtools::install_github(&quot;renanxcortes/springerQuarantineBooksR&quot;)
 library(springerQuarantineBooksR)
 library(tidyverse)
@@ -346,8 +346,8 @@ skim(springer_table)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>I looked around at the Github repo and found this <a href="https://github.com/renanxcortes/springerQuarantineBooksR/issues/5">explanation</a> by the author:<br />
-“Currently, due to the fact that the package works with the book title (in order to facilitate the creation of subgroups of books by title), <strong>It fetches the latest edition of each book. In fact, that’s why the number of books generated is lower than the number of lines of the .xlsx file catalog that springer made available.</strong> Perhaps, it is worth to check an alternative to download all editions of the same book.”</p>
+<p>I looked around at the Github repo and found this <a href="https://github.com/renanxcortes/springerQuarantineBooksR/issues/5">explanation</a> by the author:</p>
+<p>“Currently, due to the fact that the package works with the book title (in order to facilitate the creation of subgroups of books by title), <strong>It fetches the latest edition of each book. In fact, that’s why the number of books generated is lower than the number of lines of the .xlsx file catalog that springer made available.</strong> Perhaps, it is worth to check an alternative to download all editions of the same book.”</p>
 <p>Perusing the column names together with a <code>head()</code>+<code>transmute()</code> combo, I’ll filter out some columns which doesn’t interest me.</p>
 <pre class="r"><code>colnames(springer_table)</code></pre>
 <pre><code>##  [1] &quot;book_title&quot;             &quot;author&quot;                 &quot;edition&quot;               
@@ -470,9 +470,28 @@ skim(springer_table)</code></pre>
 <p>So if one is looking for a book, it’s better to search for sub-categories under <code>subject_classification</code>. However, multiple sub-categories are listed under <code>subject_classification</code> column per book. I plan to <code>separate()</code> then <code>pivot_longer()</code> to make our <a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html">data tidy</a>.</p>
 <pre class="r"><code>springer2 &lt;- springer %&gt;%
   separate(subject_classification, paste(&quot;category&quot;, 1:8, sep = &quot;&quot;), sep = &quot;;&quot;)
-skim(springer2)</code></pre>
+
+springer2 %&gt;% 
+  select(book_title, english_package_name, contains(&quot;cat&quot;))</code></pre>
+<pre><code>## # A tibble: 407 x 10
+##    book_title english_package~ category1 category2 category3 category4 category5
+##    &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;    
+##  1 Fundament~ Engineering      Engineer~ &quot; Circui~ &quot; Energy~ &quot; Electr~ &quot; Energy~
+##  2 Handbook ~ Humanities, Soc~ Social S~ &quot; Sociol~ &quot; Clinic~ &quot; Popula~  &lt;NA&gt;    
+##  3 All of St~ Mathematics and~ Mathemat~ &quot; Comput~ &quot; Probab~ &quot; Comple~ &quot; Statis~
+##  4 Social An~ Behavioral Scie~ Psycholo~ &quot; Clinic~ &quot; Person~ &quot; Commun~  &lt;NA&gt;    
+##  5 Discrete ~ Mathematics and~ Mathemat~ &quot; Combin~ &quot; Number~  &lt;NA&gt;      &lt;NA&gt;    
+##  6 Developme~ Biomedical and ~ Biomedic~ &quot; Neuros~ &quot; Anatom~ &quot; Neurob~  &lt;NA&gt;    
+##  7 Intuitive~ Engineering      Engineer~ &quot; Commun~ &quot; Mathem~ &quot; Mathem~ &quot; Signal~
+##  8 Handbook ~ Humanities, Soc~ Social S~ &quot; Sociol~ &quot; Public~ &quot; Demogr~  &lt;NA&gt;    
+##  9 Handbook ~ Humanities, Soc~ Social S~ &quot; Sociol~ &quot; Social~ &quot; Person~  &lt;NA&gt;    
+## 10 Handbook ~ Humanities, Soc~ Social S~ &quot; Sociol~ &quot; Politi~  &lt;NA&gt;      &lt;NA&gt;    
+## # ... with 397 more rows, and 3 more variables: category6 &lt;chr&gt;,
+## #   category7 &lt;chr&gt;, category8 &lt;chr&gt;</code></pre>
+<p>This part of the data wrangling required some trial and error to gauge how many columns I needed to completely seperate all sub-categories. From another round of <code>skim</code>, it looks like only 7 columns were needed because column <code>category8</code> has all 407 rows with missing values i.e. all sub-categories have been separated.</p>
+<pre class="r"><code>skim(springer2)</code></pre>
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 2: </span>Data summary</caption>
+<caption><span id="tab:unnamed-chunk-6">Table 2: </span>Data summary</caption>
 <tbody>
 <tr class="odd">
 <td align="left">Name</td>
@@ -695,12 +714,16 @@ skim(springer2)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>This part of the data wrangling required some trial and error to gauge how many columns I needed to completely seperate all sub-categories. From another round of <code>skim</code>, it looks like only 7 columns were needed because column <code>category8</code> is empty. I’ll proceed to remove it followed by <code>pivot_longer()</code>.<br />
-Some observations:</p>
-<ul>
-<li>Physics, Mathematics, Chemistry and Statistics are very straightforward categories - you won’t be surprised</li>
-<li>Categories like Mathematical &amp; Computer Engineering and Statistics &amp; Computing, on the other hand, are inter-disciplinary.</li>
-</ul>
+<p>Another way to scan for missing values would be using the <code>map_df()</code> function by the purrr package. Once again we obtain the same outcome.</p>
+<pre class="r"><code>springer2 %&gt;% 
+  select(contains(&quot;cat&quot;)) %&gt;% 
+  map_df(~sum(is.na(.)))</code></pre>
+<pre><code>## # A tibble: 1 x 8
+##   category1 category2 category3 category4 category5 category6 category7
+##       &lt;int&gt;     &lt;int&gt;     &lt;int&gt;     &lt;int&gt;     &lt;int&gt;     &lt;int&gt;     &lt;int&gt;
+## 1         0         2        32        86       201       306       367
+## # ... with 1 more variable: category8 &lt;int&gt;</code></pre>
+<p>I’ll proceed to remove that column, followed by making our data long with <code>pivot_longer()</code> so that we can process it later.</p>
 <pre class="r"><code>springer_tidy &lt;- springer2 %&gt;%
   select(-category8) %&gt;%
   pivot_longer(
@@ -724,8 +747,13 @@ springer_tidy %&gt;%
     x = &quot;Sub-categories&quot;,
     y = &quot;Number of Times Mentioned&quot;
   )</code></pre>
-<p><img src="/post/2020-04-30-being-picky-about-free-textbooks-from-springer_files/figure-html/unnamed-chunk-6-1.png" width="1152" /></p>
-<p>I created word clouds for the most popular categories in the event anyone is looking for some inspiration on topics to dive into.</p>
+<p><img src="/post/2020-04-30-being-picky-about-free-textbooks-from-springer_files/figure-html/unnamed-chunk-8-1.png" width="1152" /></p>
+<p>Some observations:</p>
+<ul>
+<li>Physics, Mathematics, Chemistry and Statistics are very straightforward categories - you won’t be surprised</li>
+<li>Categories like Mathematical &amp; Computer Engineering and Statistics &amp; Computing, on the other hand, are inter-disciplinary.</li>
+</ul>
+<p>To narrow down potentially interesting sub-categories, I created word clouds to highlight the most popular ones, in the event anyone is looking for inspiration on topics to dive into.</p>
 <pre class="r"><code>library(ggwordcloud)
 
 wordcloud &lt;- springer_tidy %&gt;%
@@ -743,11 +771,11 @@ ggplot(wordcloud,
        )) +
   geom_text_wordcloud_area(
     rm_outside = T,
-    area_corr_power = 0.8,
+    area_corr_power = 0.7,
     eccentricity = 1,
     shape = &quot;pentagon&quot;
   ) +
-  scale_size_area(max_size = 10) +
+  scale_size_area(max_size = 8) +
   facet_wrap(. ~ english_package_name, nrow = 3) +
   labs(title = &quot;Analysis paralysis setting in with hundred of books to choose from?&quot;,
        subtitle = &quot;Word clouds are a way to visualize text data; Size of the word is an indication of its popularity in each category&quot;) +
@@ -755,9 +783,9 @@ ggplot(wordcloud,
     plot.title = element_text(face = &quot;bold&quot;, size = 25, hjust = 0.5),
     plot.subtitle = element_text(size = 15,  hjust = 0.5),
     strip.background = element_blank(),
-    strip.text = element_text(face = &quot;bold&quot;, size = 25)
+    strip.text = element_text(face = &quot;bold&quot;, size = 20)
   )</code></pre>
-<p><img src="/post/2020-04-30-being-picky-about-free-textbooks-from-springer_files/figure-html/unnamed-chunk-7-1.png" width="1152" /></p>
+<p><img src="/post/2020-04-30-being-picky-about-free-textbooks-from-springer_files/figure-html/unnamed-chunk-9-1.png" width="1152" /></p>
 <p>And just because my wife was curious what the most “obsure” sub-categories were …</p>
 <pre class="r"><code>wordcloud2 &lt;- springer_tidy %&gt;%
   add_count(categories) %&gt;%
@@ -770,26 +798,26 @@ ggplot(wordcloud,
 
 ggplot(wordcloud2,
        aes(label = categories,
-           size = n,
-           colour = english_package_name
+         size = n,
+         colour = english_package_name
        )) +
   geom_text_wordcloud_area(
     rm_outside = T,
-    area_corr_power = 0.8,
+    area_corr_power = 0.7,
     eccentricity = 1,
     shape = &quot;pentagon&quot;
   ) +
-  scale_size_area(max_size = 10) +
+  scale_size_area(max_size = 8) +
   facet_wrap(. ~ english_package_name, nrow = 3) +
   labs(title = &quot;What are some potentially esoteric sub-categories?&quot;,
        subtitle = &quot;These are a sample of sub-categories that are cited three times or less.&quot;) +
-  theme(
+theme(
     plot.title = element_text(face = &quot;bold&quot;, size = 25, hjust = 0.5),
     plot.subtitle = element_text(size = 15,  hjust = 0.5),
     strip.background = element_blank(),
-    strip.text = element_text(face = &quot;bold&quot;, size = 25)
+    strip.text = element_text(face = &quot;bold&quot;, size = 20)
   )</code></pre>
-<p><img src="/post/2020-04-30-being-picky-about-free-textbooks-from-springer_files/figure-html/unnamed-chunk-8-1.png" width="1152" /></p>
+<p><img src="/post/2020-04-30-being-picky-about-free-textbooks-from-springer_files/figure-html/unnamed-chunk-10-1.png" width="1152" /></p>
 <p>Once you’ve decided on a category, say Sociology, the following code brings up the book title, author, and the relevant download link</p>
 <pre class="r"><code>springer_tidy %&gt;%
   mutate(open_url = paste0(&#39;&lt;a target=&quot;_blank&quot; href=&quot;&#39;,
