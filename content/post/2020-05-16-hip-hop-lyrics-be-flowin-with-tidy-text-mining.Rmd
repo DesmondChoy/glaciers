@@ -176,11 +176,11 @@ lyrics_count %>%
     subtitle = "Selected Hip-Hop Songs from BBC Poll; Categories from NRC Emotion Lexicon; Lyrics from Genius package"
   ) +
   theme(
-    plot.title = element_text(face = "bold", size = 15),
+    plot.title = element_text(face = "bold", size = 20),
     plot.title.position = "plot",
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = "bold", size = 10)
+    strip.text = element_text(face = "bold", size = 15)
   )
   
 ```
@@ -215,18 +215,18 @@ song_sentiment %>%
     subtitle = "Positive scores indicate positive sentiment, and vice versa."
   ) +
   theme(
-    plot.title = element_text(face = "bold", size = 15),
+    plot.title = element_text(face = "bold", size = 20),
     plot.title.position = "plot",
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = "bold", size = 10)
+    strip.text = element_text(face = "bold", size = 15)
   )
 
 ```
 
 ## Modelling
 
-We begin our modelling process that aims to predict if a hip-hop song is Old School (released before the year 2000) or Modern (released in the year 2000 or later) by using feature engineering on its lyrics.
+We begin our modelling process that aims to predict if a hip-hop song is Old School (released before the year 2000) or Modern (released in the year 2000 or later) by using feature engineering on its lyrics as well as artist gender.
 
 ## Data Splitting
 
@@ -259,7 +259,6 @@ Let's use a [LASSO](https://bradleyboehmke.github.io/HOML/regularized-regression
 * **Penalty**: The total amount of regularization in the model. This is set to `tune()`, a placeholder that will be determined subsequently by tuning.  
 * **Mixture**: The proportion of L1 regularization in the model. Setting Mixture to 1 makes it a LASSO model.
 
-
 ```{r}
 lr_model <- logistic_reg(penalty = tune(),
                          mixture = 1) %>% 
@@ -271,8 +270,8 @@ lr_model <- logistic_reg(penalty = tune(),
 Here we begin to do some processing on the lyrics that we previously pulled:  
 
 * step_tokenize: Similar to `unnest_tokens()`; this tokenizes our lyrics. The default option is used where words are broken down into single words (as opposed to n-grams or multiple words)
-* step_stopwords: Similar to anti-join(stop_words)
-* step_tokenfilter: We keep the top 1000 most-used tokens after accounting for the removal of stop words
+* step_stopwords: Similar to `anti-join(stop_words)`
+* step_tokenfilter: We keep the top 2000 most-used tokens after accounting for the removal of stop words
 * step_tfidf: The statistic [tf-idf](https://www.tidytextmining.com/tfidf.html), or term frequency multiplied by inverse document frequency, identifies words that are important to one document within a collection of documents.
 * step_normalize: Once the words have been converted to tf-idf values, they will then be centered and scaled i.e. normalized. This is important as the LASSO model is not robust to outliers.
 * step_dummy: Standard practise to convert factor/character columns (such as our  `gender` bucket) to [dummy variables](https://bookdown.org/max/FES/creating-dummy-variables-for-unordered-categories.html) to make them numeric. 
@@ -294,7 +293,7 @@ prep(hiphop_rec)
 
 ## Workflows
 
-We next use the `workflows` package to bundle our model and recipes. Personally I'm  rather excited after this package as it has not only has great synergy with the ecosystem, but it makes the process cleaner and more intuitive - especially compared to my previous [tidymodels post](https://desmondchoy.netlify.app/2020/04/food-consumption-and-co2-emissions/) where I have yet to learn about `workflows`.
+We next use the `workflows` package to bundle our model and recipes. Personally I'm  rather excited after this package as it has not only has great synergy with the ecosystem, but it makes the process cleaner and more intuitive - especially compared to my previous [tidymodels post](https://desmondchoy.netlify.app/2020/04/food-consumption-and-co2-emissions/).
 
 ```{r}
 lr_wflow <- workflow() %>% 
@@ -312,7 +311,7 @@ Recall the penalty hyperparamter in our model was given the placeholder `tune()`
 grid <- grid_regular(penalty(), levels = 40)
 ```
 
-Together with our resampled tibble created earlier, we can begin tuning. We can further specify relevant metrics - in this case, `AUC`, positive predictive value (`PPV`), negative predictive value (`npv`), and mean log loss (`mn_log_loss`) which takes into account the uncertainty in the prediction and gives a more detailed view into the actual performance.
+Together with our resampled tibble created earlier, we can begin tuning. We can further specify relevant metrics - in this case, `roc_auc`, positive predictive value (`ppv`), negative predictive value (`npv`), and mean log loss (`mn_log_loss`) which takes into account the uncertainty in the prediction and gives a more detailed view into the actual performance.
 
 ```{r}
 #doParallel::registerDoParallel()
@@ -393,11 +392,11 @@ final_lr %>%
        title = "Hip-hop lyrics with the highest importance when determining the era of a song",
        subtitle = "Modern: Released in 2000 or after; Old School: Songs released before 2000") +
   theme(
-    plot.title = element_text(face = "bold", size = 15),
+    plot.title = element_text(face = "bold", size = 20),
     plot.title.position = "plot",
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = "bold", size = 10)
+    strip.text = element_text(face = "bold", size = 15)
   )
 
 ```
@@ -489,11 +488,11 @@ final_lr_v2 %>%
        title = "Hip-hop lyrics with the highest importance when determining the era of a song",
        subtitle = "Modern: Released in 2000 or after; Old School: Songs released before 2000") +
   theme(
-    plot.title = element_text(face = "bold", size = 15),
+    plot.title = element_text(face = "bold", size = 20),
     plot.title.position = "plot",
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = "bold", size = 10)
+    strip.text = element_text(face = "bold", size = 15)
   )
 
 ```
@@ -521,4 +520,4 @@ lyrics %>%
   mutate(percent = n/sum(n))
 ```
 
-Writing and re-iterating through this blog post was fascinating and educational - giving me  preliminary insights to the domain of NLP and another opportunity to familiarise myself with tidymodels. The tidy text mining workflow is testament to how robust the `dplyr` package is when it comes to data wrangling.
+Writing and re-iterating through this blog post was fascinating and educational - giving me  preliminary insight to the domain of NLP and another opportunity to familiarise myself with `tidymodels`. Lastly, the tidy text mining workflow is testament to how robust the `dplyr` package is when it comes to data wrangling.

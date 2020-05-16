@@ -133,18 +133,18 @@ tidy_lyrics %&gt;%
   select(word, sentiment, line, title, artist, bucket) %&gt;% 
   sample_n(10)</code></pre>
 <pre><code>## # A tibble: 10 x 6
-##    word       sentiment  line title                    artist          bucket   
-##    &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                    &lt;chr&gt;           &lt;chr&gt;    
-##  1 belt       fear         16 Gossip                   Lil Wayne       Modern   
-##  2 bless      joy          34 The World Is Yours       Nas             Old Scho~
-##  3 insane     fear         33 Insane In The Brain      Cypress Hill    Old Scho~
-##  4 armor      trust        26 The Rain (Supa Dupa Fly) Missy Elliott   Old Scho~
-##  5 overdue    sadness      42 We Got It For Cheap (In~ Clipse          Modern   
-##  6 death      anger        63 Takkies                  YoungstaCPT     Modern   
-##  7 playground positive     42 Concrete Schoolyard      Jurassic 5      Old Scho~
-##  8 dying      anger        34 Gossip                   Lil Wayne       Modern   
-##  9 smell      disgust      70 Triumph                  Wu-Tang Clan    Old Scho~
-## 10 fight      negative     88 Fight Da Faida           Frankie HI-NRG~ Old Scho~</code></pre>
+##    word     sentiment  line title                artist               bucket    
+##    &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;                &lt;chr&gt;     
+##  1 murder   anger        48 La La La             Lil Wayne            Modern    
+##  2 dirt     disgust      55 OVERSEAS             Bohan Phoenix        Modern    
+##  3 hell     anger        85 I Gave You Power     Nas                  Old School
+##  4 favorite trust        13 Play That Beat Mr DJ GLOBE &amp; Whiz Kid     Modern    
+##  5 boy      negative     89 Mural                Lupe Fiasco          Modern    
+##  6 crash    fear         55 Lucifer              JAY-Z                Modern    
+##  7 bad      anger        18 Kyoto                Yung Lean            Modern    
+##  8 white    trust        77 Hahahaha jk?         Das Racist           Modern    
+##  9 lie      sadness      31 Fuck Tha World       Lil Wayne            Old School
+## 10 fight    anger        53 Scenario             A Tribe Called Quest Old School</code></pre>
 <p>Let’s peek at the top words used in our songs.</p>
 <pre class="r"><code>tidy_lyrics %&gt;% 
   count(word, sort = TRUE) </code></pre>
@@ -221,11 +221,11 @@ lyrics_count &lt;- tidy_lyrics %&gt;%
     subtitle = &quot;Selected Hip-Hop Songs from BBC Poll; Categories from NRC Emotion Lexicon; Lyrics from Genius package&quot;
   ) +
   theme(
-    plot.title = element_text(face = &quot;bold&quot;, size = 15),
+    plot.title = element_text(face = &quot;bold&quot;, size = 20),
     plot.title.position = &quot;plot&quot;,
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = &quot;bold&quot;, size = 10)
+    strip.text = element_text(face = &quot;bold&quot;, size = 15)
   )</code></pre>
 <p><img src="/post/2020-05-16-hip-hop-lyrics-be-flowin-with-tidy-text-mining_files/figure-html/unnamed-chunk-11-1.png" width="1152" /></p>
 <p>Data is wrangled further with <code>count()</code> and <code>pivot_wider()</code> to obtain a sentiment score. With the score, we can now visualise how sentiment (positive/negative) changes across ten randomly sampled rap songs.</p>
@@ -256,17 +256,17 @@ song_sentiment %&gt;%
     subtitle = &quot;Positive scores indicate positive sentiment, and vice versa.&quot;
   ) +
   theme(
-    plot.title = element_text(face = &quot;bold&quot;, size = 15),
+    plot.title = element_text(face = &quot;bold&quot;, size = 20),
     plot.title.position = &quot;plot&quot;,
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = &quot;bold&quot;, size = 10)
+    strip.text = element_text(face = &quot;bold&quot;, size = 15)
   )</code></pre>
 <p><img src="/post/2020-05-16-hip-hop-lyrics-be-flowin-with-tidy-text-mining_files/figure-html/unnamed-chunk-12-1.png" width="1152" /></p>
 </div>
 <div id="modelling" class="section level2">
 <h2>Modelling</h2>
-<p>We begin our modelling process that aims to predict if a hip-hop song is Old School (released before the year 2000) or Modern (released in the year 2000 or later) by using feature engineering on its lyrics.</p>
+<p>We begin our modelling process that aims to predict if a hip-hop song is Old School (released before the year 2000) or Modern (released in the year 2000 or later) by using feature engineering on its lyrics as well as artist gender.</p>
 </div>
 <div id="data-splitting" class="section level2">
 <h2>Data Splitting</h2>
@@ -315,8 +315,8 @@ folds</code></pre>
 <p>Here we begin to do some processing on the lyrics that we previously pulled:</p>
 <ul>
 <li>step_tokenize: Similar to <code>unnest_tokens()</code>; this tokenizes our lyrics. The default option is used where words are broken down into single words (as opposed to n-grams or multiple words)</li>
-<li>step_stopwords: Similar to anti-join(stop_words)</li>
-<li>step_tokenfilter: We keep the top 1000 most-used tokens after accounting for the removal of stop words</li>
+<li>step_stopwords: Similar to <code>anti-join(stop_words)</code></li>
+<li>step_tokenfilter: We keep the top 2000 most-used tokens after accounting for the removal of stop words</li>
 <li>step_tfidf: The statistic <a href="https://www.tidytextmining.com/tfidf.html">tf-idf</a>, or term frequency multiplied by inverse document frequency, identifies words that are important to one document within a collection of documents.</li>
 <li>step_normalize: Once the words have been converted to tf-idf values, they will then be centered and scaled i.e. normalized. This is important as the LASSO model is not robust to outliers.</li>
 <li>step_dummy: Standard practise to convert factor/character columns (such as our <code>gender</code> bucket) to <a href="https://bookdown.org/max/FES/creating-dummy-variables-for-unordered-categories.html">dummy variables</a> to make them numeric.</li>
@@ -354,17 +354,17 @@ prep(hiphop_rec) </code></pre>
 </div>
 <div id="workflows" class="section level2">
 <h2>Workflows</h2>
-<p>We next use the <code>workflows</code> package to bundle our model and recipes. Personally I’m rather excited after this package as it has not only has great synergy with the ecosystem, but it makes the process cleaner and more intuitive - especially compared to my previous <a href="https://desmondchoy.netlify.app/2020/04/food-consumption-and-co2-emissions/">tidymodels post</a> where I have yet to learn about <code>workflows</code>.</p>
+<p>We next use the <code>workflows</code> package to bundle our model and recipes. Personally I’m rather excited after this package as it has not only has great synergy with the ecosystem, but it makes the process cleaner and more intuitive - especially compared to my previous <a href="https://desmondchoy.netlify.app/2020/04/food-consumption-and-co2-emissions/">tidymodels post</a>.</p>
 <pre class="r"><code>lr_wflow &lt;- workflow() %&gt;% 
   add_model(lr_model) %&gt;% 
   add_recipe(hiphop_rec)
   
 lr_wflow</code></pre>
-<pre><code>## == Workflow =======================================================================================
+<pre><code>## == Workflow ========================================================================================
 ## Preprocessor: Recipe
 ## Model: logistic_reg()
 ## 
-## -- Preprocessor -----------------------------------------------------------------------------------
+## -- Preprocessor ------------------------------------------------------------------------------------
 ## 6 Recipe Steps
 ## 
 ## * step_tokenize()
@@ -374,7 +374,7 @@ lr_wflow</code></pre>
 ## * step_normalize()
 ## * step_dummy()
 ## 
-## -- Model ------------------------------------------------------------------------------------------
+## -- Model -------------------------------------------------------------------------------------------
 ## Logistic Regression Model Specification (classification)
 ## 
 ## Main Arguments:
@@ -387,7 +387,7 @@ lr_wflow</code></pre>
 <h2>Tuning</h2>
 <p>Recall the penalty hyperparamter in our model was given the placeholder <code>tune()</code>. To find an optimal value, we first create a set of possible regularization parameters to conduct a grid search.</p>
 <pre class="r"><code>grid &lt;- grid_regular(penalty(), levels = 40)</code></pre>
-<p>Together with our resampled tibble created earlier, we can begin tuning. We can further specify relevant metrics - in this case, <code>AUC</code>, positive predictive value (<code>PPV</code>), negative predictive value (<code>npv</code>), and mean log loss (<code>mn_log_loss</code>) which takes into account the uncertainty in the prediction and gives a more detailed view into the actual performance.</p>
+<p>Together with our resampled tibble created earlier, we can begin tuning. We can further specify relevant metrics - in this case, <code>roc_auc</code>, positive predictive value (<code>ppv</code>), negative predictive value (<code>npv</code>), and mean log loss (<code>mn_log_loss</code>) which takes into account the uncertainty in the prediction and gives a more detailed view into the actual performance.</p>
 <pre class="r"><code>#doParallel::registerDoParallel()
 #Step recommended by Julia Silge. Gives me an error on my Windows PC but perhaps it works on Mac?
 
@@ -429,11 +429,11 @@ lr_grid &lt;- tune_grid(
 final_lr &lt;- lr_wflow %&gt;%
   finalize_workflow(best_auc)
 final_lr</code></pre>
-<pre><code>## == Workflow =======================================================================================
+<pre><code>## == Workflow ========================================================================================
 ## Preprocessor: Recipe
 ## Model: logistic_reg()
 ## 
-## -- Preprocessor -----------------------------------------------------------------------------------
+## -- Preprocessor ------------------------------------------------------------------------------------
 ## 6 Recipe Steps
 ## 
 ## * step_tokenize()
@@ -443,7 +443,7 @@ final_lr</code></pre>
 ## * step_normalize()
 ## * step_dummy()
 ## 
-## -- Model ------------------------------------------------------------------------------------------
+## -- Model -------------------------------------------------------------------------------------------
 ## Logistic Regression Model Specification (classification)
 ## 
 ## Main Arguments:
@@ -479,11 +479,11 @@ final_lr %&gt;%
        title = &quot;Hip-hop lyrics with the highest importance when determining the era of a song&quot;,
        subtitle = &quot;Modern: Released in 2000 or after; Old School: Songs released before 2000&quot;) +
   theme(
-    plot.title = element_text(face = &quot;bold&quot;, size = 15),
+    plot.title = element_text(face = &quot;bold&quot;, size = 20),
     plot.title.position = &quot;plot&quot;,
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = &quot;bold&quot;, size = 10)
+    strip.text = element_text(face = &quot;bold&quot;, size = 15)
   )</code></pre>
 <p><img src="/post/2020-05-16-hip-hop-lyrics-be-flowin-with-tidy-text-mining_files/figure-html/unnamed-chunk-23-1.png" width="1152" /></p>
 <p><code>gender_mixed</code> immediately stands out as an outlier. Taking a look at lyrics data once more, it is now apparent why <code>gender_mixed</code> contributed improportionately. Out of all of the songs that were tagged as <code>gender_mixed</code>, lyrics were only pulled for one!</p>
@@ -576,11 +576,11 @@ final_lr_v2 &lt;- lr_wflow_v2 %&gt;%
        title = &quot;Hip-hop lyrics with the highest importance when determining the era of a song&quot;,
        subtitle = &quot;Modern: Released in 2000 or after; Old School: Songs released before 2000&quot;) +
   theme(
-    plot.title = element_text(face = &quot;bold&quot;, size = 15),
+    plot.title = element_text(face = &quot;bold&quot;, size = 20),
     plot.title.position = &quot;plot&quot;,
-    plot.subtitle = element_text(size = 10),
+    plot.subtitle = element_text(size = 15),
     strip.background = element_blank(),
-    strip.text = element_text(face = &quot;bold&quot;, size = 10)
+    strip.text = element_text(face = &quot;bold&quot;, size = 15)
   )</code></pre>
 <p><img src="/post/2020-05-16-hip-hop-lyrics-be-flowin-with-tidy-text-mining_files/figure-html/unnamed-chunk-27-1.png" width="1152" /></p>
 </div>
@@ -609,5 +609,5 @@ hiphop_final %&gt;%
 ##   &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;
 ## 1 Modern      5447   0.465
 ## 2 Old School  6278   0.535</code></pre>
-<p>Writing and re-iterating through this blog post was fascinating and educational - giving me preliminary insights to the domain of NLP and another opportunity to familiarise myself with tidymodels. The tidy text mining workflow is testament to how robust the <code>dplyr</code> package is when it comes to data wrangling.</p>
+<p>Writing and re-iterating through this blog post was fascinating and educational - giving me preliminary insight to the domain of NLP and another opportunity to familiarise myself with <code>tidymodels</code>. Lastly, the tidy text mining workflow is testament to how robust the <code>dplyr</code> package is when it comes to data wrangling.</p>
 </div>
