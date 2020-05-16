@@ -224,7 +224,7 @@ song_sentiment %>%
 
 ```
 
-#Modelling
+## Modelling
 
 We begin our modelling process that aims to predict if a hip-hop song is Old School (released before the year 2000) or Modern (released in the year 2000 or later) by using feature engineering on its lyrics.
 
@@ -364,7 +364,7 @@ final_lr
 
 ```
 
-## Fitting the model
+## Fitting / Visualizing The Results
 
 After fitting the model to the training data, let's take a look at variable importance i.e. which words had the highest predictive power.
 
@@ -412,7 +412,7 @@ lyrics %>%
   count(bucket, gender)
 ```
 
-## Re-fitting the model
+## Re-fitting the Model
 
 Because of this anomality in gender training data, I'll remove gender as a predictor and re-run the entire process.
 
@@ -465,6 +465,8 @@ final_lr_v2 <- lr_wflow_v2 %>%
 
 ```
 
+## Visualizing Results Once More
+
 After filtering for stop words, we used tf-idf as one of our recipe steps to extract importance. The [idea behind tf-idf](https://www.tidytextmining.com/tfidf.html#the-bind_tf_idf-function) is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection  of documents. **Calculating tf-idf attempts to find the words that are important (i.e. common) in a text, but not too common**.  
 
 ```{r fig.width = 12, fig.height = 10}
@@ -496,7 +498,7 @@ final_lr_v2 %>%
 
 ```
 
-## Final fit on Test data
+## Final fit on Test Data
 
 Now we perform the final fit using `last_fit()` to evaluate our model on the test data. Somewhat counter-intuitively, `last_fit()` is fitted onto our initial split data instead of test data.
 
