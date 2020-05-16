@@ -6,10 +6,19 @@
     <description>Recent content in visualization on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hip-hop lyrics be flowing with Tidy Text Mining</title>
+      <link>/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/</link>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/</guid>
+      <description>I’ve been hit with a double dose of NLP inspiration after reading a recent Julia Silge blog post and watching a Datacamp video on Tidy Text Mining which she used to teach. Ergo, this post will set out to do two things: use sentiment analysis to explore hip-hop songs, and subsequently use the tidymodels package on the lyrics to predict which era (Old School versus Modern) the songs came from.</description>
+    </item>
     
     <item>
       <title>Being Picky About Free Textbooks From Springer</title>

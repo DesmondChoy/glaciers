@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,16 +14,34 @@
     <item>
       <title>EDA</title>
       <link>/tags/eda/</link>
-      <pubDate>Thu, 30 Apr 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/eda/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>machine learning</title>
+      <link>/tags/machine-learning/</link>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>NLP</title>
+      <link>/tags/nlp/</link>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/nlp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>r</title>
       <link>/tags/r/</link>
-      <pubDate>Thu, 30 Apr 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/r/</guid>
       <description></description>
@@ -32,18 +50,9 @@
     <item>
       <title>visualization</title>
       <link>/tags/visualization/</link>
-      <pubDate>Thu, 30 Apr 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/visualization/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>machine learning</title>
-      <link>/tags/machine-learning/</link>
-      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/machine-learning/</guid>
       <description></description>
     </item>
     

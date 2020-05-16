@@ -3,47 +3,57 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/eda/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/machine-learning/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/nlp/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/visualization/</loc>
+    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2020/04/being-picky-about-free-textbooks-from-springer/</loc>
     <lastmod>2020-04-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/eda/</loc>
-    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/r/</loc>
-    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/visualization/</loc>
-    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/2020/04/food-consumption-and-co2-emissions/</loc>
-    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/machine-learning/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
