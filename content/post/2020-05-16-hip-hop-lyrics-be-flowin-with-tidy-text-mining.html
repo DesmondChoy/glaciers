@@ -1,5 +1,5 @@
 ---
-title: Hip-hop lyrics be flowing with Tidy Text Mining
+title: Hip-Hop Lyrics Be Flowing with Tidy Text Mining
 author: Desmond Choy
 date: '2020-05-16'
 slug: hip-hop-lyrics-be-flowin-with-tidy-text-mining
@@ -133,18 +133,18 @@ tidy_lyrics %&gt;%
   select(word, sentiment, line, title, artist, bucket) %&gt;% 
   sample_n(10)</code></pre>
 <pre><code>## # A tibble: 10 x 6
-##    word       sentiment  line title                     artist          bucket  
-##    &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                     &lt;chr&gt;           &lt;chr&gt;   
-##  1 shit       negative     14 Bout It Bout It           Master P        Old Sch~
-##  2 shit       disgust      48 Straight Outta Compton    NWA             Old Sch~
-##  3 shit       disgust      51 Takkies                   YoungstaCPT     Modern  
-##  4 stoned     negative     35 Elevators (Me &amp; You)      OutKast         Old Sch~
-##  5 backwards  negative     76 Hovi Baby                 JAY-Z           Modern  
-##  6 interfere~ negative     18 Concrete Schoolyard       Jurassic 5      Old Sch~
-##  7 leave      negative      9 Bring Da Ruckus           Wu-Tang Clan    Old Sch~
-##  8 shit       anger        36 Bastard                   Tyler The Crea~ Modern  
-##  9 sex        positive     24 Electric Relaxation       A Tribe Called~ Old Sch~
-## 10 threat     negative    204 Double Trouble At The Am~ Double Trouble  Old Sch~</code></pre>
+##    word     sentiment     line title           artist               bucket    
+##    &lt;chr&gt;    &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                &lt;chr&gt;     
+##  1 mountain anticipation   107 Protect Ya Neck Wu-Tang Clan         Old School
+##  2 torture  fear            49 Warm It Up Kane Big Daddy Kane       Old School
+##  3 baby     joy             76 Slow It Down    Little Brother       Modern    
+##  4 real     positive        67 Real            Lupe Fiasco          Modern    
+##  5 disaster fear            69 Root Down       Beastie Boys         Old School
+##  6 trend    positive       123 I Luv U         Dizzee Rascal        Modern    
+##  7 gang     negative        27 Hovi Baby       JAY-Z                Modern    
+##  8 foul     negative         8 Put It On       Big L                Old School
+##  9 prick    surprise        35 I Luv U         Dizzee Rascal        Modern    
+## 10 pray     anticipation    65 Tha Crossroads  Bone Thugs-N-Harmony Old School</code></pre>
 <p>Let’s peek at the top words used in our songs.</p>
 <pre class="r"><code>tidy_lyrics %&gt;% 
   count(word, sort = TRUE) </code></pre>
@@ -551,7 +551,7 @@ lr_grid_v2 %&gt;%
 
 final_lr_v2 &lt;- lr_wflow_v2 %&gt;% 
   finalize_workflow(best_auc_v2)</code></pre>
-<p>After filtering for stop words, we used tf-idf as one of our recipe steps to extract importance. The <a href="https://www.tidytextmining.com/tfidf.html#the-bind_tf_idf-function">idea of tf-idf</a> is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection of documents. Calculating tf-idf attempts to find the words that are important (i.e. common) in a text, but not too common.</p>
+<p>After filtering for stop words, we used tf-idf as one of our recipe steps to extract importance. The <a href="https://www.tidytextmining.com/tfidf.html#the-bind_tf_idf-function">idea behind tf-idf</a> is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection of documents. <strong>Calculating tf-idf attempts to find the words that are important (i.e. common) in a text, but not too common</strong>.</p>
 <pre class="r"><code>final_lr_v2 %&gt;%
   fit(hiphop_train) %&gt;%
   pull_workflow_fit() %&gt;%
@@ -595,7 +595,7 @@ hiphop_final %&gt;%
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>How did our model do? Our LASSO model, post tuning, gave a roc_auc mean of 0.78, while performance on test data was 0.778 - indicating we did not overfit. While I wouldn’t say performance is excellent, the model did perform better than random chance (46%/54% chance to pick Modern/Old School). Some considerations which could increase performance: Try other models, increase the number of tokens, and increasing the sample size of songs.</p>
+<p>How did our model do? Our LASSO model, post tuning, gave a roc_auc mean of 0.78, while performance on test data was 0.778 - indicating we did not overfit. While I wouldn’t say performance is excellent, the model did perform better than random chance (46%/54% chance to pick Modern/Old School). Some considerations which could increase performance: Trying other models, increasing the number of tokens, and increasing the sample size of songs.</p>
 <pre class="r"><code>lyrics %&gt;% 
   count(bucket) %&gt;% 
   mutate(percent = n/sum(n))</code></pre>
@@ -604,5 +604,5 @@ hiphop_final %&gt;%
 ##   &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;
 ## 1 Modern      5447   0.465
 ## 2 Old School  6278   0.535</code></pre>
-<p>Writing and re-iterating through this blog post was fascinating, gave me preliminary insights to the domain of NLP, and was testament to the package workhorse that is <code>dplyr</code>.</p>
+<p>Writing and re-iterating through this blog post was fascinating and educational - giving me preliminary insights to the domain of NLP and another opportunity to familiarise myself with tidymodels. The tidy text mining workflow is testament to how robust the <code>dplyr</code> package is when it comes to data wrangling.</p>
 </div>

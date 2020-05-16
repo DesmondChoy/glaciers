@@ -1,5 +1,5 @@
 ---
-title: Hip-hop Lyrics Be Flowing with Tidy Text Mining
+title: Hip-Hop Lyrics Be Flowing with Tidy Text Mining
 author: Desmond Choy
 date: '2020-05-16'
 slug: hip-hop-lyrics-be-flowin-with-tidy-text-mining
