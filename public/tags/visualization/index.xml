@@ -6,10 +6,19 @@
     <description>Recent content in visualization on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 16 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Scoring Visualization Goals with PCA and FIFA 20</title>
+      <link>/2020/06/scoring-visualization-goals-with-pca-and-fifa-20.en-us/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/06/scoring-visualization-goals-with-pca-and-fifa-20.en-us/</guid>
+      <description>I came across this interesting dataset on Kaggle related to the football simulation video game FIFA 20, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.</description>
+    </item>
     
     <item>
       <title>Hip-Hop Lyrics Be Flowing with Tidy Text Mining</title>

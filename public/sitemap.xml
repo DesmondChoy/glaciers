@@ -4,12 +4,42 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/eda/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/machine-learning/</loc>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2020/06/scoring-visualization-goals-with-pca-and-fifa-20.en-us/</loc>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/visualization/</loc>
+    <lastmod>2020-06-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -23,32 +53,7 @@
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/r/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/</loc>
-    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/machine-learning/</loc>
-    <lastmod>2020-05-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/visualization/</loc>
     <lastmod>2020-05-16T00:00:00+00:00</lastmod>
   </url>
   
