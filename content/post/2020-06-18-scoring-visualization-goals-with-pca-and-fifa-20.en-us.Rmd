@@ -17,8 +17,8 @@ keywords:
 knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
-  fig.width = 15,
-  fig.height = 12)
+  fig.width = 18,
+  fig.height = 15)
 ```
 
 I came across this interesting [dataset]("https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset") on Kaggle related to the football simulation video game **FIFA 20**, with a very detailed breakdown of attributes of over 18,000 football players. It's been a while since I've played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.
@@ -616,7 +616,7 @@ juice(pca_prep) %>%
   filter(long_name %in% valuable$long_name) %>%
   left_join(geography %>% select(sofifa_id, position)) %>% 
   ggplot(aes(PC1, PC3, label = paste(
-    short_name, "\n", "(", str_wrap(club, width = 20), ")", "\n", "EUR", value_eur/1000000, "m", sep = ""))) +
+    short_name, " ", "(", str_wrap(club, width = 20), ")", "\n", "EUR", value_eur/1000000, "m", sep = ""))) +
   geom_point(aes(color = position), alpha = 0.75, size = 5) +
   geom_text(
     check_overlap = TRUE,
@@ -640,6 +640,8 @@ juice(pca_prep) %>%
     legend.title = element_text(face = "bold"),
     legend.position = "top"
   ) 
+
+?geom_text
 ```
 
 To my knowledge it looks like the positions are mapped out fairly accurately. Well-known players such as Messi, Ronaldo and Neymar have dazzled the world with their dribbling and shooting - and have been aptly mapped towards the left most of this chart.
@@ -660,12 +662,11 @@ juice(pca_prep) %>%
   filter(long_name %in% pot_dollar$long_name) %>%
   left_join(geography %>% select(sofifa_id, position)) %>% 
   ggplot(aes(PC1, PC3, label = paste(
-    short_name, "\n", "(", str_wrap(club, width = 20), ")", "\n", "EUR", value_eur/1000, "k", sep = ""))) +
+    short_name, " ", "(", str_wrap(club, width = 20), ")", "\n", "EUR", value_eur/1000, "k", sep = ""))) +
   geom_point(aes(color = position), alpha = 0.75, size = 5) +
   geom_text(
     check_overlap = TRUE,
-    vjust = "inward",
-    hjust = "outward",
+    hjust = "left",
     size = 4,
     fontface = "bold"
   ) +
@@ -695,7 +696,7 @@ library(gghighlight)
 
 PC2 <- tidied_pca %>%
   filter(component == "PC2") %>%
-  top_n(20, abs(value))
+  top_n(15, abs(value))
 
 geography %>%
   filter(str_detect(short_name, "T. French|Y. Fujita|A. Bennett|J. McCombe")) %>%
@@ -708,6 +709,9 @@ geography %>%
     names_to = "traits",
     values_to = "scores"
   ) %>%
+  group_by(short_name) %>% 
+  top_n(20, scores) %>% 
+  ungroup() %>% 
   ggplot(aes(reorder_within(traits, scores, short_name), scores)) +
   geom_col(aes(fill = short_name), show.legend = F) +
   gghighlight(traits %in% PC2$terms, calculate_per_facet = T) +

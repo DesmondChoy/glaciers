@@ -382,18 +382,18 @@ dim(data)</code></pre>
   select(short_name, team_position, player_positions) %&gt;% 
   sample_n(10)</code></pre>
 <pre><code>## # A tibble: 10 x 3
-##    short_name    team_position player_positions
-##    &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;           
-##  1 R. Hedges     CAM           RM, LM          
-##  2 A. Attiah     RES           GK              
-##  3 H. Mbock      RES           CM              
-##  4 D. Blind      LDM           CDM, CB, LB     
-##  5 A. Layouni    LW            LW, RW          
-##  6 D. Zappacosta SUB           RB, RWB         
-##  7 E. Voufack    SUB           RB, RM          
-##  8 Wang Qiuming  LM            LM, CM          
-##  9 D. Serna      SUB           LB, LM, CAM     
-## 10 J. Córdova    RB            RB, LB</code></pre>
+##    short_name        team_position player_positions
+##    &lt;chr&gt;             &lt;chr&gt;         &lt;chr&gt;           
+##  1 L. Dubois         RB            RB              
+##  2 R. Gagliolo       LB            LB, CB          
+##  3 A. Georgiou       RES           LB, LM          
+##  4 A. Ariza          SUB           CM, RB          
+##  5 J. Eskesen        SUB           CM, RM          
+##  6 Diogo Acosta      SUB           ST              
+##  7 J. Livolant       RM            CAM, CM, RM     
+##  8 L. Hägg-Johansson GK            GK              
+##  9 Carlos Alves      SUB           GK              
+## 10 U. Vasic          RES           RM</code></pre>
 <p>Let’s clean the data further by lumping the player’s position into broader categories - Goalkeeper (G), Defender (D), Defensive Midfielder (DM), Midfielder (M), Attacking Midfielder (AM), Forward (F) and Striker (ST). I’ll do this by inferring from the player’s <code>player_positions</code>. Fewer categories will benefit data visualization.</p>
 <pre class="r"><code>data &lt;- data %&gt;%
   mutate(
@@ -446,7 +446,7 @@ data %&gt;%
     plot.title = element_text(face = &quot;bold&quot;, size = 20),
     plot.subtitle = element_text(size = 17)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/overall%20histogram-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/overall%20histogram-1.png" width="1728" /></p>
 <div id="players-without-club-contracts" class="section level2">
 <h2>Players Without Club Contracts</h2>
 <p>I noticed the variables <code>team_position</code> and <code>team_jersey_number</code> have missing values. We can ascertain the relationship between both columns by counting the NAs and checking if they’re equal.</p>
@@ -516,7 +516,7 @@ data %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggplot%20continents-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggplot%20continents-1.png" width="1728" /></p>
 <p>Are these players without contracts because overall performance is trailing far behind potential? Let’s analyze it further across <code>position</code>.</p>
 <pre class="r"><code>library(ggridges)
 
@@ -543,7 +543,7 @@ data %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;, size = 15)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge1-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge1-1.png" width="1728" /></p>
 <p>Testing our hypothesis if it is indeed a performance gap that is resulting in these players to be contract-less, can we then expect players with contracts to be playing much closer to their potential?</p>
 <pre class="r"><code>data %&gt;%
   filter(!is.na(team_position)) %&gt;%
@@ -568,7 +568,7 @@ data %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;, size = 15)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge2-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge2-1.png" width="1728" /></p>
 <p>Another way to compare performance between contracted and non-contracted players would be to use skill sets such as <code>pace</code>, <code>dribbling</code> and <code>shooting</code> that are applicable across all <code>position</code> (excluding Goalkeepers because they have their own unique skill sets such as diving).</p>
 <pre class="r"><code>labels &lt;-
   c(&quot;D&quot; = &quot;Defender&quot;,
@@ -619,7 +619,7 @@ data %&gt;%
     legend.title = element_text(face = &quot;bold&quot;, size = 15),
     legend.position = &quot;top&quot;
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/Players%20With%20And%20Without%20Contracts-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/Players%20With%20And%20Without%20Contracts-1.png" width="1728" /></p>
 <p>Using boxplots to identify medians, variance and outliers, I conclude that there are other reasons other than overall score and generic skills driving the non-contractual state of these players.</p>
 <p>Take for example Defenders - we want a higher defending score and the median for non-contract players is higher than players with contracts. Similarly, the median for passing scores is higher for non-contract players, and the same can be said for shooting scores for Forwards and Strikers.</p>
 <p>One other thing you might have observed is that there are significantly more outliers for contracted players. The <em>crème de la crème</em>, so to speak.</p>
@@ -705,7 +705,7 @@ corr %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/network%20graph-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/network%20graph-1.png" width="1728" /></p>
 </div>
 <div id="do-soccer-players-age-like-wine" class="section level2">
 <h2>Do Soccer Players Age Like Wine?</h2>
@@ -733,7 +733,7 @@ data %&gt;%
     plot.subtitle = element_text(size = 17),
     legend.title = element_text(face = &quot;bold&quot;)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggscatmat-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggscatmat-1.png" width="1728" /></p>
 <p>There is some positive correlation observed between players aged 23 and younger and their associated <code>value_eur</code>, <code>wage_eur</code> and <code>overall</code> score. Conversely, beyond 29 years of age, we observe some negative correlation too between <code>age</code> and <code>value_eur</code>, <code>wage_eur</code> and <code>overall</code> score.</p>
 <p>This isn’t too surprising as the average retirement age of a football player is said to be <a href="%22https://www.thepfa.com/equalities/commitment-to-all/age#:~:text=Age,player%20is%2035%20years%20old%22">35 years old</a>, according to the Professional Footballers’ Association.</p>
 </div>
@@ -806,7 +806,7 @@ geography %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/pot_dollar-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/pot_dollar-1.png" width="1728" /></p>
 </div>
 <div id="principal-components-analysis" class="section level2">
 <h2>Principal Components Analysis</h2>
@@ -964,7 +964,7 @@ tidied_pca %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20high-level-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20high-level-1.png" width="1728" /></p>
 <p>Let’s dive deeper into the top 15 traits that defines each of these four features.</p>
 <pre class="r"><code>tidied_pca %&gt;%
   filter(component %in% paste0(&quot;PC&quot;, 1:4)) %&gt;%
@@ -992,7 +992,7 @@ tidied_pca %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20deep-dive-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20deep-dive-1.png" width="1728" /></p>
 <p>Below is my interpretation for PC1-PC4:</p>
 <ul>
 <li>PC1: Negative indicates offensive midfielder / <a href="https://en.wikipedia.org/wiki/Playmaker">playmaker</a> traits</li>
@@ -1013,7 +1013,7 @@ juice(pca_prep) %&gt;%
   filter(long_name %in% valuable$long_name) %&gt;%
   left_join(geography %&gt;% select(sofifa_id, position)) %&gt;% 
   ggplot(aes(PC1, PC3, label = paste(
-    short_name, &quot;\n&quot;, &quot;(&quot;, str_wrap(club, width = 20), &quot;)&quot;, &quot;\n&quot;, &quot;EUR&quot;, value_eur/1000000, &quot;m&quot;, sep = &quot;&quot;))) +
+    short_name, &quot; &quot;, &quot;(&quot;, str_wrap(club, width = 20), &quot;)&quot;, &quot;\n&quot;, &quot;EUR&quot;, value_eur/1000000, &quot;m&quot;, sep = &quot;&quot;))) +
   geom_point(aes(color = position), alpha = 0.75, size = 5) +
   geom_text(
     check_overlap = TRUE,
@@ -1037,7 +1037,8 @@ juice(pca_prep) %&gt;%
     legend.title = element_text(face = &quot;bold&quot;),
     legend.position = &quot;top&quot;
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/top50%20most%20valuable-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/top50%20most%20valuable-1.png" width="1728" /></p>
+<pre class="r"><code>?geom_text</code></pre>
 <p>To my knowledge it looks like the positions are mapped out fairly accurately. Well-known players such as Messi, Ronaldo and Neymar have dazzled the world with their dribbling and shooting - and have been aptly mapped towards the left most of this chart.</p>
 <p>Revisiting our bargain hunting theme, let’s run PCA on the top 100 players with the highest <code>pot_per_dollar</code>.</p>
 <pre class="r"><code>pot_dollar &lt;- geography %&gt;% 
@@ -1053,12 +1054,11 @@ juice(pca_prep) %&gt;%
   filter(long_name %in% pot_dollar$long_name) %&gt;%
   left_join(geography %&gt;% select(sofifa_id, position)) %&gt;% 
   ggplot(aes(PC1, PC3, label = paste(
-    short_name, &quot;\n&quot;, &quot;(&quot;, str_wrap(club, width = 20), &quot;)&quot;, &quot;\n&quot;, &quot;EUR&quot;, value_eur/1000, &quot;k&quot;, sep = &quot;&quot;))) +
+    short_name, &quot; &quot;, &quot;(&quot;, str_wrap(club, width = 20), &quot;)&quot;, &quot;\n&quot;, &quot;EUR&quot;, value_eur/1000, &quot;k&quot;, sep = &quot;&quot;))) +
   geom_point(aes(color = position), alpha = 0.75, size = 5) +
   geom_text(
     check_overlap = TRUE,
-    vjust = &quot;inward&quot;,
-    hjust = &quot;outward&quot;,
+    hjust = &quot;left&quot;,
     size = 4,
     fontface = &quot;bold&quot;
   ) +
@@ -1077,14 +1077,14 @@ juice(pca_prep) %&gt;%
     legend.title = element_text(face = &quot;bold&quot;),
     legend.position = &quot;top&quot;
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/top50%20pot_dollar-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/top50%20pot_dollar-1.png" width="1728" /></p>
 <p>First and foremost, what’s interesting about this chart is the x-axis. Our previous Top 50 Most Valuable Players chart had a strong bias towards negative PC1 values (players with offensive traits), while our current chart has a strong bias towards positive PC1 values(players with defensive traits) and we consequently see significantly more defenders showing up.</p>
 <p>Finally, recall PC2 was the feature created that was tilted towards defender / defensive midfielder traits. Let’s pick four of the defenders located furthest to the right and map PC2 components against their strongest traits.</p>
 <pre class="r"><code>library(gghighlight)
 
 PC2 &lt;- tidied_pca %&gt;%
   filter(component == &quot;PC2&quot;) %&gt;%
-  top_n(20, abs(value))
+  top_n(15, abs(value))
 
 geography %&gt;%
   filter(str_detect(short_name, &quot;T. French|Y. Fujita|A. Bennett|J. McCombe&quot;)) %&gt;%
@@ -1097,6 +1097,9 @@ geography %&gt;%
     names_to = &quot;traits&quot;,
     values_to = &quot;scores&quot;
   ) %&gt;%
+  group_by(short_name) %&gt;% 
+  top_n(20, scores) %&gt;% 
+  ungroup() %&gt;% 
   ggplot(aes(reorder_within(traits, scores, short_name), scores)) +
   geom_col(aes(fill = short_name), show.legend = F) +
   gghighlight(traits %in% PC2$terms, calculate_per_facet = T) +
@@ -1117,7 +1120,7 @@ geography %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/gghighlight-1.png" width="1440" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/gghighlight-1.png" width="1728" /></p>
 <p>I think there are plenty of questions that warrant further investigation here, and personally this blog post really made me appreciate PCA and the intuition it brings. It’s been one of my long-time visualization goals to use network graphs and ridgeline plots, and its great to be able to add them to my EDA toolkit. A big shout-out to Wen Hao for spotting some errors in my initial charts!</p>
 </div>
 </div>
