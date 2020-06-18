@@ -17,11 +17,11 @@ keywords:
 knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
-  fig.width = 18,
-  fig.height = 15)
+  fig.width = 12,
+  fig.height = 10)
 ```
 
-I came across this interesting [dataset]("https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset") on Kaggle related to the football simulation video game **FIFA 20**, with a very detailed breakdown of attributes of over 18,000 football players. It's been a while since I've played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.
+I came across this interesting [dataset](https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset) on Kaggle related to the football simulation video game **FIFA 20**, with a very detailed breakdown of attributes of over 18,000 football players. It's been a while since I've played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.
 
 # Libraries
 
@@ -35,12 +35,11 @@ theme_set(theme_minimal())
 # Loading The Data
 
 ```{r data}
-#upload the csv to github
 data <- read_csv("https://raw.githubusercontent.com/DesmondChoy/glaciers/master/content/post/players_20.csv")
 glimpse(data)
 ```
 
-Without a data dictionary, I went to the website where the data was scrapped from and looked into a [player's profile]("https://sofifa.com/player/205632/lucas-ocampos/200046/") to make sense of the columns. Removing some columns that we won't be using, we're left with 76 columns and over 18,000 rows of data.
+Without a data dictionary, I went to the website where the data was scrapped from and looked into a [player's profile](https://sofifa.com/player/205632/lucas-ocampos/200046/) to make sense of the columns. Removing some columns that we won't be using, we're left with 76 columns and over 18,000 rows of data.
 
 ```{r removing columns}
 data <- data %>% 
@@ -51,9 +50,9 @@ dim(data)
 
 # Data Discrepancies
 
-I note the [website](www.sofifa.com) where the data was scrapped from has its data updated once every few days. So there might be discrepancies if you're comparing the numbers in this data set to the latest ones featured on the website.  
+I note the [website](https://sofifa.com/) where the data was scrapped from has its data updated once every few days. So there might be discrepancies if you're comparing the numbers in this data set to the latest ones featured on the website.  
 
-Additionally, I was doing a little fact-checking online and some columns don't tally to real-life figures (understandably, FIFA 20 is a video game). For instance, the player with the highest release clause in real life is [Karim Benzema at GBP846m]("https://www.sportbible.com/football/news-the-top-10-highest-release-clauses-in-world-football-today-20200211"). In this data set however, even after accounting for currency translations, Benzema does not even appear in the top 10 list for release clauses. 
+Additionally, I was doing a little fact-checking online and some columns don't tally to real-life figures (understandably, FIFA 20 is a video game). For instance, the player with the highest release clause in real life is [Karim Benzema at GBP846m](https://www.sportbible.com/football/news-the-top-10-highest-release-clauses-in-world-football-today-20200211). In this data set however, even after accounting for currency translations, Benzema does not even appear in the top 10 list for release clauses. 
 
 ```{r data discrepancies}
 
@@ -181,8 +180,8 @@ data %>%
   labs(
     x = "",
     y = "",
-    title = "Which Continents Have Highest # Of International Players With No Clubs/Contracts?",
-    subtitle = "A higher percentage of players come from Africa, Americas and Europe.\nPerhaps these are countries with no well-established soccer league?",
+    title = "Continents With Highest # Of International Players With No Clubs/Contracts",
+    subtitle = "A higher percentage of players come from Africa, Americas and Europe.\nPerhaps these are countries with no well-established soccer leagues?",
     caption = "Source: FIFA 20 Complete Player Data Set"
   ) +
   theme(
@@ -240,7 +239,7 @@ data %>%
     y = NULL,
     fill = "Score",
     title = "Players With Contracts: Comparing Overall vs Potential Score Across Positions",
-    subtitle = "Ironically, the gap between overall and potential performance is even wider for players with club contracts, albeit with longer right tails.\nThis could also be due to a larger sample size.",
+    subtitle = "Ironically, the gap between overall and potential performance is even wider for players with club contracts,\nalbeit with longer right tails. This could also be due to a larger sample size.",
     caption = "Source: FIFA 20 Complete Player Data Set"
   ) +
   theme(
@@ -254,7 +253,7 @@ data %>%
 
 Another way to compare performance between contracted and non-contracted players would be to use skill sets such as `pace`, `dribbling` and `shooting` that are applicable across all `position` (excluding Goalkeepers because they have their own unique skill sets such as diving).   
 
-```{r Players With And Without Contracts}
+```{r geomboxplot Players With And Without Contracts}
 labels <-
   c("D" = "Defender",
     "DM" = "Defensive Midfielder",
@@ -278,22 +277,21 @@ data %>%
       filter(percentile == 1),
     aes(label = paste(short_name, "\n", str_wrap(club, width = 15), sep = ""), colour = position),
     size = 3,
-    nudge_x = -3,
-    nudge_y = -0.2,
     check_overlap = TRUE,
     fontface = "bold",
-    vjust = "bottom-left", hjust = "bottom-left",
+    vjust = "inward", hjust = "inward",
     show.legend = F
   ) +
   facet_wrap( ~ position, scales = "free_y", labeller = as_labeller(labels)) +
   scale_y_reordered() +
-  scale_fill_fish_d(option = "Antennarius_commerson") +
+  scale_colour_fish_d(option = "Antennarius_commerson") +
+  scale_fill_fish_d(option = "Hypsypops_rubicundus") +
   labs(
     x = "Values",
     y = "Skills",
     fill = "Under Contract?",
     title = "Players With And Without Contracts In FIFA 20 - How Do They Compare?",
-    subtitle = "Using traits like dribbling, passing and shooting, players with only international appearances and no club contracts don't appear to be less skilled.\nHowever there are significantly more outliers among players with contracts - we highlight the extreme outliers and their clubs.",
+    subtitle = "Using traits like dribbling, passing and shooting, players with only international appearances and\nno club contracts don't appear to be less skilled.\nHowever there are significantly more outliers among players with contracts.\nThe extreme outliers and their clubs are highlighted.",
     caption = "Source: FIFA 20 Complete Player Data Set"
   ) +
   theme(
@@ -344,7 +342,7 @@ corr <- data %>%
 corr
 ```
 
-Tidy Text Mining with R has a [great tutorial]("https://www.tidytextmining.com/ngrams.html#counting-and-correlating-among-sections") on how to construct network graphs.
+Tidy Text Mining with R has a [great tutorial](https://www.tidytextmining.com/ngrams.html#counting-and-correlating-among-sections) on how to construct network graphs.
 
 > The igraph package has many powerful functions for manipulating and analyzing networks. One way to create an igraph object from tidy data is the `graph_from_data_frame()` function, which takes a data frame of edges with columns for "from", "to", and edge attributes.   
 
@@ -396,7 +394,7 @@ data %>%
   select(age, value_eur, wage_eur, overall, potential, age_segment) %>%
   ggscatmat(columns = 1:5, color = "age_segment") +
   scale_color_fish_d(option = "Antennarius_commerson") +
-  labs(title = "Players Aged <23 Are Positively Correlated With Higher Value, Wages and Overall Score",
+  labs(title = "Players Aged <23 +ve Correlated With Higher Value/Wages/Overall Score",
        subtitle = "Beyond 29 years of age, we start to see negative correlation",
        color = "Age Segment",
        caption = "Source: FIFA 20 Complete Player Data Set") +
@@ -409,7 +407,7 @@ data %>%
 
 There is some positive correlation observed between players aged 23 and younger and their associated `value_eur`, `wage_eur` and `overall` score. Conversely, beyond 29 years of age, we observe some negative correlation too between `age` and `value_eur`, `wage_eur` and `overall` score.   
 
-This isn't too surprising as the average retirement age of a football player is said to be [35 years old]("https://www.thepfa.com/equalities/commitment-to-all/age#:~:text=Age,player%20is%2035%20years%20old"), according to the Professional Footballers' Association.
+This isn't too surprising as the average retirement age of a football player is said to be [35 years old](https://www.thepfa.com/equalities/commitment-to-all/age#:~:text=Age,player%20is%2035%20years%20old), according to the Professional Footballers' Association.
 
 ## Bargain Hunting At Clubs
 
@@ -462,7 +460,7 @@ geography %>%
     x = "Club",
     y = "Club's Total Potential Per Value",
     fill = "Continent",
-    title = "Bargain Hunting At Clubs - Scouting For High Potential Players At The Lowest Price",
+    title = "Bargain Hunting: Clubs With High Potential Players At Lowest Prices",
     subtitle = "Sorted by this metric, we can see promising clubs can be found in Asia and Europe leagues.",
     caption = "Source: FIFA 20 Complete Player Data Set"
   ) +
@@ -603,7 +601,7 @@ Below is my interpretation for PC1-PC4:
 
 Now let's assess how accurate our PCA features are by visualizing the most valuable players against our features.
 
-```{r top50 most valuable}
+```{r top50 most valuable, fig.width = 18, fig.height = 15}
 #Getting our top 50 valuable players ex GKs
 valuable <- geography %>%
   filter(!is.na(team_jersey_number),
@@ -640,15 +638,13 @@ juice(pca_prep) %>%
     legend.title = element_text(face = "bold"),
     legend.position = "top"
   ) 
-
-?geom_text
 ```
 
 To my knowledge it looks like the positions are mapped out fairly accurately. Well-known players such as Messi, Ronaldo and Neymar have dazzled the world with their dribbling and shooting - and have been aptly mapped towards the left most of this chart.
 
 Revisiting our bargain hunting theme, let's run PCA on the top 100 players with the highest `pot_per_dollar`.
 
-```{r top50 pot_dollar}
+```{r top50 pot_dollar, fig.width = 18, fig.height = 15}
 pot_dollar <- geography %>% 
   filter(!is.na(team_jersey_number),
          !position == "GK",

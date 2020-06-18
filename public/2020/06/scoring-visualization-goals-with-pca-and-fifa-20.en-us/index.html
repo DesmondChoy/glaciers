@@ -220,7 +220,7 @@
               
 
 
-<p>I came across this interesting <a href="%22https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset%22">dataset</a> on Kaggle related to the football simulation video game <strong>FIFA 20</strong>, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.</p>
+<p>I came across this interesting <a href="https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset">dataset</a> on Kaggle related to the football simulation video game <strong>FIFA 20</strong>, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.</p>
 <div id="libraries" class="section level1">
 <h1>Libraries</h1>
 <pre class="r"><code>library(tidyverse) #data wrangling
@@ -230,8 +230,7 @@ theme_set(theme_minimal())</code></pre>
 </div>
 <div id="loading-the-data" class="section level1">
 <h1>Loading The Data</h1>
-<pre class="r"><code>#upload the csv to github
-data &lt;- read_csv(&quot;https://raw.githubusercontent.com/DesmondChoy/glaciers/master/content/post/players_20.csv&quot;)
+<pre class="r"><code>data &lt;- read_csv(&quot;https://raw.githubusercontent.com/DesmondChoy/glaciers/master/content/post/players_20.csv&quot;)
 glimpse(data)</code></pre>
 <pre><code>## Rows: 18,278
 ## Columns: 104
@@ -339,7 +338,7 @@ glimpse(data)</code></pre>
 ## $ cb                         &lt;chr&gt; &quot;52+2&quot;, &quot;53+3&quot;, &quot;46+3&quot;, NA, &quot;49+3&quot;, &quot;66+...
 ## $ rcb                        &lt;chr&gt; &quot;52+2&quot;, &quot;53+3&quot;, &quot;46+3&quot;, NA, &quot;49+3&quot;, &quot;66+...
 ## $ rb                         &lt;chr&gt; &quot;63+2&quot;, &quot;61+3&quot;, &quot;61+3&quot;, NA, &quot;61+3&quot;, &quot;73+...</code></pre>
-<p>Without a data dictionary, I went to the website where the data was scrapped from and looked into a <a href="%22https://sofifa.com/player/205632/lucas-ocampos/200046/%22">player’s profile</a> to make sense of the columns. Removing some columns that we won’t be using, we’re left with 76 columns and over 18,000 rows of data.</p>
+<p>Without a data dictionary, I went to the website where the data was scrapped from and looked into a <a href="https://sofifa.com/player/205632/lucas-ocampos/200046/">player’s profile</a> to make sense of the columns. Removing some columns that we won’t be using, we’re left with 76 columns and over 18,000 rows of data.</p>
 <pre class="r"><code>data &lt;- data %&gt;% 
   select(-c(player_url, real_face, ls:rb))
 
@@ -348,8 +347,8 @@ dim(data)</code></pre>
 </div>
 <div id="data-discrepancies" class="section level1">
 <h1>Data Discrepancies</h1>
-<p>I note the <a href="www.sofifa.com">website</a> where the data was scrapped from has its data updated once every few days. So there might be discrepancies if you’re comparing the numbers in this data set to the latest ones featured on the website.</p>
-<p>Additionally, I was doing a little fact-checking online and some columns don’t tally to real-life figures (understandably, FIFA 20 is a video game). For instance, the player with the highest release clause in real life is <a href="%22https://www.sportbible.com/football/news-the-top-10-highest-release-clauses-in-world-football-today-20200211%22">Karim Benzema at GBP846m</a>. In this data set however, even after accounting for currency translations, Benzema does not even appear in the top 10 list for release clauses.</p>
+<p>I note the <a href="https://sofifa.com/">website</a> where the data was scrapped from has its data updated once every few days. So there might be discrepancies if you’re comparing the numbers in this data set to the latest ones featured on the website.</p>
+<p>Additionally, I was doing a little fact-checking online and some columns don’t tally to real-life figures (understandably, FIFA 20 is a video game). For instance, the player with the highest release clause in real life is <a href="https://www.sportbible.com/football/news-the-top-10-highest-release-clauses-in-world-football-today-20200211">Karim Benzema at GBP846m</a>. In this data set however, even after accounting for currency translations, Benzema does not even appear in the top 10 list for release clauses.</p>
 <pre class="r"><code>data %&gt;%
   select(short_name, club, release_clause_eur, wage_eur) %&gt;% 
   arrange(desc(release_clause_eur))</code></pre>
@@ -382,18 +381,18 @@ dim(data)</code></pre>
   select(short_name, team_position, player_positions) %&gt;% 
   sample_n(10)</code></pre>
 <pre><code>## # A tibble: 10 x 3
-##    short_name        team_position player_positions
-##    &lt;chr&gt;             &lt;chr&gt;         &lt;chr&gt;           
-##  1 L. Dubois         RB            RB              
-##  2 R. Gagliolo       LB            LB, CB          
-##  3 A. Georgiou       RES           LB, LM          
-##  4 A. Ariza          SUB           CM, RB          
-##  5 J. Eskesen        SUB           CM, RM          
-##  6 Diogo Acosta      SUB           ST              
-##  7 J. Livolant       RM            CAM, CM, RM     
-##  8 L. Hägg-Johansson GK            GK              
-##  9 Carlos Alves      SUB           GK              
-## 10 U. Vasic          RES           RM</code></pre>
+##    short_name  team_position player_positions
+##    &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           
+##  1 T. Agyepong SUB           LM, RM          
+##  2 D. Pik      SUB           LM              
+##  3 A. Bittroff SUB           RB, LB          
+##  4 R. Hughes   RES           CB              
+##  5 L. Hendrie  LB            RWB, RB, LB     
+##  6 L. Freeman  SUB           CAM, LM         
+##  7 G. Massey   SUB           RM              
+##  8 E. Derdiyok ST            ST              
+##  9 R. Roache   RES           ST              
+## 10 K. Miyoshi  SUB           CAM, CM, CF</code></pre>
 <p>Let’s clean the data further by lumping the player’s position into broader categories - Goalkeeper (G), Defender (D), Defensive Midfielder (DM), Midfielder (M), Attacking Midfielder (AM), Forward (F) and Striker (ST). I’ll do this by inferring from the player’s <code>player_positions</code>. Fewer categories will benefit data visualization.</p>
 <pre class="r"><code>data &lt;- data %&gt;%
   mutate(
@@ -446,7 +445,7 @@ data %&gt;%
     plot.title = element_text(face = &quot;bold&quot;, size = 20),
     plot.subtitle = element_text(size = 17)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/overall%20histogram-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/overall%20histogram-1.png" width="1152" /></p>
 <div id="players-without-club-contracts" class="section level2">
 <h2>Players Without Club Contracts</h2>
 <p>I noticed the variables <code>team_position</code> and <code>team_jersey_number</code> have missing values. We can ascertain the relationship between both columns by counting the NAs and checking if they’re equal.</p>
@@ -506,8 +505,8 @@ data %&gt;%
   labs(
     x = &quot;&quot;,
     y = &quot;&quot;,
-    title = &quot;Which Continents Have Highest # Of International Players With No Clubs/Contracts?&quot;,
-    subtitle = &quot;A higher percentage of players come from Africa, Americas and Europe.\nPerhaps these are countries with no well-established soccer league?&quot;,
+    title = &quot;Continents With Highest # Of International Players With No Clubs/Contracts&quot;,
+    subtitle = &quot;A higher percentage of players come from Africa, Americas and Europe.\nPerhaps these are countries with no well-established soccer leagues?&quot;,
     caption = &quot;Source: FIFA 20 Complete Player Data Set&quot;
   ) +
   theme(
@@ -516,7 +515,7 @@ data %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggplot%20continents-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggplot%20continents-1.png" width="1152" /></p>
 <p>Are these players without contracts because overall performance is trailing far behind potential? Let’s analyze it further across <code>position</code>.</p>
 <pre class="r"><code>library(ggridges)
 
@@ -543,7 +542,7 @@ data %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;, size = 15)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge1-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge1-1.png" width="1152" /></p>
 <p>Testing our hypothesis if it is indeed a performance gap that is resulting in these players to be contract-less, can we then expect players with contracts to be playing much closer to their potential?</p>
 <pre class="r"><code>data %&gt;%
   filter(!is.na(team_position)) %&gt;%
@@ -558,7 +557,7 @@ data %&gt;%
     y = NULL,
     fill = &quot;Score&quot;,
     title = &quot;Players With Contracts: Comparing Overall vs Potential Score Across Positions&quot;,
-    subtitle = &quot;Ironically, the gap between overall and potential performance is even wider for players with club contracts, albeit with longer right tails.\nThis could also be due to a larger sample size.&quot;,
+    subtitle = &quot;Ironically, the gap between overall and potential performance is even wider for players with club contracts,\nalbeit with longer right tails. This could also be due to a larger sample size.&quot;,
     caption = &quot;Source: FIFA 20 Complete Player Data Set&quot;
   ) +
   theme(
@@ -568,7 +567,7 @@ data %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;, size = 15)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge2-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geom%20ridge2-1.png" width="1152" /></p>
 <p>Another way to compare performance between contracted and non-contracted players would be to use skill sets such as <code>pace</code>, <code>dribbling</code> and <code>shooting</code> that are applicable across all <code>position</code> (excluding Goalkeepers because they have their own unique skill sets such as diving).</p>
 <pre class="r"><code>labels &lt;-
   c(&quot;D&quot; = &quot;Defender&quot;,
@@ -593,22 +592,21 @@ data %&gt;%
       filter(percentile == 1),
     aes(label = paste(short_name, &quot;\n&quot;, str_wrap(club, width = 15), sep = &quot;&quot;), colour = position),
     size = 3,
-    nudge_x = -3,
-    nudge_y = -0.2,
     check_overlap = TRUE,
     fontface = &quot;bold&quot;,
-    vjust = &quot;bottom-left&quot;, hjust = &quot;bottom-left&quot;,
+    vjust = &quot;inward&quot;, hjust = &quot;inward&quot;,
     show.legend = F
   ) +
   facet_wrap( ~ position, scales = &quot;free_y&quot;, labeller = as_labeller(labels)) +
   scale_y_reordered() +
-  scale_fill_fish_d(option = &quot;Antennarius_commerson&quot;) +
+  scale_colour_fish_d(option = &quot;Antennarius_commerson&quot;) +
+  scale_fill_fish_d(option = &quot;Hypsypops_rubicundus&quot;) +
   labs(
     x = &quot;Values&quot;,
     y = &quot;Skills&quot;,
     fill = &quot;Under Contract?&quot;,
     title = &quot;Players With And Without Contracts In FIFA 20 - How Do They Compare?&quot;,
-    subtitle = &quot;Using traits like dribbling, passing and shooting, players with only international appearances and no club contracts don&#39;t appear to be less skilled.\nHowever there are significantly more outliers among players with contracts - we highlight the extreme outliers and their clubs.&quot;,
+    subtitle = &quot;Using traits like dribbling, passing and shooting, players with only international appearances and\nno club contracts don&#39;t appear to be less skilled.\nHowever there are significantly more outliers among players with contracts.\nThe extreme outliers and their clubs are highlighted.&quot;,
     caption = &quot;Source: FIFA 20 Complete Player Data Set&quot;
   ) +
   theme(
@@ -619,7 +617,7 @@ data %&gt;%
     legend.title = element_text(face = &quot;bold&quot;, size = 15),
     legend.position = &quot;top&quot;
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/Players%20With%20And%20Without%20Contracts-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/geomboxplot%20Players%20With%20And%20Without%20Contracts-1.png" width="1152" /></p>
 <p>Using boxplots to identify medians, variance and outliers, I conclude that there are other reasons other than overall score and generic skills driving the non-contractual state of these players.</p>
 <p>Take for example Defenders - we want a higher defending score and the median for non-contract players is higher than players with contracts. Similarly, the median for passing scores is higher for non-contract players, and the same can be said for shooting scores for Forwards and Strikers.</p>
 <p>One other thing you might have observed is that there are significantly more outliers for contracted players. The <em>crème de la crème</em>, so to speak.</p>
@@ -675,7 +673,7 @@ corr</code></pre>
 ##  9 Avoids Using Weaker Foot Giant Throw-in                 0.223
 ## 10 Giant Throw-in           Avoids Using Weaker Foot       0.223
 ## # ... with 542 more rows</code></pre>
-<p>Tidy Text Mining with R has a <a href="%22https://www.tidytextmining.com/ngrams.html#counting-and-correlating-among-sections%22">great tutorial</a> on how to construct network graphs.</p>
+<p>Tidy Text Mining with R has a <a href="https://www.tidytextmining.com/ngrams.html#counting-and-correlating-among-sections">great tutorial</a> on how to construct network graphs.</p>
 <blockquote>
 <p>The igraph package has many powerful functions for manipulating and analyzing networks. One way to create an igraph object from tidy data is the <code>graph_from_data_frame()</code> function, which takes a data frame of edges with columns for “from”, “to”, and edge attributes.</p>
 </blockquote>
@@ -705,7 +703,7 @@ corr %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/network%20graph-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/network%20graph-1.png" width="1152" /></p>
 </div>
 <div id="do-soccer-players-age-like-wine" class="section level2">
 <h2>Do Soccer Players Age Like Wine?</h2>
@@ -724,7 +722,7 @@ data %&gt;%
   select(age, value_eur, wage_eur, overall, potential, age_segment) %&gt;%
   ggscatmat(columns = 1:5, color = &quot;age_segment&quot;) +
   scale_color_fish_d(option = &quot;Antennarius_commerson&quot;) +
-  labs(title = &quot;Players Aged &lt;23 Are Positively Correlated With Higher Value, Wages and Overall Score&quot;,
+  labs(title = &quot;Players Aged &lt;23 +ve Correlated With Higher Value/Wages/Overall Score&quot;,
        subtitle = &quot;Beyond 29 years of age, we start to see negative correlation&quot;,
        color = &quot;Age Segment&quot;,
        caption = &quot;Source: FIFA 20 Complete Player Data Set&quot;) +
@@ -733,9 +731,9 @@ data %&gt;%
     plot.subtitle = element_text(size = 17),
     legend.title = element_text(face = &quot;bold&quot;)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggscatmat-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/ggscatmat-1.png" width="1152" /></p>
 <p>There is some positive correlation observed between players aged 23 and younger and their associated <code>value_eur</code>, <code>wage_eur</code> and <code>overall</code> score. Conversely, beyond 29 years of age, we observe some negative correlation too between <code>age</code> and <code>value_eur</code>, <code>wage_eur</code> and <code>overall</code> score.</p>
-<p>This isn’t too surprising as the average retirement age of a football player is said to be <a href="%22https://www.thepfa.com/equalities/commitment-to-all/age#:~:text=Age,player%20is%2035%20years%20old%22">35 years old</a>, according to the Professional Footballers’ Association.</p>
+<p>This isn’t too surprising as the average retirement age of a football player is said to be <a href="https://www.thepfa.com/equalities/commitment-to-all/age#:~:text=Age,player%20is%2035%20years%20old">35 years old</a>, according to the Professional Footballers’ Association.</p>
 </div>
 <div id="bargain-hunting-at-clubs" class="section level2">
 <h2>Bargain Hunting At Clubs</h2>
@@ -795,7 +793,7 @@ geography %&gt;%
     x = &quot;Club&quot;,
     y = &quot;Club&#39;s Total Potential Per Value&quot;,
     fill = &quot;Continent&quot;,
-    title = &quot;Bargain Hunting At Clubs - Scouting For High Potential Players At The Lowest Price&quot;,
+    title = &quot;Bargain Hunting: Clubs With High Potential Players At Lowest Prices&quot;,
     subtitle = &quot;Sorted by this metric, we can see promising clubs can be found in Asia and Europe leagues.&quot;,
     caption = &quot;Source: FIFA 20 Complete Player Data Set&quot;
   ) +
@@ -806,7 +804,7 @@ geography %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/pot_dollar-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/pot_dollar-1.png" width="1152" /></p>
 </div>
 <div id="principal-components-analysis" class="section level2">
 <h2>Principal Components Analysis</h2>
@@ -964,7 +962,7 @@ tidied_pca %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20high-level-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20high-level-1.png" width="1152" /></p>
 <p>Let’s dive deeper into the top 15 traits that defines each of these four features.</p>
 <pre class="r"><code>tidied_pca %&gt;%
   filter(component %in% paste0(&quot;PC&quot;, 1:4)) %&gt;%
@@ -992,7 +990,7 @@ tidied_pca %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
     legend.title = element_text(face = &quot;bold&quot;)
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20deep-dive-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/visual%20deep-dive-1.png" width="1152" /></p>
 <p>Below is my interpretation for PC1-PC4:</p>
 <ul>
 <li>PC1: Negative indicates offensive midfielder / <a href="https://en.wikipedia.org/wiki/Playmaker">playmaker</a> traits</li>
@@ -1038,7 +1036,6 @@ juice(pca_prep) %&gt;%
     legend.position = &quot;top&quot;
   ) </code></pre>
 <p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/top50%20most%20valuable-1.png" width="1728" /></p>
-<pre class="r"><code>?geom_text</code></pre>
 <p>To my knowledge it looks like the positions are mapped out fairly accurately. Well-known players such as Messi, Ronaldo and Neymar have dazzled the world with their dribbling and shooting - and have been aptly mapped towards the left most of this chart.</p>
 <p>Revisiting our bargain hunting theme, let’s run PCA on the top 100 players with the highest <code>pot_per_dollar</code>.</p>
 <pre class="r"><code>pot_dollar &lt;- geography %&gt;% 
@@ -1120,7 +1117,7 @@ geography %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/gghighlight-1.png" width="1728" /></p>
+<p><img src="/post/2020-06-18-scoring-visualization-goals-with-pca-and-fifa-20.en-us_files/figure-html/gghighlight-1.png" width="1152" /></p>
 <p>I think there are plenty of questions that warrant further investigation here, and personally this blog post really made me appreciate PCA and the intuition it brings. It’s been one of my long-time visualization goals to use network graphs and ridgeline plots, and its great to be able to add them to my EDA toolkit. A big shout-out to Wen Hao for spotting some errors in my initial charts!</p>
 </div>
 </div>
