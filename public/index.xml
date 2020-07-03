@@ -6,10 +6,19 @@
     <description>Recent content on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Make Your Vote Count By Counting Sentences</title>
+      <link>/2020/07/make-your-vote-count-by-counting-sentences.en-us/</link>
+      <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/make-your-vote-count-by-counting-sentences.en-us/</guid>
+      <description>Singapore General Elections 2020With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies should be made. With all 93 elected seats in Parliament organised into 14 Single Member Constituencies (SMCs) and 17 Group Representation Constituencies (GRCs) being contested by 11 political parties, I wanted to create an interactive data table that consolidated all manifestos and would make it convenient for voters to compare policies and issues across different parties.</description>
+    </item>
     
     <item>
       <title>Scoring Visualization Goals with PCA and FIFA 20</title>
