@@ -9,6 +9,9 @@ tags:
   - visualization
 keywords:
   - tech
+output:
+  blogdown::html_page:
+    toc: true
 ---
 
 <script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
@@ -24,14 +27,34 @@ keywords:
 <script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
 <script src="/rmarkdown-libs/reactable-binding/reactable.js"></script>
 
+<div id="TOC">
+<ul>
+<li><a href="#singapore-general-elections-2020">Singapore General Elections 2020</a><ul>
+<li><a href="#libraries">Libraries</a></li>
+<li><a href="#cleaning-individual-manifestos">Cleaning Individual Manifestos</a></li>
+<li><a href="#manifesto-united">Manifesto United</a></li>
+</ul></li>
+<li><a href="#analysis">Analysis</a><ul>
+<li><a href="#gauging-level-of-detail">Gauging Level of Detail</a></li>
+<li><a href="#categorically-speaking">Categorically Speaking</a></li>
+<li><a href="#a-quick-investigation-of-others">A Quick Investigation Of Others</a></li>
+</ul></li>
+<li><a href="#the-tables-have-turned">The Tables Have Turned</a><ul>
+<li><a href="#interactive-table">Interactive Table</a></li>
+</ul></li>
+<li><a href="#visualization">Visualization</a><ul>
+<li><a href="#the-best-form-of-flattery">The Best Form Of Flattery</a></li>
+<li><a href="#the-prickly-issues">The Prickly Issues</a></li>
+</ul></li>
+<li><a href="#concluding-thoughts">Concluding Thoughts</a></li>
+</ul>
+</div>
 
 <div id="singapore-general-elections-2020" class="section level1">
 <h1>Singapore General Elections 2020</h1>
 <p>With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies <em>should</em> be made. With all 93 elected seats in Parliament organised into 14 Single Member Constituencies (SMCs) and 17 Group Representation Constituencies (GRCs) being contested by 11 political parties, I wanted to create an interactive data table that consolidated all manifestos and would make it convenient for voters to compare policies and issues across different parties.</p>
-<p>The table can be found around the 3/4 mark of this post, should you wish to skip the code and methodology.</p>
-</div>
-<div id="libraries" class="section level1">
-<h1>Libraries</h1>
+<div id="libraries" class="section level2">
+<h2>Libraries</h2>
 <pre class="r"><code>library(tidyverse)
 library(tidytext)
 library(pdftools)
@@ -39,8 +62,8 @@ library(fishualize)
 
 theme_set(theme_minimal())</code></pre>
 </div>
-<div id="cleaning-individual-manifestos" class="section level1">
-<h1>Cleaning Individual Manifestos</h1>
+<div id="cleaning-individual-manifestos" class="section level2">
+<h2>Cleaning Individual Manifestos</h2>
 <p>These manifestos are listed in the order which I managed to obtain their PDFs. A big thank you to <a href="https://drive.google.com/drive/folders/1AkOJuNInhcASVQ2LWwqrBH3Uclyr3HU8">Ariel P</a> who consolidated all the PDFs in one Google Drive folder, and Kirsten Han of <a href="https://wethecitizens.substack.com/p/ge2020-manifestos-manifestos-manifestos"><em>we, the citizens</em></a> for flagging out the folder to her readers.</p>
 <pre class="r"><code>#1 page per row
 wp_df &lt;- pdf_text(&quot;wp.pdf&quot;) %&gt;%
@@ -54,26 +77,23 @@ wp_df &lt;- pdf_text(&quot;wp.pdf&quot;) %&gt;%
   unnest_tokens(sentence, value, 
                 token = &quot;sentences&quot;,
                 to_lower = FALSE) </code></pre>
-<pre><code>## # A tibble: 17 x 2
+<pre><code>## # A tibble: 14 x 2
 ##     page sentence                                                               
 ##    &lt;int&gt; &lt;chr&gt;                                                                  
-##  1    33 The Workers’ Party Manifesto 2020                                     ~
-##  2    33 Seniors thinking of applying for casual or part-time jobs may be deter~
-##  3    33 This measure could encourage more seniors and PWDs to  take up work in~
-##  4    33 Enhancing the employability of  seniors and PWDs is a crucial priority~
-##  5    33 It supports inclusiveness and active  ageing and also raises our labou~
-##  6    33 Independently-measured service quality standards should be taken into ~
-##  7    33 Do more to mitigate climate change  The average sea level around Singa~
-##  8    33 Commitment to climate change mitigation is crucial and necessary.      
-##  9    33 We must increase our use of renewable energy sources.                  
-## 10    33 Natural gas, currently the main fuel  used for power generation, is cl~
-## 11    33 We propose targeting a minimum of 10% of our energy to come from renew~
-## 12    33 This should come from a combination of enhanced solar power deployment~
-## 13    33 New gas-fired power plants should not be built unless the demand  cann~
-## 14    33 Government R&amp;D funding should simultaneously be steered towards addres~
-## 15    33 Curb plastics use  We call for the introduction of a single-use plasti~
-## 16    33 The value of the charge  would need to be sufficiently high to change ~
-## 17    33 30</code></pre>
+##  1    42 The Workers’ Party Manifesto 2020                                     ~
+##  2    42 Singapore should work with our companies and NGOs interested in Corpor~
+##  3    42 Such efforts should  focus on social impact and deepening cultural und~
+##  4    42 Communicating the positive regional role played by Singapore will win ~
+##  5    42 Strengthen ASEAN  We support efforts to work with our neighbours to bo~
+##  6    42 A united and well-  coordinated ASEAN can provide assistance to its me~
+##  7    42 We should seek multifaceted relations with our neighbours, as outlined~
+##  8    42 This would include facilitating cultural exchanges,  interaction among~
+##  9    42 These enhancements will strengthen ASEAN as an institution that can be~
+## 10    42 Conclude South China Sea code of conduct  We support ASEAN’s efforts t~
+## 11    42 Singapore should work through ASEAN to finalise, as soon as possible, ~
+## 12    42 Any Code of Conduct should be mindful of power asymmetries and seek to~
+## 13    42 Singapore should also work through ASEAN to realise arrangements to im~
+## 14    42 39</code></pre>
 <p>PAP’s manifesto requires more data wrangling because of the column formatting and bullet points in it. (Note: Not sure why Chinese characters are showing up but that’s a bullet point dot in my code - head to my <a href="https://github.com/DesmondChoy/glaciers/tree/master/content/post">github</a> for the full source code)</p>
 <pre class="r"><code>pap_df &lt;- pdf_data(&quot;pap.pdf&quot;) %&gt;% 
   imap(., ~.x %&gt;% mutate(page = .y)) %&gt;% 
@@ -85,7 +105,7 @@ wp_df &lt;- pdf_text(&quot;wp.pdf&quot;) %&gt;%
   unnest_tokens(sentence, sentence,
                 token = &quot;regex&quot;,
                 to_lower = FALSE,
-                pattern = &quot;\\.|\\:|\\戼㸷&quot;) %&gt;% 
+                pattern = &quot;\\.|\\:|\\戼㸷|\\.&quot;) %&gt;% 
   mutate(party = &quot;PAP&quot;) %&gt;% 
   select(sentence, page, party)</code></pre>
 <p>Consolidating SDP’s manifesto required significant subjectivity and discretion. It seems the only way to obtain a consolidated manifesto is to pay $42 for a <a href="https://yoursdp.org/store/the-way-forward">hardcopy book</a>.</p>
@@ -162,8 +182,8 @@ ppp_df &lt;- pdf_text(&quot;ppp.pdf&quot;) %&gt;%
   mutate(page = row_number(),
          party = &quot;PPP&quot;) </code></pre>
 </div>
-<div id="manifesto-united" class="section level1">
-<h1>Manifesto United</h1>
+<div id="manifesto-united" class="section level2">
+<h2>Manifesto United</h2>
 <p>The first step is to combine manifestos extracted by <code>pdf_text()</code>, followed by combining with the ones extracted by <code>pdf_data()</code>. We run <code>unnest_tokens()</code> on the first set of PDFs (more details on unnest_tokens can be found in my previous <a href="https://desmondchoy.netlify.app/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/">blog posts</a>).</p>
 <p>The idea is to <strong>break down our current data which is organized as one-page-per-row, into one-sentence-per-row.</strong> By doing that, we focus our analysis to extract meaning behind each sentence (more on that later), and we also get to keep the page number to cross-reference against the actual document.</p>
 <pre class="r"><code>manifestos &lt;- wp_df %&gt;% 
@@ -191,8 +211,11 @@ manif_df</code></pre>
 ## 10     1 RP    &quot;Take the foreign worker dormitory operators as an example.&quot;     
 ## # ... with 2,005 more rows</code></pre>
 </div>
-<div id="gauging-level-of-detail-within-each-manifesto" class="section level1">
-<h1>Gauging Level of Detail Within Each Manifesto</h1>
+</div>
+<div id="analysis" class="section level1">
+<h1>Analysis</h1>
+<div id="gauging-level-of-detail" class="section level2">
+<h2>Gauging Level of Detail</h2>
 <p>By counting the number of sentences in each manifesto and using it as a proxy, we can gauge the level of detail within each manifesto. For bullet point-heavy PDFs, we have already separated each bullet point and treated it as one sentence.</p>
 <pre class="r"><code>manif_df %&gt;% 
   count(party, sort = TRUE)</code></pre>
@@ -212,8 +235,8 @@ manif_df</code></pre>
 <p>I should point out that this method only takes into account unstructured text information - parties like PAP have supplemented their manifesto heavily with videos which contain valuable policy information. Charts and visualization featured within the manifestos are also not picked up.</p>
 <p>One thing that stands out for me is WP’s manifesto. The word count is a good proxy for the timeliness and level of detail it provides in its manifesto, given the entire PDF was released recently but with no charts nor visualization (unfortunately).</p>
 </div>
-<div id="categorically-speaking" class="section level1">
-<h1>Categorically Speaking</h1>
+<div id="categorically-speaking" class="section level2">
+<h2>Categorically Speaking</h2>
 <p>With sentences, we can attempt to identify broad topics by picking out certain words in each sentence that are often used in context. For instance, to identify discussions related to <code>Governance</code>, I search for key words such as <em>constituencies</em>, <em>parliament</em>, and <em>transparen</em> (not a typo since it picks up both <em>transparent</em> and <em>transparency</em>). We have ten broad categories, with remaining sentences classified as <code>Others</code>.</p>
 <pre class="r"><code>categories &lt;- manif_df %&gt;% 
   #transform all sentences to lower case
@@ -266,8 +289,8 @@ categories %&gt;%
 ## sentence &quot;The Self-Employed Person Income Relief Scheme should be made automatic for all self-  employed adults below the age of 37.&quot;
 ## page     &quot;7&quot;</code></pre>
 </div>
-<div id="a-quick-investigation-of-others" class="section level1">
-<h1>A Quick Investigation Of Others</h1>
+<div id="a-quick-investigation-of-others" class="section level2">
+<h2>A Quick Investigation Of Others</h2>
 <p>After categorization of our sentences, there’s quite a fair bit lumped into <code>Others</code>.</p>
 <pre class="r"><code>categories %&gt;% 
   count(topic, sort = TRUE)</code></pre>
@@ -386,9 +409,9 @@ categories %&gt;%
 categories %&gt;% 
   filter(topic == &quot;Others&quot;) %&gt;% 
   mutate(length = str_count(sentence),
-         percentile = as.factor(case_when(length &lt; 6 ~ &quot;0-25&quot;,
-                                between(length, 6, 54) ~ &quot;26-50&quot;,
-                                between(length, 55, 104) ~ &quot;51-75&quot;,
+         percentile = as.factor(case_when(length &lt; 4 ~ &quot;0-25&quot;,
+                                between(length, 4, 50) ~ &quot;26-50&quot;,
+                                between(length, 51, 102) ~ &quot;51-75&quot;,
                                 TRUE ~ &quot;76-100&quot;))) %&gt;% 
   group_by(percentile) %&gt;% 
   sample_n(5) %&gt;% 
@@ -397,27 +420,28 @@ categories %&gt;%
 ## # Groups:   percentile [4]
 ##    party topic  sentence                                  page length percentile
 ##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;                                    &lt;int&gt;  &lt;int&gt; &lt;fct&gt;     
-##  1 RDU   Others &quot;\n4&quot;                                       14      2 0-25      
+##  1 RDU   Others &quot;\n7&quot;                                       15      2 0-25      
 ##  2 SDP   Others &quot; 1&quot;                                        20      2 0-25      
 ##  3 WP    Others &quot;6&quot;                                          9      1 0-25      
 ##  4 PAP   Others &quot;\nWe&quot;                                      10      3 0-25      
 ##  5 WP    Others &quot;3&quot;                                          6      1 0-25      
-##  6 SDP   Others &quot;” https&quot;                                   25      7 26-50     
-##  7 SDP   Others &quot;//yoursdp&quot;                                 26      9 26-50     
-##  8 RDU   Others &quot;\nBut rough patches do not last foreve~     4     38 26-50     
-##  9 SDP   Others &quot;\n(SDP&#39;s Young Democrats launched the ~    30     49 26-50     
-## 10 SDP   Others &quot; An Agenda For Transformation&quot;              9     29 26-50     
-## 11 PAP   Others &quot;\nIni kerana kita terus bersatu hati d~    24     83 51-75     
-## 12 SPP   Others &quot;This is not a novel idea and it has be~    13    103 51-75     
-## 13 RDU   Others &quot;\nThe best way to predict the future i~     7     58 51-75     
-## 14 WP    Others &quot;Exceptions to new rules should be anno~     8     74 51-75     
-## 15 WP    Others &quot;More generally, a deeper public discus~    26     97 51-75     
-## 16 SPP   Others &quot;Increasing youth engagement in policy-~     5    135 76-100    
-## 17 SPP   Others &quot;Malay, Indian and Eurasian homeowners ~    19    123 76-100    
-## 18 WP    Others &quot;The licensing regime  should be opened~    38    170 76-100    
-## 19 SPP   Others &quot;One of our  founding fathers, Mr Toh C~    10    113 76-100    
-## 20 WP    Others &quot;Given that over 20% of existing marria~    18    200 76-100</code></pre>
-<p>In the first and second quantile, the sentences contain random digits separated from sentences and short soundbites. In the remaining two quantiles we see more meaningful sentences discussing youth engagement and media licensing that don’t quite fall into any of the prior categories. There’s a sentence on contact tracing that could be classified under <code>Covid-19</code>, but I think the search filters are good enough.</p>
+##  6 SDP   Others &quot;\nMAs are profit-driven&quot;                   27     22 26-50     
+##  7 SDP   Others &quot;\nRead the report here or watch the ev~    30     45 26-50     
+##  8 RDU   Others &quot;\n‘Politics with Principles, Vision wi~    15     50 26-50     
+##  9 PSP   Others &quot;\n4 You Deserve better 5&quot;                   3     23 26-50     
+## 10 SDP   Others &quot; \uf082 \uf16d \uf099 \uf167 https&quot;        11     14 26-50     
+## 11 PAP   Others &quot;\nKami akan bekerjasama dengan anda un~    24    100 51-75     
+## 12 WP    Others &quot;Do our part as good global citizens  S~    11     96 51-75     
+## 13 RDU   Others &quot;\nBut let us not forget that a sampan,~     5     53 51-75     
+## 14 SPP   Others &quot;Instead, they aim to  tackle the root ~     8     93 51-75     
+## 15 WP    Others &quot;However, any discriminatory practice i~    24     80 51-75     
+## 16 SPP   Others &quot;As long as the current  safeguards wit~     5    138 76-100    
+## 17 WP    Others &quot;We reiterate our  call for a ban on al~    18    109 76-100    
+## 18 WP    Others &quot;In the interests of national security,~    38    118 76-100    
+## 19 NSP   Others &quot;The Nation should adopt a moderate and~    10    199 76-100    
+## 20 WP    Others &quot;The Workers’ Party Manifesto 2020     ~    18    123 76-100</code></pre>
+<p>In the first and second quantile, the sentences contain random digits separated from sentences and short soundbites. In the remaining two quantiles we see more meaningful sentences discussing infant care centres, online gambling and national security that don’t quite fall into any of the prior categories. There is a sentence addressing rising global temperatures that should be classified under <code>Climate Change</code>, but for the most part I think the search filters are good enough.</p>
+</div>
 </div>
 <div id="the-tables-have-turned" class="section level1">
 <h1>The Tables Have Turned</h1>
@@ -433,9 +457,10 @@ links &lt;- categories %&gt;%
     html = paste(
       &quot;https://github.com/DesmondChoy/DataSets/raw/master/&quot;,
       str_to_lower(party), &quot;.pdf&quot;, sep = &quot;&quot;)
-  )
-
-bscols(
+  )</code></pre>
+<div id="interactive-table" class="section level2">
+<h2>Interactive Table</h2>
+<pre class="r"><code>bscols(
   widths = c(2, 10),
   list(
     filter_checkbox(&quot;type&quot;, &quot;Topic&quot;, data, ~ topic),
@@ -659,8 +684,11 @@ bscols(
 </div>
 </div>
 </div>
-<div id="the-best-form-of-flattery" class="section level1">
-<h1>The Best Form Of Flattery</h1>
+</div>
+<div id="visualization" class="section level1">
+<h1>Visualization</h1>
+<div id="the-best-form-of-flattery" class="section level2">
+<h2>The Best Form Of Flattery</h2>
 <p>Across my selected topics, how does the manifesto of the ruling party compare against the opposition parties?</p>
 <pre class="r"><code>library(gghighlight)
 
@@ -692,6 +720,9 @@ comp %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   )</code></pre>
 <p><img src="/post/2020-07-03-make-your-vote-count-by-counting-sentences.en-us_files/figure-html/comparing%20across%20topic-1.png" width="1152" /></p>
+</div>
+<div id="the-prickly-issues" class="section level2">
+<h2>The Prickly Issues</h2>
 <p>Based on their manifestos, which are the top issues that define each political party?</p>
 <pre class="r"><code>most_discussed &lt;- comp %&gt;%
   group_by(party) %&gt;%
@@ -748,6 +779,7 @@ comp %&gt;%
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
 <p><img src="/post/2020-07-03-make-your-vote-count-by-counting-sentences.en-us_files/figure-html/comparing%20across%20party-1.png" width="1152" /></p>
+</div>
 </div>
 <div id="concluding-thoughts" class="section level1">
 <h1>Concluding Thoughts</h1>

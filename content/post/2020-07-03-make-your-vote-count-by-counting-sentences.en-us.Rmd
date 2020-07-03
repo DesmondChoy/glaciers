@@ -9,13 +9,15 @@ tags:
   - visualization
 keywords:
   - tech
+output:
+  blogdown::html_page:
+    toc: true
 ---
 
 # Singapore General Elections 2020
 
 With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies *should* be made. With all 93 elected seats in Parliament organised into 14 Single Member Constituencies (SMCs) and 17 Group Representation Constituencies (GRCs) being contested by 11 political parties, I wanted to create an interactive data table that consolidated all manifestos and would make it convenient for voters to compare policies and issues across different parties.  
 
-The table can be found around the 3/4 mark of this post, should you wish to skip the code and methodology.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -27,7 +29,7 @@ knitr::opts_chunk$set(
 setwd("C:\\Users\\Desmond\\Documents\\GitHub\\glaciers\\content\\post")
 ```
 
-# Libraries
+## Libraries
 
 ```{r libraries}
 library(tidyverse)
@@ -38,7 +40,7 @@ library(fishualize)
 theme_set(theme_minimal())
 ```
 
-# Cleaning Individual Manifestos
+## Cleaning Individual Manifestos
 
 These manifestos are listed in the order which I managed to obtain their PDFs. A big thank you to [Ariel P](https://drive.google.com/drive/folders/1AkOJuNInhcASVQ2LWwqrBH3Uclyr3HU8) who consolidated all the PDFs in one Google Drive folder, and Kirsten Han of [*we, the citizens*](https://wethecitizens.substack.com/p/ge2020-manifestos-manifestos-manifestos) for flagging out the folder to her readers.  
 
@@ -74,7 +76,7 @@ pap_df <- pdf_data("pap.pdf") %>%
   unnest_tokens(sentence, sentence,
                 token = "regex",
                 to_lower = FALSE,
-                pattern = "\\.|\\:|\\·") %>% 
+                pattern = "\\.|\\:|\\·|\\.") %>% 
   mutate(party = "PAP") %>% 
   select(sentence, page, party)
 ```
@@ -175,7 +177,7 @@ ppp_df <- pdf_text("ppp.pdf") %>%
          party = "PPP") 
 ```
 
-# Manifesto United
+## Manifesto United
 
 The first step is to combine manifestos extracted by `pdf_text()`, followed by combining with the ones extracted by `pdf_data()`. We run `unnest_tokens()` on the first set of PDFs (more details on unnest_tokens can be found in my previous [blog posts](https://desmondchoy.netlify.app/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/)).   
 
@@ -194,7 +196,9 @@ manif_df <- manifestos %>%
 manif_df
 ```
 
-# Gauging Level of Detail Within Each Manifesto
+# Analysis
+
+## Gauging Level of Detail
 
 By counting the number of sentences in each manifesto and using it as a proxy, we can gauge the level of detail within each manifesto. For bullet point-heavy PDFs, we have already separated each bullet point and treated it as one sentence.
 
@@ -207,7 +211,7 @@ I should point out that this method only takes into account unstructured text in
 
 One thing that stands out for me is WP's manifesto. The word count is a good proxy for the timeliness and level of detail it provides in its manifesto, given the entire PDF was released recently but with no charts nor visualization (unfortunately).
 
-# Categorically Speaking
+## Categorically Speaking
 
 With sentences, we can attempt to identify broad topics by picking out certain words in each sentence that are often used in context. For instance, to identify discussions related to `Governance`, I search for key words such as *constituencies*, *parliament*, and *transparen* (not a typo since it picks up both *transparent* and *transparency*). We have ten broad categories, with remaining sentences classified as `Others`.
 
@@ -249,7 +253,7 @@ categories %>%
   t()
 ```
 
-# A Quick Investigation Of Others
+## A Quick Investigation Of Others
 
 After categorization of our sentences, there's quite a fair bit lumped into `Others`. 
 
@@ -300,16 +304,16 @@ set.seed(2020)
 categories %>% 
   filter(topic == "Others") %>% 
   mutate(length = str_count(sentence),
-         percentile = as.factor(case_when(length < 6 ~ "0-25",
-                                between(length, 6, 54) ~ "26-50",
-                                between(length, 55, 104) ~ "51-75",
+         percentile = as.factor(case_when(length < 4 ~ "0-25",
+                                between(length, 4, 50) ~ "26-50",
+                                between(length, 51, 102) ~ "51-75",
                                 TRUE ~ "76-100"))) %>% 
   group_by(percentile) %>% 
   sample_n(5) %>% 
   slice(1:5)
 ```
 
-In the first and second quantile, the sentences contain random digits separated from sentences and short soundbites. In the remaining two quantiles we see more meaningful sentences discussing youth engagement and media licensing that don't quite fall into any of the prior categories. There's a sentence on contact tracing that could be classified under `Covid-19`, but I think the search filters are good enough.
+In the first and second quantile, the sentences contain random digits separated from sentences and short soundbites. In the remaining two quantiles we see more meaningful sentences discussing infant care centres, online gambling and national security that don't quite fall into any of the prior categories. There is a sentence addressing rising global temperatures that should be classified under `Climate Change`, but for the most part I think the search filters are good enough.   
 
 # The Tables Have Turned
 
@@ -328,7 +332,11 @@ links <- categories %>%
       "https://github.com/DesmondChoy/DataSets/raw/master/",
       str_to_lower(party), ".pdf", sep = "")
   )
+```
 
+## Interactive Table
+
+```{r interactive}
 bscols(
   widths = c(2, 10),
   list(
@@ -377,7 +385,9 @@ bscols(
 )
 ```
 
-# The Best Form Of Flattery
+# Visualization
+
+## The Best Form Of Flattery
 
 Across my selected topics, how does the manifesto of the ruling party compare against the opposition parties?
 
@@ -412,6 +422,8 @@ comp %>%
     strip.text = element_text(face = "bold", size = 15),
   )
 ```
+
+## The Prickly Issues
 
 Based on their manifestos, which are the top issues that define each political party?
 
