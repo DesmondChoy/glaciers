@@ -16,7 +16,7 @@ output:
 
 # Singapore General Elections 2020
 
-With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies *should* be made. With all 93 elected seats in Parliament organised into 14 Single Member Constituencies (SMCs) and 17 Group Representation Constituencies (GRCs) being contested by 11 political parties, I wanted to create an interactive data table that consolidated all manifestos and would make it convenient for voters to compare policies and issues across different parties.  
+With [election fever](https://sg.news.yahoo.com/ge-2020-singapore-parliament-dissolved-paving-way-for-general-election-081602263.html) heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies *should* be made. With all 93 elected seats in Parliament organised into 14 Single Member Constituencies (SMCs) and 17 Group Representation Constituencies (GRCs) being contested by 11 political parties, I wanted to create an interactive data table that consolidated all manifestos and would make it convenient for voters to compare policies and issues across different parties.  
 
 
 ```{r setup, include=FALSE}
@@ -60,95 +60,15 @@ wp_df %>%
   select(page, value) %>% 
   unnest_tokens(sentence, value, 
                 token = "sentences",
-                to_lower = FALSE) 
-```
-
-PAP's manifesto requires more data wrangling because of the column formatting and bullet points in it. (Note: Not sure why Chinese characters are showing up but that's a bullet point dot in my code - head to my [github](https://github.com/DesmondChoy/glaciers/tree/master/content/post) for the full source code)
-
-```{r pap}
-pap_df <- pdf_data("pap.pdf") %>% 
-  imap(., ~.x %>% mutate(page = .y)) %>% 
-  reduce(bind_rows) %>% 
-  select(page, text) %>% 
-  unnest_tokens(sentence, text,
-              token = "sentences",
                 to_lower = FALSE) %>% 
-  unnest_tokens(sentence, sentence,
-                token = "regex",
-                to_lower = FALSE,
-                pattern = "\\.|\\:|\\會\\.") %>% 
-  mutate(party = "PAP") %>% 
-  select(sentence, page, party)
-```
-
-Consolidating SDP's manifesto required significant subjectivity and discretion. It seems the only way to obtain a consolidated manifesto is to pay $42 for a [hardcopy book](https://yoursdp.org/store/the-way-forward).   
-
-So I resorted to visiting to [their website](https://yoursdp.org/policies), saving each of those 10 pages as PDFs, and combining them. I also note a lot of their pages are rather dated and written over a year ago.
-
-```{r sdp wrangling, include = FALSE, eval=FALSE}
-#removing references
-pdf_subset("sdp10A.pdf", pages = 1:32, output = "sdp10.pdf" )
-
-pdf_combine(paste("sdp", 1:10, ".pdf", sep = ""), output = "sdp.pdf")
-```
-
-```{r sdp}
-sdp_df <- pdf_data("sdp.pdf") %>% 
-  imap(., ~.x %>% mutate(page = .y)) %>% 
-  reduce(bind_rows) %>% 
-  select(page, text) %>% 
-  unnest_tokens(sentence, text,
-                token = "sentences",
-                to_lower = FALSE) %>% 
-  unnest_tokens(sentence, sentence,
-                token = "regex",
-                to_lower = FALSE,
-                pattern = "\\.|\\:|\\會\\.") %>% 
-  mutate(party = "SDP") %>% 
-  select(sentence, page, party)
-```
-
-PSP's manifesto is formatted similarly to PAP's, albeit with a shorter length.
-
-```{r psp}
-psp_df <- pdf_data("psp.pdf") %>% 
-  imap(., ~.x %>% mutate(page = .y)) %>% 
-  reduce(bind_rows) %>% 
-  select(page, text) %>% 
-  unnest_tokens(sentence, text,
-                token = "sentences",
-                to_lower = FALSE) %>% 
-  unnest_tokens(sentence, sentence,
-                token = "regex",
-                to_lower = FALSE,
-                pattern = "\\.|\\:|\\會\\.") %>% 
-  mutate(party = "PSP") %>% 
-  select(sentence, page, party)
-```
-
-One more unruly PDF ...
-
-```{r rdu}
-rdu_df <- pdf_data("rdu.pdf") %>% 
-  imap(., ~.x %>% mutate(page = .y)) %>% 
-  reduce(bind_rows) %>% 
-  select(page, text) %>% 
-  unnest_tokens(sentence, text,
-                token = "sentences",
-                to_lower = FALSE) %>% 
-  unnest_tokens(sentence, sentence,
-                token = "regex",
-                to_lower = FALSE,
-                pattern = "\\.|\\:|\\會\\.") %>% 
-  mutate(party = "RDU") %>% 
-  select(sentence, page, party)
+  head()
 ```
 
 * RP's manifesto is the shortest by far, with no social media links, no introduction, and just one image of its party logo. 
 * [SDA's manifesto](https://drive.google.com/file/d/17Rn0NnGUXWeJXcjcyoa0UDDOmfCLu8Pn/view) comprised of only images and figuring how to convert images to text accurately could be a herculean task, so I opted for [a summary of their manifesto](https://www.onlinecitizenasia.com/2020/06/30/singapore-democratic-alliance-issues-elections-manifesto-ahead-of-pasir-ris-punggol-grc-contest/) from The Online Citizen instead. 
 * PPP's manifesto can only be found on a [Facebook post](https://www.facebook.com/peoplespowerpartysg/posts/3997120926995772?__xts__[0]=68.ARD01SqwXQBRgXSzdg3ng9Wto2VkmXHqAqbhUhcPxdZDmYUr-oXsk72wrvJynOsN-Z4OdAGtTHmemCUPkIRoo2JDjch6dupC0gGX18JxYyh9HGuwQzTrXqub0MolpwPmbvoeK_WmqTX9I0hvbc_hiaPd2CvWqnEZig4ZE7_Gs72CrkDHmeWS2CDlqfNvhdVkSv4NXkyWsr6Hf35xFR_53PbyxmmnI0xqQMPLu9XcHGbgeDsWYycOR_TM6JclmWP5nu2-kLv4prcGvkfboSkTqs4um8d_0f_GRyquwiSUUrNi9edprz0Z_k4C5K9rGJs0dyvUEHWHG17kWPN1QbnGtw&__tn__=-R), and I've opted to use a summary of his manifesto from [The Independent](http://theindependent.sg/ppp-leader-goh-meng-sengs-manifesto-focuses-on-macpherson/).
 
-As of 2nd July, I'm unable to find any manifesto from People's Voice.
+As of 2nd July, I'm unable to find any manifesto from Peoples Voice.
 
 ```{r rp spp nsp sda ppp}
 rp_df <- pdf_text("rp.pdf") %>%
@@ -177,11 +97,85 @@ ppp_df <- pdf_text("ppp.pdf") %>%
          party = "PPP") 
 ```
 
+PAP, PSP and RDU's manifestos requires more data wrangling because of the column formatting and bullet points in it. We can't use `pdf_text()` as we did above because it doesn't seem to extract bullet points well, but `pdf_data()` does a good job at it. The caveat is, we don't get a clean one-page-a-row format as we do with `pdf_text()`, so we have to run `unnest_tokens()` twice (intuition detailed in code). More details on `unnest_tokens()` can be found in my previous [blog post](https://desmondchoy.netlify.app/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/))
+
+```{r pap psp rdu}
+pap_df <- pdf_data("pap.pdf") %>% 
+  #map page number
+  imap(., ~.x %>% mutate(page = .y)) %>% 
+  #combine all lists
+  reduce(bind_rows) %>% 
+  select(page, text) %>% 
+  #convert it to one-sentence-per-row
+  unnest_tokens(sentence, text,
+              token = "sentences",
+                to_lower = FALSE) %>% 
+  #convert bullet points to standalone sentence
+  unnest_tokens(sentence, sentence,
+                token = "regex",
+                to_lower = FALSE,
+                pattern = "\\.|\\:|\\u00B7|\\u2022") %>% 
+  mutate(party = "PAP") %>% 
+  select(sentence, page, party)
+
+psp_df <- pdf_data("psp.pdf") %>% 
+  imap(., ~.x %>% mutate(page = .y)) %>% 
+  reduce(bind_rows) %>% 
+  select(page, text) %>% 
+  unnest_tokens(sentence, text,
+                token = "sentences",
+                to_lower = FALSE) %>% 
+  unnest_tokens(sentence, sentence,
+                token = "regex",
+                to_lower = FALSE,
+                pattern = "\\.|\\:|\\u00B7|\\u2022") %>% 
+  mutate(party = "PSP") %>% 
+  select(sentence, page, party)
+
+rdu_df <- pdf_data("rdu.pdf") %>% 
+  imap(., ~.x %>% mutate(page = .y)) %>% 
+  reduce(bind_rows) %>% 
+  select(page, text) %>% 
+  unnest_tokens(sentence, text,
+                token = "sentences",
+                to_lower = FALSE) %>% 
+  unnest_tokens(sentence, sentence,
+                token = "regex",
+                to_lower = FALSE,
+                pattern = "\\.|\\:|\\u00B7|\\u2022") %>% 
+  mutate(party = "RDU") %>% 
+  select(sentence, page, party)
+```
+
+Consolidating SDP's manifesto required significant subjectivity and discretion. It seems the only way to obtain a consolidated manifesto is to pay $42 for a [hardcopy book](https://yoursdp.org/store/the-way-forward).   
+
+So I resorted to visiting to [their website](https://yoursdp.org/policies), saving each of those 10 pages as PDFs, and combining them. I also note a lot of their pages are rather dated and written over a year ago.
+
+```{r sdp wrangling, include = FALSE, eval=FALSE}
+pdf_combine(paste("sdp", 1:10, ".pdf", sep = ""), output = "sdp.pdf")
+```
+
+```{r sdp}
+sdp_df <- pdf_data("sdp.pdf") %>% 
+  imap(., ~.x %>% mutate(page = .y)) %>% 
+  reduce(bind_rows) %>% 
+  select(page, text) %>% 
+  unnest_tokens(sentence, text,
+                token = "sentences",
+                to_lower = FALSE) %>% 
+  unnest_tokens(sentence, sentence,
+                token = "regex",
+                to_lower = FALSE,
+                pattern = "\\.|\\:|\\u00B7|\\u2022") %>% 
+  mutate(party = "SDP") %>% 
+  select(sentence, page, party)
+```
+
 ## Manifesto United
 
-The first step is to combine manifestos extracted by `pdf_text()`, followed by combining with the ones extracted by `pdf_data()`. We run `unnest_tokens()` on the first set of PDFs (more details on unnest_tokens can be found in my previous [blog posts](https://desmondchoy.netlify.app/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/)).   
+The next step is to combine all manifestos extracted by `pdf_text()`, followed by combining with the ones extracted by `pdf_data()`.   
 
-The idea is to **break down our current data which is organized as one-page-per-row, into one-sentence-per-row.** By doing that, we focus our analysis to extract meaning behind each sentence (more on that later), and we also get to keep the page number to cross-reference against the actual document.
+We run `unnest_tokens()` on the first set of PDFs. The idea is to **break down our current data which is organized as one-page-per-row, into one-sentence-per-row.** By doing that, we focus our analysis to extract meaning behind each sentence (more on that later), and we also get to keep the page number to cross-reference against the actual document.
 
 ```{r combination}
 manifestos <- wp_df %>% 
@@ -189,7 +183,11 @@ manifestos <- wp_df %>%
   unnest_tokens(sentence, value,
                 token = "sentences",
                 to_lower = FALSE) 
+```
 
+Now that all manifestos are one-sentence-per-row, accounting for bullet points, we can proceed to merge the rest.
+
+```{r}
 manif_df <- manifestos %>% 
   bind_rows(list(pap_df, sdp_df, psp_df, rdu_df))
 
@@ -198,22 +196,30 @@ manif_df
 
 # Analysis
 
-## Gauging Level of Detail
+## Don't Judge A Manifesto By Its Length
 
-By counting the number of sentences in each manifesto and using it as a proxy, we can gauge the level of detail within each manifesto. For bullet point-heavy PDFs, we have already separated each bullet point and treated it as one sentence.
+Can we gauge the level of detail and amount of discourse within each manifesto by counting the number of sentences and using it as a proxy?
 
 ```{r counting sentence}
 manif_df %>% 
   count(party, sort = TRUE)
 ```
 
-I should point out that this method only takes into account unstructured text information - parties like PAP have supplemented their manifesto heavily with videos which contain valuable policy information. Charts and visualization featured within the manifestos are also not picked up.  
+This method is a little too simplistic. Recall that for bullet point-heavy PDFs, we broke down each bullet point into its own sentence and, as a consequence, [white spaces](https://en.wikipedia.org/wiki/Whitespace_character) were created and also treated as a standalone sentence. Counting sentences alone to gauge the level of detail in each manifesto would inflate the sentence count of bullet-point heavy PDFs.
 
-One thing that stands out for me is WP's manifesto. The word count is a good proxy for the timeliness and level of detail it provides in its manifesto, given the entire PDF was released recently but with no charts nor visualization (unfortunately).
+```{r}
+pap_df %>% 
+  mutate(length = str_count(sentence)) %>% 
+  arrange(length)
+```
+
+Additionally, this method only takes into account unstructured text information - parties like PAP have supplemented their manifesto heavily with videos which contain valuable policy information. Charts and visualization featured within the manifestos are also not picked up.  
+
+That being said, for WP's manifesto the word count is a good proxy for the timeliness and level of detail it provides in its manifesto, given the entire PDF was released recently but with no charts nor visualization (unfortunately).
 
 ## Categorically Speaking
 
-With sentences, we can attempt to identify broad topics by picking out certain words in each sentence that are often used in context. For instance, to identify discussions related to `Governance`, I search for key words such as *constituencies*, *parliament*, and *transparen* (not a typo since it picks up both *transparent* and *transparency*). We have ten broad categories, with remaining sentences classified as `Others`.
+A more accurate way to gauge both **depth and width of detail** would be to categorize sentences, which would also involve counting. The idea is broad topics can be identified by picking out certain words in each sentence that are often used in context. For instance, to identify discussions related to `Governance`, one could search for key words such as *constituencies*, *parliament*, and *transparen* (not a typo since it picks up both *transparent* and *transparency*). I came up with ten broad categories, with remaining sentences classified as `Others`.
 
 ```{r categories}
 categories <- manif_df %>% 
@@ -313,7 +319,7 @@ categories %>%
   slice(1:5)
 ```
 
-In the first and second quantile, the sentences contain random digits separated from sentences and short soundbites. In the remaining two quantiles we see more meaningful sentences discussing infant care centres, online gambling and national security that don't quite fall into any of the prior categories. There is a sentence addressing rising global temperatures that should be classified under `Climate Change`, but for the most part I think the search filters are good enough.   
+In the first and second quantile, the sentences contain random digits separated from sentences and short soundbites. In the remaining two quantiles there are more meaningful sentences discussing infant care centres, online gambling and national security that don't quite fall into any of the prior categories. There is a sentence addressing rising global temperatures that should be classified under `Climate Change`, but for the most part I think the search filters are good enough.   
 
 # The Tables Have Turned
 
@@ -346,7 +352,7 @@ bscols(
   reactable(
     data,
     defaultColDef = colDef(
-      headerStyle = list(background = fish(1, option = "Parupeneus_insularis"))
+      headerStyle = list(background = fish(1, option = "Epinephelus_fasciatus"))
     ),
     columns = list(
       sentence = colDef(name = "Search Across Manifestos", align = "center",
@@ -474,7 +480,7 @@ comp %>%
     x = "Frequency Of Topic Cited Within Own Manifesto (%)",
     y = "",
     title = "Party Manifestos: Ranking Top Five Most Discussed Topics",
-    subtitle = "Social Mobility/Labour ranks as the most discussed topic across all parties,\nwith PPP/SDA putting significantly more emphasis."
+    subtitle = "Social Mobility/Labour ranks as the most discussed topic across all parties,with PPP/SDA\nputting significantly more emphasis. Quotes provided relate to most discussed topic."
   ) +
   theme(
     plot.title = element_text(face = "bold", size = 20),
@@ -486,7 +492,11 @@ comp %>%
 
 # Concluding Thoughts
 
-I hope this post benefited the reader, be it from the code or insights derived from the interactive table. Collecting and cleaning the data took a surprisingly long time, but was ultimately rewarding seeing sentences being (mostly) correctly classified. I suppose my experience does echo [surveys collected](https://blog.ldodds.com/2020/01/31/do-data-scientists-spend-80-of-their-time-cleaning-data-turns-out-no/) on time spent cleaning data.  
+Personally, this post reinforces a lot of my prior beliefs - that the PAP (understandably, as a function of an incumbent) spends less time championing topics related to `Civil Liberties` and `Governance`, that WP's policies appear closer to the PAP's than one might think, and `CPF/Housing`, `Labour` and `Social Mobility` issues appears to be what drives votes (since every party is heavily focused on them).   
+
+I'm also heartened that `Climate Change` is one of the topics that are already being discussed, as that could be one of the most defining issues of our generation. Within the `Others` category, I'm certain that there are important issues as well that have not been picked up by my filters e.g. minority rights, gender inequality, etc. 
+
+Collecting and cleaning the data took a surprisingly long time, but was ultimately rewarding seeing sentences being (mostly) correctly classified and learning about [unicodes](https://en.wikipedia.org/wiki/Unicode) when struggling to separate bullet points. I suppose my experience does echo [surveys collected](https://blog.ldodds.com/2020/01/31/do-data-scientists-spend-80-of-their-time-cleaning-data-turns-out-no/) on time spent cleaning data.  
 
 I look forward to casting my vote and if you are based in Singapore and eligible to vote, I hope you do too. Make your vote count!
 
