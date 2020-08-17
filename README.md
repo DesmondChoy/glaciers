@@ -6,6 +6,6 @@ I would describe myself as being passionate about data, fascinated by NLP, const
 
 This blog is built with blogdown and Hugo, using the Tranquilpeak theme and deployed using Netlify. I use this blog to showcase new libraries, explore unusual data sets and learn new data science techniques.  
 
-All code to my blog posts can be found in my Github.
+All code to my blog posts can be found in glaciers/content/post/
 
 
