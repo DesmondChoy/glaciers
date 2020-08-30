@@ -7,19 +7,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.66.0 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="Desmond Choy">
-<meta name="keywords" content="tech">
-<meta name="description" content="Despite these troubling times brought upon us by Covid-19, one interesting investment theme has outperformed the market - “stay-at-home” stocks. These generally consist of companies that would benefit from the lockdown such as big retailers with delivery services, tech companies providing essential software for WFH setups, and video gaming companies that benefit from bored kids and adults. These companies have outperformed the broader indices significantly and, intuitively, sentiment for these companies should be positive, right?">
+<meta name="keywords" content="">
+<meta name="description" content="NLP techniques (bag of words, tf-idf) are used to extract sentiment analysis and word importance from companies&rsquo; earning call transcripts">
 
 
-<meta property="og:description" content="Despite these troubling times brought upon us by Covid-19, one interesting investment theme has outperformed the market - “stay-at-home” stocks. These generally consist of companies that would benefit from the lockdown such as big retailers with delivery services, tech companies providing essential software for WFH setups, and video gaming companies that benefit from bored kids and adults. These companies have outperformed the broader indices significantly and, intuitively, sentiment for these companies should be positive, right?">
+<meta property="og:description" content="NLP techniques (bag of words, tf-idf) are used to extract sentiment analysis and word importance from companies&rsquo; earning call transcripts">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Exploring Share Prices and Sentiment">
 <meta name="twitter:title" content="Exploring Share Prices and Sentiment">
 <meta property="og:url" content="/2020/05/exploring-share-prices-and-sentiment/">
 <meta property="twitter:url" content="/2020/05/exploring-share-prices-and-sentiment/">
 <meta property="og:site_name" content="Desmond Choy&#39;s Blog">
-<meta property="og:description" content="Despite these troubling times brought upon us by Covid-19, one interesting investment theme has outperformed the market - “stay-at-home” stocks. These generally consist of companies that would benefit from the lockdown such as big retailers with delivery services, tech companies providing essential software for WFH setups, and video gaming companies that benefit from bored kids and adults. These companies have outperformed the broader indices significantly and, intuitively, sentiment for these companies should be positive, right?">
-<meta name="twitter:description" content="Despite these troubling times brought upon us by Covid-19, one interesting investment theme has outperformed the market - “stay-at-home” stocks. These generally consist of companies that would benefit from the lockdown such as big retailers with delivery services, tech companies providing essential software for WFH setups, and video gaming companies that benefit from bored kids and adults. These companies have outperformed the broader indices significantly and, intuitively, sentiment for these companies should be positive, right?">
+<meta property="og:description" content="NLP techniques (bag of words, tf-idf) are used to extract sentiment analysis and word importance from companies&rsquo; earning call transcripts">
+<meta name="twitter:description" content="NLP techniques (bag of words, tf-idf) are used to extract sentiment analysis and word importance from companies&rsquo; earning call transcripts">
 <meta property="og:locale" content="en-us">
 
   
@@ -53,6 +53,12 @@
 
 
 
+  <meta property="og:image" content="https://images.unsplash.com/photo-1559589689-577aabd1db4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1559589689-577aabd1db4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80">
+
+
+  <meta property="og:image" content="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80">
 
 
 
@@ -189,15 +195,13 @@
 </nav>
 
       
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
-          
-          
-            <div class="post-header main-content-wrap text-left">
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1050&amp;q=80')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
       Exploring Share Prices and Sentiment
@@ -216,6 +220,18 @@
   </div>
 
 </div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">Books By Patrick Tomasso</span>
+          
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
