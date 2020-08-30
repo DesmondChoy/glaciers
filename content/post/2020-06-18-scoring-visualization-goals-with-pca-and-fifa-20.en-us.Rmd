@@ -3,14 +3,17 @@ title: Scoring Visualization Goals with PCA and FIFA 20
 author: Desmond Choy
 date: '2020-06-18'
 slug: scoring-visualization-goals-with-pca-and-fifa-20.en-us
-categories: []
+summary: The FIFA20 player dataset is visualized using ridgeline plots and network graphs. Unsupervised machine learning (Principal Components Analysis) is also used to generate a new set of statistically independent features.
+readingtime: '16'
 tags:
   - r
   - EDA
   - machine learning
   - visualization
-keywords:
-  - tech
+coverImage: https://images.unsplash.com/photo-1544698310-74ea9d1c8258?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1490&q=80
+thumbnailImage: https://images.unsplash.com/photo-1543351611-58f69d7c1781?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60
+thumbnailImagePosition: left
+coverCaption: Voting By Donnycocacola
 ---
 
 ```{r setup, include=FALSE}

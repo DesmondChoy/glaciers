@@ -7,19 +7,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.66.0 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="Desmond Choy">
-<meta name="keywords" content="tech">
-<meta name="description" content="I came across this interesting dataset on Kaggle related to the football simulation video game FIFA 20, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.">
+<meta name="keywords" content="">
+<meta name="description" content="The FIFA20 player dataset is visualized using ridgeline plots and network graphs. Unsupervised machine learning (Principal Components Analysis) is also used to generate a new set of statistically independent features.">
 
 
-<meta property="og:description" content="I came across this interesting dataset on Kaggle related to the football simulation video game FIFA 20, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.">
+<meta property="og:description" content="The FIFA20 player dataset is visualized using ridgeline plots and network graphs. Unsupervised machine learning (Principal Components Analysis) is also used to generate a new set of statistically independent features.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Scoring Visualization Goals with PCA and FIFA 20">
 <meta name="twitter:title" content="Scoring Visualization Goals with PCA and FIFA 20">
 <meta property="og:url" content="/2020/06/scoring-visualization-goals-with-pca-and-fifa-20.en-us/">
 <meta property="twitter:url" content="/2020/06/scoring-visualization-goals-with-pca-and-fifa-20.en-us/">
 <meta property="og:site_name" content="Desmond Choy&#39;s Blog">
-<meta property="og:description" content="I came across this interesting dataset on Kaggle related to the football simulation video game FIFA 20, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.">
-<meta name="twitter:description" content="I came across this interesting dataset on Kaggle related to the football simulation video game FIFA 20, with a very detailed breakdown of attributes of over 18,000 football players. It’s been a while since I’ve played a FIFA game, and an even longer time since I last worn my soccer boots, but this seemed like an excellent data set for some Exploratory Data Analysis. I also showcase ridgeline plots and network graphs with wrangled data, and take a stab at implementing and interpreting unsupervised machine learning in the form of Principal Components Analysis on our wide data set.">
+<meta property="og:description" content="The FIFA20 player dataset is visualized using ridgeline plots and network graphs. Unsupervised machine learning (Principal Components Analysis) is also used to generate a new set of statistically independent features.">
+<meta name="twitter:description" content="The FIFA20 player dataset is visualized using ridgeline plots and network graphs. Unsupervised machine learning (Principal Components Analysis) is also used to generate a new set of statistically independent features.">
 <meta property="og:locale" content="en-us">
 
   
@@ -55,6 +55,12 @@
 
 
 
+  <meta property="og:image" content="https://images.unsplash.com/photo-1543351611-58f69d7c1781?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1543351611-58f69d7c1781?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60">
+
+
+  <meta property="og:image" content="https://images.unsplash.com/photo-1544698310-74ea9d1c8258?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1490&q=80">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1544698310-74ea9d1c8258?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1490&q=80">
 
 
 
@@ -191,15 +197,13 @@
 </nav>
 
       
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
-          
-          
-            <div class="post-header main-content-wrap text-left">
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://images.unsplash.com/photo-1544698310-74ea9d1c8258?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1490&amp;q=80')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
       Scoring Visualization Goals with PCA and FIFA 20
@@ -218,6 +222,18 @@
   </div>
 
 </div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">Voting By Donnycocacola</span>
+          
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
@@ -385,18 +401,18 @@ dim(data)</code></pre>
   select(short_name, team_position, player_positions) %&gt;% 
   sample_n(10)</code></pre>
 <pre><code>## # A tibble: 10 x 3
-##    short_name  team_position player_positions
-##    &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           
-##  1 T. Agyepong SUB           LM, RM          
-##  2 D. Pik      SUB           LM              
-##  3 A. Bittroff SUB           RB, LB          
-##  4 R. Hughes   RES           CB              
-##  5 L. Hendrie  LB            RWB, RB, LB     
-##  6 L. Freeman  SUB           CAM, LM         
-##  7 G. Massey   SUB           RM              
-##  8 E. Derdiyok ST            ST              
-##  9 R. Roache   RES           ST              
-## 10 K. Miyoshi  SUB           CAM, CM, CF</code></pre>
+##    short_name     team_position player_positions
+##    &lt;chr&gt;          &lt;chr&gt;         &lt;chr&gt;           
+##  1 M. Vihmann     LCB           CB              
+##  2 N. Al Ghamdi   RES           GK              
+##  3 J. Mendes      SUB           ST, RM          
+##  4 C. Gasper      LB            LB, CB          
+##  5 G. Ortíz       SUB           CB              
+##  6 D. Russo       SUB           GK              
+##  7 P. Vaquizo     &lt;NA&gt;          RW, RM          
+##  8 I. Opara       RCB           CB              
+##  9 A. Al Owayshir SUB           GK              
+## 10 J. Bumbu       RES           CM, CDM</code></pre>
 <p>Let’s clean the data further by lumping the player’s position into broader categories - Goalkeeper (G), Defender (D), Defensive Midfielder (DM), Midfielder (M), Attacking Midfielder (AM), Forward (F) and Striker (ST). I’ll do this by inferring from the player’s <code>player_positions</code>. Fewer categories will benefit data visualization.</p>
 <pre class="r"><code>data &lt;- data %&gt;%
   mutate(
