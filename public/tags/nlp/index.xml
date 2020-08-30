@@ -6,10 +6,19 @@
     <description>Recent content in NLP on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Make Your Vote Count By Counting Sentences</title>
+      <link>/2020/07/make-your-vote-count-by-counting-sentences.en-us/</link>
+      <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/make-your-vote-count-by-counting-sentences.en-us/</guid>
+      <description>Singapore political manifestos are categorized using NLP. The results are fed into an interactive html table that allows for convenient sorting and filtering.</description>
+    </item>
     
     <item>
       <title>Exploring Share Prices and Sentiment</title>

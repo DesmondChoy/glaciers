@@ -7,19 +7,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.66.0 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="Desmond Choy">
-<meta name="keywords" content="tech">
-<meta name="description" content="Singapore General Elections 2020LibrariesCleaning Individual ManifestosManifesto UnitedAnalysisDon’t Judge A Manifesto By Its LengthCategorically SpeakingA Quick Investigation Of OthersThe Tables Have TurnedInteractive TableVisualizationThe Best Form Of FlatteryThe Prickly IssuesConcluding ThoughtsSingapore General Elections 2020With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies should be made.">
+<meta name="keywords" content="">
+<meta name="description" content="Singapore political manifestos are categorized using NLP. The results are fed into an interactive html table that allows for convenient sorting and filtering.">
 
 
-<meta property="og:description" content="Singapore General Elections 2020LibrariesCleaning Individual ManifestosManifesto UnitedAnalysisDon’t Judge A Manifesto By Its LengthCategorically SpeakingA Quick Investigation Of OthersThe Tables Have TurnedInteractive TableVisualizationThe Best Form Of FlatteryThe Prickly IssuesConcluding ThoughtsSingapore General Elections 2020With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies should be made.">
+<meta property="og:description" content="Singapore political manifestos are categorized using NLP. The results are fed into an interactive html table that allows for convenient sorting and filtering.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Make Your Vote Count By Counting Sentences">
 <meta name="twitter:title" content="Make Your Vote Count By Counting Sentences">
 <meta property="og:url" content="/2020/07/make-your-vote-count-by-counting-sentences.en-us/">
 <meta property="twitter:url" content="/2020/07/make-your-vote-count-by-counting-sentences.en-us/">
 <meta property="og:site_name" content="Desmond Choy&#39;s Blog">
-<meta property="og:description" content="Singapore General Elections 2020LibrariesCleaning Individual ManifestosManifesto UnitedAnalysisDon’t Judge A Manifesto By Its LengthCategorically SpeakingA Quick Investigation Of OthersThe Tables Have TurnedInteractive TableVisualizationThe Best Form Of FlatteryThe Prickly IssuesConcluding ThoughtsSingapore General Elections 2020With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies should be made.">
-<meta name="twitter:description" content="Singapore General Elections 2020LibrariesCleaning Individual ManifestosManifesto UnitedAnalysisDon’t Judge A Manifesto By Its LengthCategorically SpeakingA Quick Investigation Of OthersThe Tables Have TurnedInteractive TableVisualizationThe Best Form Of FlatteryThe Prickly IssuesConcluding ThoughtsSingapore General Elections 2020With election fever heating up, political parties have been releasing their manifestos to share campaign promises and educate the uninitiated on how policies should be made.">
+<meta property="og:description" content="Singapore political manifestos are categorized using NLP. The results are fed into an interactive html table that allows for convenient sorting and filtering.">
+<meta name="twitter:description" content="Singapore political manifestos are categorized using NLP. The results are fed into an interactive html table that allows for convenient sorting and filtering.">
 <meta property="og:locale" content="en-us">
 
   
@@ -36,6 +36,8 @@
     
       <meta property="article:tag" content="visualization">
     
+      <meta property="article:tag" content="NLP">
+    
   
 
 
@@ -51,6 +53,12 @@
 
 
 
+  <meta property="og:image" content="https://images.unsplash.com/photo-1534293230397-c067fc201ab8?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1534293230397-c067fc201ab8?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80">
+
+
+  <meta property="og:image" content="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80">
 
 
 
@@ -187,15 +195,13 @@
 </nav>
 
       
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
-          
-          
-            <div class="post-header main-content-wrap text-left">
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1050&amp;q=80')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
       Make Your Vote Count By Counting Sentences
@@ -214,6 +220,18 @@
   </div>
 
 </div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">Voting By Element5 Digital</span>
+          
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
@@ -282,14 +300,15 @@ wp_df &lt;- pdf_text(&quot;wp.pdf&quot;) %&gt;%
                 token = &quot;sentences&quot;,
                 to_lower = FALSE) %&gt;% 
   head()</code></pre>
-<pre><code>## # A tibble: 5 x 2
+<pre><code>## # A tibble: 6 x 2
 ##    page sentence                                                                
 ##   &lt;int&gt; &lt;chr&gt;                                                                   
-## 1     2 The Workers’ Party Manifesto 2020                                      ~
-## 2     2 •   We must forge a dynamic economy with competitive, locally-based fir~
-## 3     2 •   We will work together to build the home that we want: tackling the ~
-## 4     2 •   An accountable democracy and resilient Singapore is one where robus~
-## 5     2 We should embrace a           diversity of views and encourage robust d~</code></pre>
+## 1    11 The Workers’ Party Manifesto 2020                                      ~
+## 2    11 Many countries would want to pull more essential manufacturing and serv~
+## 3    11 This underlines the urgent necessity to nurture a strong core of locall~
+## 4    11 The points  contained in our manifesto on nurturing local enterprises a~
+## 5    11 Changing our laws to enable Singapore to ease the growth of reserves in~
+## 6    11 Accumulating  huge reserves while keeping Singaporean workers and compa~</code></pre>
 <ul>
 <li>RP’s manifesto is the shortest by far, with no social media links, no introduction, and just one image of its party logo.</li>
 <li><a href="https://drive.google.com/file/d/17Rn0NnGUXWeJXcjcyoa0UDDOmfCLu8Pn/view">SDA’s manifesto</a> comprised of only images and figuring how to convert images to text accurately could be a herculean task, so I opted for <a href="https://www.onlinecitizenasia.com/2020/06/30/singapore-democratic-alliance-issues-elections-manifesto-ahead-of-pasir-ris-punggol-grc-contest/">a summary of their manifesto</a> from The Online Citizen instead.</li>
@@ -1021,6 +1040,8 @@ comp %&gt;%
   <a class="tag tag--primary tag--small" href="/tags/r/">r</a>
 
   <a class="tag tag--primary tag--small" href="/tags/visualization/">visualization</a>
+
+  <a class="tag tag--primary tag--small" href="/tags/nlp/">NLP</a>
 
                   </div>
                 
