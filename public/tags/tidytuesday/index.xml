@@ -6,10 +6,19 @@
     <description>Recent content in tidytuesday on Desmond Choy&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 11 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 29 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/tidytuesday/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Predicting Coffee Quality With ML</title>
+      <link>/2020/08/predicting-coffee-quality-with-ml.en-us/</link>
+      <pubDate>Sat, 29 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/predicting-coffee-quality-with-ml.en-us/</guid>
+      <description>A LASSO model, random forest model and an XGBoost model walks into a cafe&amp;hellip;</description>
+    </item>
     
     <item>
       <title>Food Consumption and CO2 Emissions</title>
