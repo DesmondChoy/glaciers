@@ -8,18 +8,18 @@
 <meta name="generator" content="Hugo 0.66.0 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="Desmond Choy">
 <meta name="keywords" content="">
-<meta name="description" content="A LASSO model, random forest model and an XGBoost model walks into a cafe&hellip;">
+<meta name="description" content="Coffee quality-related data is explored and cleaned. Using the tidymodels framework, I demonstrate feature engineering, fitting of three models (LASSO, Random Forest and XGBoost), tuning of hyperparameters and analyzing out-of-sample performance.">
 
 
-<meta property="og:description" content="A LASSO model, random forest model and an XGBoost model walks into a cafe&hellip;">
+<meta property="og:description" content="Coffee quality-related data is explored and cleaned. Using the tidymodels framework, I demonstrate feature engineering, fitting of three models (LASSO, Random Forest and XGBoost), tuning of hyperparameters and analyzing out-of-sample performance.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Predicting Coffee Quality With ML">
 <meta name="twitter:title" content="Predicting Coffee Quality With ML">
 <meta property="og:url" content="/2020/08/predicting-coffee-quality-with-ml.en-us/">
 <meta property="twitter:url" content="/2020/08/predicting-coffee-quality-with-ml.en-us/">
 <meta property="og:site_name" content="Desmond Choy&#39;s Blog">
-<meta property="og:description" content="A LASSO model, random forest model and an XGBoost model walks into a cafe&hellip;">
-<meta name="twitter:description" content="A LASSO model, random forest model and an XGBoost model walks into a cafe&hellip;">
+<meta property="og:description" content="Coffee quality-related data is explored and cleaned. Using the tidymodels framework, I demonstrate feature engineering, fitting of three models (LASSO, Random Forest and XGBoost), tuning of hyperparameters and analyzing out-of-sample performance.">
+<meta name="twitter:description" content="Coffee quality-related data is explored and cleaned. Using the tidymodels framework, I demonstrate feature engineering, fitting of three models (LASSO, Random Forest and XGBoost), tuning of hyperparameters and analyzing out-of-sample performance.">
 <meta property="og:locale" content="en-us">
 
   
@@ -291,7 +291,7 @@
 <h1>Coffee Quality Ratings</h1>
 <p>Coffee can be a huge productivity boost and I can’t imagine working through the day without it. This data set, originally uploaded from <a href="https://github.com/jldbc/coffee-quality-database">Coffee Quality Database</a>, was re-posted to <a href="https://www.kaggle.com/volpatto/coffee-quality-database-from-cqi?select=merged_data_cleaned.csv">Kaggle</a> and subsequently featured on <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-07-07/readme.md">TidyTuesday</a>.</p>
 <p>In it, coffee from different countries are awarded cup points, scored by panelists who sample the coffee and assess it based on a number of factors such as aroma, acidity, uniformity and sweetness. But do other factors, such as country, altitude and processing method, also affect coffee quality scores?</p>
-<p>This blog post will set out to investigate the data with exploratory data analysis. Next, utilizing the <code>tidymodels</code> collection, we will create new predictors with feature engineering, and subsequently specify, tune, compare in-sample results based on RMSE for three popular machine learning models (LASSO, random forest and XGBoost). Variable importance of features will also be compared. Finally, the model that’s able to deliver the lowest out-of-sample RMSE when predicting coffee quality points will be selected.</p>
+<p>This blog post will set out to investigate the data with exploratory data analysis. Next, utilizing the <code>tidymodels</code> collection, I will create new predictors with feature engineering, and subsequently specify, tune, compare in-sample results based on RMSE for three popular machine learning models (LASSO, random forest and XGBoost). Variable importance of features will also be compared. Finally, the model that’s able to deliver the lowest out-of-sample RMSE when predicting coffee quality points will be selected.</p>
 </div>
 <div id="libraries" class="section level1">
 <h1>Libraries</h1>
@@ -1096,11 +1096,11 @@ xgb_res &lt;- tune_grid(
 <pre><code>## # A tibble: 5 x 8
 ##    mtry min_n .metric .estimator  mean     n std_err .config
 ##   &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  
-## 1     6    32 rmse    standard    2.45    10   0.139 Model35
-## 2     7    17 rmse    standard    2.45    10   0.139 Model36
-## 3     6    24 rmse    standard    2.45    10   0.139 Model30
-## 4     6    18 rmse    standard    2.45    10   0.140 Model45
-## 5     7    21 rmse    standard    2.45    10   0.140 Model50</code></pre>
+## 1     7    17 rmse    standard    2.45    10   0.142 Model36
+## 2     6    18 rmse    standard    2.45    10   0.140 Model45
+## 3     7    21 rmse    standard    2.45    10   0.141 Model50
+## 4     7    25 rmse    standard    2.45    10   0.140 Model03
+## 5     6    24 rmse    standard    2.45    10   0.140 Model30</code></pre>
 <p>Let’s do the same for the XGBoost model.</p>
 <pre class="r"><code>xgb_res %&gt;%
   collect_metrics() %&gt;%
@@ -1134,8 +1134,8 @@ xgb_res &lt;- tune_grid(
 ##   &lt;int&gt; &lt;int&gt;      &lt;int&gt;      &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;  
 ## 1     4     6         14    0.0225        4.08e- 1       0.797 rmse   
 ## 2     5    11          3    0.0810        3.43e- 4       0.948 rmse   
-## 3     8    28          2    0.00648       1.20e-10       0.804 rmse   
-## 4     5    13          8    0.0655        5.60e- 1       0.985 rmse   
+## 3     5    13          8    0.0655        5.60e- 1       0.985 rmse   
+## 4     8    28          2    0.00648       1.20e-10       0.804 rmse   
 ## 5     6    29         13    0.0336        2.95e+ 1       0.465 rmse   
 ## # ... with 5 more variables: .estimator &lt;chr&gt;, mean &lt;dbl&gt;, n &lt;int&gt;,
 ## #   std_err &lt;dbl&gt;, .config &lt;fct&gt;</code></pre>
@@ -1234,7 +1234,7 @@ p1 + p2 / p3 + plot_annotation(
 ##   .metric .estimator .estimate model       
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;       
 ## 1 rmse    standard        2.35 lasso       
-## 2 rmse    standard        2.31 randomforest
+## 2 rmse    standard        2.29 randomforest
 ## 3 rmse    standard        2.32 xgboost</code></pre>
 </div>
 <div id="conclusion" class="section level1">

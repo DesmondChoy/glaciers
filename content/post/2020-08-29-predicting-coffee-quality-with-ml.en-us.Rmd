@@ -3,7 +3,7 @@ title: Predicting Coffee Quality With ML
 author: Desmond Choy
 date: '2020-08-29'
 slug: predicting-coffee-quality-with-ml.en-us
-summary: A LASSO model, random forest model and an XGBoost model walks into a cafe...
+summary: Coffee quality-related data is explored and cleaned. Using the tidymodels framework, I demonstrate feature engineering, fitting of three models (LASSO, Random Forest and XGBoost), tuning of hyperparameters and analyzing out-of-sample performance.
 readingtime: '16'
 tags:
   - EDA
@@ -26,7 +26,7 @@ Coffee can be a huge productivity boost and I can't imagine working through the 
 
 In it, coffee from different countries are awarded cup points, scored by panelists who sample the coffee and assess it based on a number of factors such as aroma, acidity, uniformity and sweetness. But do other factors, such as country, altitude and processing method, also affect coffee quality scores?
 
-This blog post will set out to investigate the data with exploratory data analysis. Next,  utilizing the `tidymodels` collection, we will create new predictors with feature engineering, and subsequently specify, tune, compare in-sample results based on RMSE for three popular machine learning models (LASSO, random forest and XGBoost). Variable importance of features will also be compared. Finally, the model that's able to deliver the lowest out-of-sample RMSE when predicting coffee quality points will be selected.
+This blog post will set out to investigate the data with exploratory data analysis. Next,  utilizing the `tidymodels` collection, I will create new predictors with feature engineering, and subsequently specify, tune, compare in-sample results based on RMSE for three popular machine learning models (LASSO, random forest and XGBoost). Variable importance of features will also be compared. Finally, the model that's able to deliver the lowest out-of-sample RMSE when predicting coffee quality points will be selected.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
