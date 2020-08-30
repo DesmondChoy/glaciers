@@ -33,14 +33,14 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
 
 [author]
   name = "Desmond Choy"
-  bio = "Investment Professional by day ; Data Scientist by night"
+  bio = "Investment Research | Data Science | NLP"
   job = "Investment Analyst"
   location = "Singapore"
   # Your Gravatar email. Overwrite `author.picture` everywhere in the blog
   #gravatarEmail = "thibaud.lepretre@gmail.com"
   # Your profile picture
   # Overwritten by your gravatar image if `author.gravatarEmail` is filled
-  picture = "https://cdn3.iconfinder.com/data/icons/business-avatar-1/512/7_avatar-512.png"
+  picture = "https://avatars3.githubusercontent.com/u/46787018?s=460&u=c677807468796862d15941d4a1dc8aa75ecc51c2&v=4"
   # Your Twitter username without the @. E.g : thibaudlepretre
   twitter = "Norest"
 
@@ -192,7 +192,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
    [params.sidebar.profile]
      url = "/about"
 
-  # Customize copyright value "© 2017 <CUSTOMIZATION>. All Rights Reserved"
+  # Customize copyright value "? 2017 <CUSTOMIZATION>. All Rights Reserved"
   # [params.footer]
   #   copyright = "<a href=\"https://github.com/kakawait\">kakawait</a>"
 
