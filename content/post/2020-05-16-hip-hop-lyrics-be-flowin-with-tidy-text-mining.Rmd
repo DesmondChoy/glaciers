@@ -3,15 +3,18 @@ title: Hip-Hop Lyrics Be Flowing with Tidy Text Mining
 author: Desmond Choy
 date: '2020-05-16'
 slug: hip-hop-lyrics-be-flowin-with-tidy-text-mining
-categories: []
+summary: Hip-hop songs' sentiment is extracted and visualized. Regularized regression is then trained on lyrics to predict if a hip-hop song was old school (released before the year 2000) or modern.
+readingtime: '10'
 tags:
   - EDA
   - machine learning
   - r
   - visualization
   - NLP
-keywords:
-  - tech
+coverImage: https://images.unsplash.com/photo-1508973379184-7517410fb0bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80
+thumbnailImage: https://images.unsplash.com/photo-1589929168117-cd9ec5f27ab7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=675&q=80
+thumbnailImagePosition: left
+coverCaption: Hip hop By Joel Muniz
 ---
 
 ```{r setup, include=FALSE}

@@ -44,7 +44,7 @@
       <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/05/hip-hop-lyrics-be-flowin-with-tidy-text-mining/</guid>
-      <description>I’ve been hit with a double dose of NLP inspiration after reading a recent Julia Silge blog post and watching a Datacamp video on Tidy Text Mining which she used to teach. Ergo, this post will set out to do two things: use sentiment analysis to explore hip-hop songs, and subsequently use the tidymodels package on the lyrics to predict which era (Old School versus Modern) the songs came from.</description>
+      <description>Hip-hop songs&amp;rsquo; sentiment is extracted and visualized. Regularized regression is then trained on lyrics to predict if a hip-hop song was old school (released before the year 2000) or modern.</description>
     </item>
     
     <item>

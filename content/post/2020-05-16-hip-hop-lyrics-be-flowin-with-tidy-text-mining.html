@@ -3,15 +3,18 @@ title: Hip-Hop Lyrics Be Flowing with Tidy Text Mining
 author: Desmond Choy
 date: '2020-05-16'
 slug: hip-hop-lyrics-be-flowin-with-tidy-text-mining
-categories: []
+summary: Hip-hop songs' sentiment is extracted and visualized. Regularized regression is then trained on lyrics to predict if a hip-hop song was old school (released before the year 2000) or modern.
+readingtime: '10'
 tags:
   - EDA
   - machine learning
   - r
   - visualization
   - NLP
-keywords:
-  - tech
+coverImage: https://images.unsplash.com/photo-1508973379184-7517410fb0bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80
+thumbnailImage: https://images.unsplash.com/photo-1589929168117-cd9ec5f27ab7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=675&q=80
+thumbnailImagePosition: left
+coverCaption: Hip hop By Joel Muniz
 ---
 
 
@@ -133,18 +136,18 @@ tidy_lyrics %&gt;%
   select(word, sentiment, line, title, artist, bucket) %&gt;% 
   sample_n(10)</code></pre>
 <pre><code>## # A tibble: 10 x 6
-##    word     sentiment  line title                artist               bucket    
-##    &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;                &lt;chr&gt;     
-##  1 murder   anger        48 La La La             Lil Wayne            Modern    
-##  2 dirt     disgust      55 OVERSEAS             Bohan Phoenix        Modern    
-##  3 hell     anger        85 I Gave You Power     Nas                  Old School
-##  4 favorite trust        13 Play That Beat Mr DJ GLOBE &amp; Whiz Kid     Modern    
-##  5 boy      negative     89 Mural                Lupe Fiasco          Modern    
-##  6 crash    fear         55 Lucifer              JAY-Z                Modern    
-##  7 bad      anger        18 Kyoto                Yung Lean            Modern    
-##  8 white    trust        77 Hahahaha jk?         Das Racist           Modern    
-##  9 lie      sadness      31 Fuck Tha World       Lil Wayne            Old School
-## 10 fight    anger        53 Scenario             A Tribe Called Quest Old School</code></pre>
+##    word       sentiment     line title                artist         bucket    
+##    &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;          &lt;chr&gt;     
+##  1 money      trust           72 Takkies              YoungstaCPT    Modern    
+##  2 devil      disgust         51 One Day              UGK            Old School
+##  3 faith      trust          158 Mortal Man           Kendrick Lamar Modern    
+##  4 jealousy   sadness         68 Ms Jackson           OutKast        Modern    
+##  5 resentment sadness         98 Mortal Man           Kendrick Lamar Modern    
+##  6 roulette   anticipation    69 Bring Da Ruckus      Wu-Tang Clan   Old School
+##  7 child      anticipation    50 Doo Wop (That Thing) Lauryn Hill    Old School
+##  8 luck       joy             65 Wot Do U Call It?    Wiley          Modern    
+##  9 crazy      fear             1 Insane In The Brain  Cypress Hill   Old School
+## 10 expire     negative        29 Ha                   Juvenile       Modern</code></pre>
 <p>Let’s peek at the top words used in our songs.</p>
 <pre class="r"><code>tidy_lyrics %&gt;% 
   count(word, sort = TRUE) </code></pre>
@@ -275,7 +278,7 @@ song_sentiment %&gt;%
 set.seed(2000)
 hiphop_split &lt;- initial_split(lyrics, strata = bucket)
 hiphop_split</code></pre>
-<pre><code>## &lt;Training/Validation/Total&gt;
+<pre><code>## &lt;Analysis/Assess/Total&gt;
 ## &lt;8795/2930/11725&gt;</code></pre>
 <pre class="r"><code>hiphop_train &lt;- training(hiphop_split)
 hiphop_test &lt;- testing(hiphop_split)</code></pre>
@@ -289,7 +292,7 @@ folds</code></pre>
 <pre><code>## #  10-fold cross-validation 
 ## # A tibble: 10 x 2
 ##    splits             id    
-##    &lt;named list&gt;       &lt;chr&gt; 
+##    &lt;list&gt;             &lt;chr&gt; 
 ##  1 &lt;split [7.9K/880]&gt; Fold01
 ##  2 &lt;split [7.9K/880]&gt; Fold02
 ##  3 &lt;split [7.9K/880]&gt; Fold03
@@ -360,11 +363,11 @@ prep(hiphop_rec) </code></pre>
   add_recipe(hiphop_rec)
   
 lr_wflow</code></pre>
-<pre><code>## == Workflow ========================================================================================
+<pre><code>## == Workflow ===============================================================================================
 ## Preprocessor: Recipe
 ## Model: logistic_reg()
 ## 
-## -- Preprocessor ------------------------------------------------------------------------------------
+## -- Preprocessor -------------------------------------------------------------------------------------------
 ## 6 Recipe Steps
 ## 
 ## * step_tokenize()
@@ -374,7 +377,7 @@ lr_wflow</code></pre>
 ## * step_normalize()
 ## * step_dummy()
 ## 
-## -- Model -------------------------------------------------------------------------------------------
+## -- Model --------------------------------------------------------------------------------------------------
 ## Logistic Regression Model Specification (classification)
 ## 
 ## Main Arguments:
@@ -413,15 +416,15 @@ lr_grid &lt;- tune_grid(
   bind_rows(lr_grid %&gt;%
               show_best(&quot;roc_auc&quot;) %&gt;%
               slice(1:3))</code></pre>
-<pre><code>## # A tibble: 6 x 6
-##   penalty .metric     .estimator  mean     n std_err
-##     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 0.00492 mn_log_loss binary     0.565    10 0.00506
-## 2 0.00273 mn_log_loss binary     0.567    10 0.00741
-## 3 0.00889 mn_log_loss binary     0.599    10 0.00282
-## 4 0.00273 roc_auc     binary     0.785    10 0.00554
-## 5 0.00492 roc_auc     binary     0.784    10 0.00571
-## 6 0.00151 roc_auc     binary     0.781    10 0.00550</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   penalty .metric     .estimator  mean     n std_err .config
+##     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  
+## 1 0.00492 mn_log_loss binary     0.565    10 0.00506 Model31
+## 2 0.00273 mn_log_loss binary     0.567    10 0.00741 Model30
+## 3 0.00889 mn_log_loss binary     0.599    10 0.00282 Model32
+## 4 0.00273 roc_auc     binary     0.785    10 0.00554 Model30
+## 5 0.00492 roc_auc     binary     0.784    10 0.00571 Model31
+## 6 0.00151 roc_auc     binary     0.781    10 0.00550 Model29</code></pre>
 <p>I will go with the penalty value that maximises roc_auc, since it corresponds to the penalty value associated with the second lowest log_loss mean. Updating the workflow with our tuned hyperparamter value is done using <code>finalize_workflow()</code>.</p>
 <pre class="r"><code>best_auc &lt;- lr_grid %&gt;%
   select_best(&quot;roc_auc&quot;)
@@ -429,11 +432,11 @@ lr_grid &lt;- tune_grid(
 final_lr &lt;- lr_wflow %&gt;%
   finalize_workflow(best_auc)
 final_lr</code></pre>
-<pre><code>## == Workflow ========================================================================================
+<pre><code>## == Workflow ===============================================================================================
 ## Preprocessor: Recipe
 ## Model: logistic_reg()
 ## 
-## -- Preprocessor ------------------------------------------------------------------------------------
+## -- Preprocessor -------------------------------------------------------------------------------------------
 ## 6 Recipe Steps
 ## 
 ## * step_tokenize()
@@ -443,7 +446,7 @@ final_lr</code></pre>
 ## * step_normalize()
 ## * step_dummy()
 ## 
-## -- Model -------------------------------------------------------------------------------------------
+## -- Model --------------------------------------------------------------------------------------------------
 ## Logistic Regression Model Specification (classification)
 ## 
 ## Main Arguments:
@@ -539,15 +542,15 @@ lr_grid_v2 %&gt;%
   bind_rows(lr_grid_v2 %&gt;%
               show_best(&quot;roc_auc&quot;) %&gt;%
               slice(1:3))</code></pre>
-<pre><code>## # A tibble: 6 x 6
-##   penalty .metric     .estimator  mean     n std_err
-##     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 0.00492 mn_log_loss binary     0.570    10 0.00563
-## 2 0.00273 mn_log_loss binary     0.573    10 0.00807
-## 3 0.00889 mn_log_loss binary     0.604    10 0.00310
-## 4 0.00273 roc_auc     binary     0.780    10 0.00582
-## 5 0.00492 roc_auc     binary     0.777    10 0.00605
-## 6 0.00151 roc_auc     binary     0.776    10 0.00569</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   penalty .metric     .estimator  mean     n std_err .config
+##     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  
+## 1 0.00492 mn_log_loss binary     0.570    10 0.00563 Model31
+## 2 0.00273 mn_log_loss binary     0.573    10 0.00807 Model30
+## 3 0.00889 mn_log_loss binary     0.604    10 0.00310 Model32
+## 4 0.00273 roc_auc     binary     0.780    10 0.00582 Model30
+## 5 0.00492 roc_auc     binary     0.777    10 0.00605 Model31
+## 6 0.00151 roc_auc     binary     0.776    10 0.00569 Model29</code></pre>
 <pre class="r"><code>best_auc_v2 &lt;- lr_grid_v2 %&gt;% 
   select_best(&quot;roc_auc&quot;)
 
