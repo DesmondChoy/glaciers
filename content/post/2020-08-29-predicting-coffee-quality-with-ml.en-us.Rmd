@@ -172,11 +172,10 @@ From some [googling](https://perkcoffee.co/sg/altitude-affect-taste-coffee/#:~:t
 
 > High altitudes are considered ideal for growing the coffee plant, with cooler temperatures delaying the growth cycle. This allows the bean to go through a longer maturation process, thus creating a much fuller, richer, and more pronounced flavour.  
 
-
+If that is indeed the case, **we can expect altitude to be a significant predictor**. However, upon inspecting the completeness of the altitude-related columns, around 20% of the data is missing. 
 
 ![Coffee at different altitudes](https://perkcoffee.co/sg/wp-content/uploads/sites/2/2017/10/map_1000px.jpg)
 
-If that is indeed the case, **we can expect altitude to be a significant predictor**. However, upon inspecting the completeness of the altitude-related columns, around 20% of the data is missing. 
 
 ```{r altitude inspect}
 coffee %>% 
@@ -500,7 +499,7 @@ model_lasso <- linear_reg(penalty = tune(), mixture = 1) %>%
 
 ## Feature Preprocessing
 
-I came across this great illustration by Allison Horst describing the `recipes` package: [recipes](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/recipes.png)
+I came across this great illustration by Allison Horst describing the `recipes` package: ![recipes](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/recipes.png)
 
 Just a quick check on which columns have missing data:
 

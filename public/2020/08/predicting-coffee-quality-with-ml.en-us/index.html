@@ -511,11 +511,11 @@ coffee %&gt;%
 <blockquote>
 <p>High altitudes are considered ideal for growing the coffee plant, with cooler temperatures delaying the growth cycle. This allows the bean to go through a longer maturation process, thus creating a much fuller, richer, and more pronounced flavour.</p>
 </blockquote>
+<p>If that is indeed the case, <strong>we can expect altitude to be a significant predictor</strong>. However, upon inspecting the completeness of the altitude-related columns, around 20% of the data is missing.</p>
 <div class="figure">
 <img src="https://perkcoffee.co/sg/wp-content/uploads/sites/2/2017/10/map_1000px.jpg" alt="" />
 <p class="caption">Coffee at different altitudes</p>
 </div>
-<p>If that is indeed the case, <strong>we can expect altitude to be a significant predictor</strong>. However, upon inspecting the completeness of the altitude-related columns, around 20% of the data is missing.</p>
 <pre class="r"><code>coffee %&gt;% 
   skimr::skim() %&gt;% 
   select(skim_variable, complete_rate) %&gt;% 
@@ -866,7 +866,7 @@ folds &lt;- vfold_cv(coffee_train, v = 10)</code></pre>
 </div>
 <div id="feature-preprocessing" class="section level2">
 <h2>Feature Preprocessing</h2>
-<p>I came across this great illustration by Allison Horst describing the <code>recipes</code> package: <a href="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/recipes.png">recipes</a></p>
+<p>I came across this great illustration by Allison Horst describing the <code>recipes</code> package: <img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/recipes.png" alt="recipes" /></p>
 <p>Just a quick check on which columns have missing data:</p>
 <pre class="r"><code>coffee_train %&gt;% 
   map_df(~ sum(is.na(.))) %&gt;% 
@@ -980,11 +980,11 @@ the best tuned hyperparameters associated with the lowest in-sample RMSE can be 
 <pre><code>## # A tibble: 5 x 7
 ##   penalty .metric .estimator  mean     n std_err .config
 ##     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  
-## 1 0.0183  rmse    standard    2.48    10   0.136 Model40
-## 2 0.0153  rmse    standard    2.48    10   0.136 Model39
+## 1 0.0153  rmse    standard    2.48    10   0.135 Model39
+## 2 0.0183  rmse    standard    2.48    10   0.135 Model40
 ## 3 0.00954 rmse    standard    2.48    10   0.136 Model38
-## 4 0.0436  rmse    standard    2.49    10   0.135 Model41
-## 5 0.00441 rmse    standard    2.49    10   0.136 Model37</code></pre>
+## 4 0.00441 rmse    standard    2.49    10   0.136 Model37
+## 5 0.0436  rmse    standard    2.49    10   0.134 Model41</code></pre>
 </div>
 <div id="finalizing-hyperparameters" class="section level2">
 <h2>Finalizing Hyperparameters</h2>
@@ -1096,11 +1096,11 @@ xgb_res &lt;- tune_grid(
 <pre><code>## # A tibble: 5 x 8
 ##    mtry min_n .metric .estimator  mean     n std_err .config
 ##   &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;fct&gt;  
-## 1     7    17 rmse    standard    2.45    10   0.142 Model36
-## 2     6    18 rmse    standard    2.45    10   0.140 Model45
-## 3     7    21 rmse    standard    2.45    10   0.141 Model50
-## 4     7    25 rmse    standard    2.45    10   0.140 Model03
-## 5     6    24 rmse    standard    2.45    10   0.140 Model30</code></pre>
+## 1     6    18 rmse    standard    2.45    10   0.141 Model45
+## 2     5    14 rmse    standard    2.46    10   0.140 Model25
+## 3     6    25 rmse    standard    2.46    10   0.140 Model49
+## 4     7    17 rmse    standard    2.46    10   0.139 Model36
+## 5     6    24 rmse    standard    2.46    10   0.139 Model30</code></pre>
 <p>Let’s do the same for the XGBoost model.</p>
 <pre class="r"><code>xgb_res %&gt;%
   collect_metrics() %&gt;%
@@ -1134,9 +1134,9 @@ xgb_res &lt;- tune_grid(
 ##   &lt;int&gt; &lt;int&gt;      &lt;int&gt;      &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;  
 ## 1     4     6         14    0.0225        4.08e- 1       0.797 rmse   
 ## 2     5    11          3    0.0810        3.43e- 4       0.948 rmse   
-## 3     5    13          8    0.0655        5.60e- 1       0.985 rmse   
-## 4     8    28          2    0.00648       1.20e-10       0.804 rmse   
-## 5     6    29         13    0.0336        2.95e+ 1       0.465 rmse   
+## 3     8    28          2    0.00648       1.20e-10       0.804 rmse   
+## 4     6    29         13    0.0336        2.95e+ 1       0.465 rmse   
+## 5     5    13          8    0.0655        5.60e- 1       0.985 rmse   
 ## # ... with 5 more variables: .estimator &lt;chr&gt;, mean &lt;dbl&gt;, n &lt;int&gt;,
 ## #   std_err &lt;dbl&gt;, .config &lt;fct&gt;</code></pre>
 </div>
@@ -1209,8 +1209,8 @@ p1 + p2 / p3 + plot_annotation(
 ##   model        lowest_training_rmse
 ##   &lt;chr&gt;                       &lt;dbl&gt;
 ## 1 lasso                        2.48
-## 2 randomforest                 2.45
-## 3 xgboost                      2.48</code></pre>
+## 2 randomforest                 2.46
+## 3 xgboost                      2.47</code></pre>
 <p>As the final step, for all three models, we perform a <code>last_fit</code> using the split data, <code>coffee_split</code>.</p>
 <p>This seeks to emulates the process where, after determining the best model, the final fit on the entire training set is used to evaluate the test set, <code>coffee_test</code> (which has not been touched since the initial split).</p>
 <pre class="r"><code>lasso_final_wf %&gt;%
@@ -1234,8 +1234,8 @@ p1 + p2 / p3 + plot_annotation(
 ##   .metric .estimator .estimate model       
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;       
 ## 1 rmse    standard        2.35 lasso       
-## 2 rmse    standard        2.29 randomforest
-## 3 rmse    standard        2.32 xgboost</code></pre>
+## 2 rmse    standard        2.30 randomforest
+## 3 rmse    standard        2.33 xgboost</code></pre>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
