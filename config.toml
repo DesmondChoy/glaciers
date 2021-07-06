@@ -33,8 +33,8 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
 
 [author]
   name = "Desmond Choy"
-  bio = "Investment Research | Data Science | NLP"
-  job = "Investment Analyst"
+  bio = "Data Science | Machine Learning | NLP"
+  job = "Data Scientist"
   location = "Singapore"
   # Your Gravatar email. Overwrite `author.picture` everywhere in the blog
   #gravatarEmail = "thibaud.lepretre@gmail.com"
