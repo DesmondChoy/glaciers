@@ -45,22 +45,28 @@ output:
 <ul>
 <li><a href="#affiliations">Affiliations</a></li>
 <li><a href="#popularity">Popularity</a></li>
-<li><a href="#accessability-buses">Accessability: Buses</a></li>
-<li><a href="#accessability-buses-1">Accessability: Buses</a></li>
+<li><a href="#accessability-buses">Accessability: Buses</a>
+<ul>
 <li><a href="#visualization">Visualization</a></li>
+</ul></li>
+<li><a href="#accessability-mrtlrt">Accessability: MRT/LRT</a>
+<ul>
+<li><a href="#visualization-1">Visualization</a></li>
+</ul></li>
 <li><a href="#final-features">Final features</a></li>
 </ul></li>
 <li><a href="#clustering">Clustering</a>
 <ul>
 <li><a href="#pre-processing">Pre-processing</a></li>
 <li><a href="#how-many-clusters-are-appropriate">How many clusters are appropriate?</a></li>
-</ul></li>
 <li><a href="#cluster-analysis">Cluster analysis</a></li>
-<li><a href="#interactive-table">Interactive table</a></li>
+</ul></li>
+<li><a href="#explore-clusters-via-an-interactive-table">Explore clusters via an interactive table</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
 </div>
 
+<p>Note: Should you wish to skip reading the commentary, data wrangling and clustering process - and jump straight to the table containing schools and clusters, click the <strong>Explore clusters via an interactive table</strong> link above.</p>
 <div id="choosing-a-primary-school" class="section level1">
 <h1>Choosing a primary school</h1>
 <p>In Singapore, the start of primary school marks the official commencement of a child’s formal education, and what follows is typically a multi-year journey that continues through secondary school to tertiary education.</p>
@@ -813,6 +819,8 @@ bus_count</code></pre>
 ##  9 Ngee Ann Primary School          14 13, 16, 16m, 31,36, 43, 47, 48, 55, 135,~
 ## 10 Seng Kang Primary School         14 27, 80, 82, 83, 86, 87, 88, 89, 119, 156~
 ## # ... with 170 more rows</code></pre>
+<div id="visualization" class="section level3">
+<h3>Visualization</h3>
 <p>The visualization of the relationships (interconnections) between the schools by the buses can be done using a network graph.</p>
 <pre class="r"><code>set.seed(2021)
 
@@ -844,15 +852,16 @@ buses_clean %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   )</code></pre>
-<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/index.en-us_files/figure-html/buses%20network%20graph-1.png" width="1152" /></p>
+<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/2021-07-06-grouping-primary-schools-with-clustering_files/figure-html/buses%20network%20graph-1.png" width="1152" /></p>
 <p>Here’s the Canberra/Endeavour/Northoaks/Sembawang pri school cluster on Google Maps:</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/DesmondChoy/DataSets/master/sembawang_cluster.png" alt="" />
 <p class="caption">Sembawang cluster</p>
 </div>
 </div>
-<div id="accessability-buses-1" class="section level2">
-<h2>Accessability: Buses</h2>
+</div>
+<div id="accessability-mrtlrt" class="section level2">
+<h2>Accessability: MRT/LRT</h2>
 <p>Let’s do the same for MRT/LRT stations.</p>
 <pre class="r"><code>pri_sch %&gt;%
   select(school_name, mrt_desc) %&gt;% 
@@ -1119,9 +1128,8 @@ mrt_clean_id &lt;- mrt_clean %&gt;%
     inner_join(station_names, by = c(&quot;word&quot; = &quot;mrt_station_english&quot;))) %&gt;% 
   distinct(school_name, word, .keep_all = TRUE) %&gt;%
   arrange(school_name)</code></pre>
-</div>
-<div id="visualization" class="section level2">
-<h2>Visualization</h2>
+<div id="visualization-1" class="section level3">
+<h3>Visualization</h3>
 <pre class="r"><code>set.seed(2021)
 
 mrt_clean_id %&gt;% 
@@ -1152,7 +1160,7 @@ mrt_clean_id %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   )</code></pre>
-<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/index.en-us_files/figure-html/station%20network%20graph-1.png" width="1152" /></p>
+<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/2021-07-06-grouping-primary-schools-with-clustering_files/figure-html/station%20network%20graph-1.png" width="1152" /></p>
 <pre class="r"><code>mrt_count &lt;- mrt_clean_id %&gt;% 
   group_by(school_name) %&gt;% 
   summarize(station_count = n()) %&gt;% 
@@ -1173,6 +1181,7 @@ mrt_count</code></pre>
 ##  9 Anglo-Chinese School (Primary)             1
 ## 10 Angsana Primary School                     2
 ## # ... with 172 more rows</code></pre>
+</div>
 </div>
 <div id="final-features" class="section level2">
 <h2>Final features</h2>
@@ -1306,7 +1315,7 @@ kclusts</code></pre>
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = seq(0, 20, 2))</code></pre>
-<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/index.en-us_files/figure-html/unnamed-chunk-36-1.png" width="1152" /></p>
+<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/2021-07-06-grouping-primary-schools-with-clustering_files/figure-html/unnamed-chunk-36-1.png" width="1152" /></p>
 <p>Plotting out the WSS across 2-20 clusters, there is a slight <a href="https://uc-r.github.io/kmeans_clustering#elbow">elbow/bend</a> after cluster 7 - indicating additional clusters beyond that will provide lesser incremental improvement to minimizing WSS. Also interesting to note that increasing cluster size from 14 -&gt; 15 actually increases WSS, but then decreases at 16.</p>
 <p>For now, let’s go with 7 clusters.</p>
 <pre class="r"><code>set.seed(2020)
@@ -1330,9 +1339,8 @@ final_cluster %&gt;%
 ## 7 7           12</code></pre>
 <p>There is a major cluster (Cluster 1) that comprises of 123 schools, or 66% of our total schools. There are also three medium clusters (Cluster 2, 5, and 7) and three smaller clusters (Cluster 3, 4 and 6).</p>
 </div>
-</div>
-<div id="cluster-analysis" class="section level1">
-<h1>Cluster analysis</h1>
+<div id="cluster-analysis" class="section level2">
+<h2>Cluster analysis</h2>
 <p>Let’s use <a href="https://github.com/hrbrmstr/waffle">waffle</a> charts (from the <code>waffle</code> library) to visualize how the clusters are distributed.</p>
 <pre class="r"><code>final_cluster %&gt;%
   augment(final_features) %&gt;%
@@ -1354,7 +1362,7 @@ final_cluster %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/index.en-us_files/figure-html/unnamed-chunk-38-1.png" width="1152" /></p>
+<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/2021-07-06-grouping-primary-schools-with-clustering_files/figure-html/unnamed-chunk-38-1.png" width="1152" /></p>
 <pre class="r"><code>final_cluster %&gt;%
   augment(final_features) %&gt;%
   count(zone_code, .cluster) %&gt;% 
@@ -1375,7 +1383,7 @@ final_cluster %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 15),
   ) </code></pre>
-<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/index.en-us_files/figure-html/unnamed-chunk-39-1.png" width="1152" /></p>
+<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/2021-07-06-grouping-primary-schools-with-clustering_files/figure-html/unnamed-chunk-39-1.png" width="1152" /></p>
 <pre class="r"><code>final_cluster %&gt;%
   augment(final_features) %&gt;%
   count(dgp_code, .cluster) %&gt;%
@@ -1398,10 +1406,16 @@ final_cluster %&gt;%
     strip.background = element_blank(),
     strip.text = element_text(face = &quot;bold&quot;, size = 10),
   )</code></pre>
-<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/index.en-us_files/figure-html/unnamed-chunk-40-1.png" width="1152" /></p>
+<p><img src="/post/2021-07-06-grouping-primary-schools-with-clustering/2021-07-06-grouping-primary-schools-with-clustering_files/figure-html/unnamed-chunk-40-1.png" width="1152" /></p>
 </div>
-<div id="interactive-table" class="section level1">
-<h1>Interactive table</h1>
+</div>
+<div id="explore-clusters-via-an-interactive-table" class="section level1">
+<h1>Explore clusters via an interactive table</h1>
+<p>I made a simple table with filters, should you wish to explore the clusters. How I would recommend using this table:</p>
+<ul>
+<li><p>If you’ve already shortlisted some schools, type in the school name and see which cluster the school is in. Then compare it to other schools within that cluster.</p></li>
+<li><p>If you haven’t yet identified a school, perhaps filter by location (zone/urban area) first, identify clusters in the area, then compare schools within those clusters.</p></li>
+</ul>
 <pre class="r"><code>cluster_data &lt;- final_cluster %&gt;%
   augment(final_features) %&gt;% 
   relocate(.cluster)

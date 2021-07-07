@@ -28,6 +28,8 @@ knitr::opts_chunk$set(
   fig.height = 10)
 ```
 
+Note: Should you wish to skip reading the commentary, data wrangling and clustering process - and jump straight to the table containing schools and clusters, click the **Explore clusters via an interactive table** link above.
+
 # Choosing a primary school
 
 In Singapore, the start of primary school marks the official commencement of a child's formal education, and what follows is typically a multi-year journey that continues through secondary school to tertiary education.   
@@ -335,6 +337,8 @@ bus_count %>%
   select(school_name, bus_count, bus_desc)
 ```
 
+### Visualization
+
 The visualization of the relationships (interconnections) between the schools by the buses can be done using a network graph.
 
 ```{r buses network graph}
@@ -374,7 +378,7 @@ Here's the Canberra/Endeavour/Northoaks/Sembawang pri school cluster on Google M
 
 ![Sembawang cluster](https://raw.githubusercontent.com/DesmondChoy/DataSets/master/sembawang_cluster.png)
 
-## Accessability: Buses
+## Accessability: MRT/LRT
 
 Let's do the same for MRT/LRT stations.
 
@@ -512,7 +516,7 @@ mrt_clean_id <- mrt_clean %>%
   arrange(school_name)
 ```
 
-## Visualization
+### Visualization
 
 ```{r station network graph}
 set.seed(2021)
@@ -671,7 +675,7 @@ final_cluster %>%
 
 There is a major cluster (Cluster 1) that comprises of 123 schools, or 66% of our total schools. There are also three medium clusters (Cluster 2, 5, and 7) and three smaller clusters (Cluster 3, 4 and 6).
 
-# Cluster analysis
+## Cluster analysis
 
 Let's use [waffle](https://github.com/hrbrmstr/waffle) charts (from the `waffle` library) to visualize how the clusters are distributed.
 
@@ -746,7 +750,13 @@ final_cluster %>%
   )
 ```
 
-# Interactive table
+# Explore clusters via an interactive table
+
+I made a simple table with filters, should you wish to explore the clusters. How I would recommend using this table: 
+
+* If you've already shortlisted some schools, type in the school name and see which cluster the school is in. Then compare it to other schools within that cluster.   
+
+* If you haven't yet identified a school, perhaps filter by location (zone/urban area) first, identify clusters in the area, then compare schools within those clusters.
 
 ```{r}
 cluster_data <- final_cluster %>%
